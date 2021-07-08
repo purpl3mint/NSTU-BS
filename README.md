@@ -1,2 +1,5 @@
 # NSTU-BS
- Broadcasting system for NSTU
+ NSTU Broadcasting System
+
+ Author: Dmitry Berezin
+

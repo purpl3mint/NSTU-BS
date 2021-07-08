@@ -1,0 +1,31 @@
+{
+  "name": "nstu-bs",
+  "version": "1.0.0",
+  "description": "Broadcasting system for NSTU",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/purpl3mint/NSTU-BS.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/purpl3mint/NSTU-BS/issues"
+  },
+  "homepage": "https://github.com/purpl3mint/NSTU-BS#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "pg": "^8.6.0",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.6.5"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.9"
+  }
+}
