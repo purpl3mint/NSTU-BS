@@ -15,7 +15,7 @@ const UserGroup = sequelize.define('usergroup', {
 
 const Content = sequelize.define('content', {
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-  name: {type: DataTypes.STRING, unique: true},
+  name: {type: DataTypes.STRING},
   source: {type: DataTypes.STRING},
   link: {type: DataTypes.STRING, unique: true},
   date_creation: {type: DataTypes.DATE},

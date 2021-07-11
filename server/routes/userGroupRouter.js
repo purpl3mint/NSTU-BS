@@ -3,7 +3,7 @@ const router = new Router()
 const userGroupController = require('../controllers/userGroupController')
 
 router.post('/create', userGroupController.create)
-router.post('/addDeviceGroup', userGroupController.addDeviceGroup)
+router.put('/adddevicegroup', userGroupController.addDeviceGroup)
 router.get('/', userGroupController.getAllGroups)
 router.get('/:id', userGroupController.getOneGroup)
 router.delete('/:id', userGroupController.delete)
