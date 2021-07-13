@@ -17,10 +17,11 @@ const Content = sequelize.define('content', {
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
   name: {type: DataTypes.STRING},
   source: {type: DataTypes.STRING},
-  link: {type: DataTypes.STRING, unique: true},
+  link: {type: DataTypes.STRING},
   date_creation: {type: DataTypes.DATE},
   date_last_change: {type: DataTypes.DATE},
-  is_approved: {type: DataTypes.BOOLEAN}
+  is_approved: {type: DataTypes.BOOLEAN},
+  author_id: {type: DataTypes.INTEGER}
 }) 
 
 const Playlist = sequelize.define('playlist', {

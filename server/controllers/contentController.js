@@ -1,10 +1,11 @@
+const uuid = require('uuid')
 const {Content} = require('../models/models')
 
 class ContentController {
   async create(req, res) {
-    const {name} = req.body
-    const source = "random_link_src" + new Date()
-    const link = "random_link_result" + new Date()
+    const {name, author_id} = req.body
+    const source = uuid.v4() + ".src"
+    const link = uuid.v4() + ".mp4"
     const date_creation = new Date()
     const date_last_change = new Date()
 
@@ -14,14 +15,22 @@ class ContentController {
       link: link,
       date_creation: date_creation,
       date_last_change: date_last_change,
-      is_approved: false
+      is_approved: false,
+      author_id: author_id
     })
 
     return res.json(content)
   }
   
   async approving(req, res) {
-    return res.json("Функция подтверждения в стадии разработки")
+    const {id} = req.body
+
+    const content = await Content.findOne({where: {id}})
+
+    content.is_approved = true
+    const isSucceed = await content.save()
+    
+    return res.json(isSucceed)
   }
   
   async getAllContent(req, res) {
