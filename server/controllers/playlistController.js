@@ -1,4 +1,5 @@
 const {Playlist} = require('../models/models')
+const {ContentInPlaylist} = require('../models/models')
 
 class PlaylistController {
   async create(req, res) {
@@ -8,11 +9,33 @@ class PlaylistController {
   }
   
   async addContent(req, res) {
-    return res.json({message: "Функция добавления контента в стадии разработки"})
+    const {content_id, playlist_id, position} = req.body
+
+    const addedContent = await ContentInPlaylist.create({
+      position: position,
+      playlist_id: playlist_id,
+      content_id: content_id
+    })
+
+    return res.json(addedContent)
+  }
+
+  async deleteContent(req, res) {
+
+    return res.json("Фнукция находится в разработке")
   }
   
   async edit(req, res) {
-    return res.json({message: "Функция редактирования плейлиста в стадии разработки"})
+    const {id} = req.params
+    const {name} = req.body
+
+    const editingPlaylist = await Playlist.findByPk(id)
+
+    name ? editingPlaylist.name = name : true
+
+    const isSucceed = await editingPlaylist.save()
+
+    return res.json(isSucceed)
   }
   
   async getAllPlaylists(req, res) {

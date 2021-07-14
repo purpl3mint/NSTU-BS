@@ -4,13 +4,14 @@ const {DataTypes} = require('sequelize')
 const User = sequelize.define('user', {
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
   username: {type: DataTypes.STRING, unique: true},
-  password: {type: DataTypes.STRING}
+  password: {type: DataTypes.STRING},
+  level: {type: DataTypes.INTEGER, require: true, defaultValue: 0},
+  group_id: {type: DataTypes.INTEGER}
 }) 
 
 const UserGroup = sequelize.define('usergroup', {
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-  name: {type: DataTypes.STRING, unique: true},
-  restrictions: {type: DataTypes.INTEGER}
+  name: {type: DataTypes.STRING, unique: true}
 }) 
 
 const Content = sequelize.define('content', {
@@ -18,7 +19,7 @@ const Content = sequelize.define('content', {
   name: {type: DataTypes.STRING},
   source: {type: DataTypes.STRING},
   link: {type: DataTypes.STRING},
-  date_creation: {type: DataTypes.DATE},
+  date_upload: {type: DataTypes.DATE},
   date_last_change: {type: DataTypes.DATE},
   is_approved: {type: DataTypes.BOOLEAN},
   author_id: {type: DataTypes.INTEGER}
@@ -31,22 +32,27 @@ const Playlist = sequelize.define('playlist', {
 
 const DeviceGroup = sequelize.define('devicegroup', {
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-  name: {type: DataTypes.STRING, unique: true}
+  name: {type: DataTypes.STRING, unique: true},
+  outer_link: {type: DataTypes.STRING}
 }) 
 
-const ContentInPlaylist = sequelize.define('contentInPlaylist', {
-  id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-  position: {type: DataTypes.INTEGER, unique: true}
-})
-
-const PlaylistForDevicesGroup = sequelize.define('playlistForDevicesGroup', {
+const Schedule = sequelize.define('schedule', {
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
   time_start: {type: DataTypes.TIME, require: true},
   time_end: {type: DataTypes.TIME, require: true}
 })
 
+const ContentInPlaylist = sequelize.define('contentInPlaylist', {
+  id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+  position: {type: DataTypes.INTEGER},
+  playlist_id: {type: DataTypes.INTEGER, require: true},
+  content_id: {type: DataTypes.INTEGER, require: true}
+})
+
 const UserControlDeviceGroup = sequelize.define('userControlDeviceGroup', {
-  id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true}
+  id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+  users_id: {type: DataTypes.INTEGER, require: true},
+  devices_id: {type: DataTypes.INTEGER, require: true}
 })
 
 UserGroup.hasMany(User)
@@ -55,19 +61,35 @@ User.belongsTo(UserGroup)
 User.hasMany(Content)
 Content.belongsTo(User)
 
-Content.belongsToMany(Playlist, {through: ContentInPlaylist})
-Playlist.belongsToMany(Content, {through: ContentInPlaylist})
+DeviceGroup.hasMany(Schedule)
+Schedule.belongsTo(DeviceGroup)
 
-DeviceGroup.belongsToMany(Playlist, {through: PlaylistForDevicesGroup})
-Playlist.belongsToMany(DeviceGroup, {through: PlaylistForDevicesGroup})
+Playlist.hasMany(Schedule)
+Schedule.belongsTo(Playlist)
 
-UserGroup.belongsToMany(DeviceGroup, {through: UserControlDeviceGroup})
-DeviceGroup.belongsToMany(UserGroup, {through: UserControlDeviceGroup})
+Content.hasMany(ContentInPlaylist)
+ContentInPlaylist.belongsTo(Content)
+
+Playlist.hasMany(ContentInPlaylist)
+ContentInPlaylist.belongsTo(Playlist)
+
+UserGroup.belongsToMany(DeviceGroup, {
+  through: UserControlDeviceGroup,
+  as: 'usergroup',
+  foreignKey: 'users_id'
+})
+DeviceGroup.belongsToMany(UserGroup, {
+  through: UserControlDeviceGroup,
+  as: 'devicegroup',
+  foreignKey: 'devices_id'
+})
 
 module.exports = {
   User,
   UserGroup,
   Content,
   Playlist,
-  DeviceGroup
+  DeviceGroup,
+  Schedule,
+  ContentInPlaylist
 }

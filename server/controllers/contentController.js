@@ -6,14 +6,14 @@ class ContentController {
     const {name, author_id} = req.body
     const source = uuid.v4() + ".src"
     const link = uuid.v4() + ".mp4"
-    const date_creation = new Date()
+    const date_upload = new Date()
     const date_last_change = new Date()
 
     const content = await Content.create({
       name: name,
       source: source,
       link: link,
-      date_creation: date_creation,
+      date_upload: date_upload,
       date_last_change: date_last_change,
       is_approved: false,
       author_id: author_id

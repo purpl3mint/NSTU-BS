@@ -3,7 +3,10 @@ const {DeviceGroup} = require('../models/models')
 class DeviceGroupController {
   async create(req, res) {
     const {name} = req.body
-    const deviceGroup = await DeviceGroup.create({name: name})
+    const outer_link = name + '.html'
+
+    const deviceGroup = await DeviceGroup.create({name: name, outer_link: outer_link})
+    
     return res.json(deviceGroup)
   }
   
@@ -14,8 +17,15 @@ class DeviceGroupController {
   
   async getOneGroup(req, res) {
     const {id} = req.params
-    const deviceGroup = await DeviceGroup.findOne({where: {id}})
+    const deviceGroup = await DeviceGroup.findByPk(id)
     return res.json(deviceGroup)
+  }
+
+  async getLink(req, res) {
+    const {id} = req.params
+    const deviceGroup = await DeviceGroup.findByPk(id)
+
+    return res.json(deviceGroup.outer_link)
   }
   
   async delete(req, res) {

@@ -3,8 +3,8 @@ const apiError = require('../error/apiError')
 
 class UserGroupController {
   async create(req, res) {
-    const {name, restrictions} = req.body
-    const userGroup = await UserGroup.create({name: name, restrictions: restrictions})
+    const {name} = req.body
+    const userGroup = await UserGroup.create({name: name})
     return res.json(userGroup)
   }
   
