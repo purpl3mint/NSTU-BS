@@ -1,13 +1,19 @@
 const uuid = require('uuid')
+const path = require('path')
 const {Content} = require('../models/models')
 
 class ContentController {
   async create(req, res) {
-    const {name, author_id} = req.body
-    const source = uuid.v4() + ".src"
-    const link = uuid.v4() + ".mp4"
+    const {name, author_id, filetype} = req.body
+    const {file} = req.files
+    const filepath = uuid.v4()
+    const source = filepath + filetype
+    const link = filepath + ".mp4"
     const date_upload = new Date()
     const date_last_change = new Date()
+
+
+    file.mv(path.resolve(__dirname, '..', 'static', source))
 
     const content = await Content.create({
       name: name,

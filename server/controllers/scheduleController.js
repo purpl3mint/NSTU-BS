@@ -28,6 +28,16 @@ class ScheduleController {
         return res.json(scheduleRecord)
     }
 
+    async getScheduleForDeviceGroup(req, res) {
+        const {id} = req.params
+
+        const schedule = await Schedule.findAll({where : {
+            devicegroupId: id
+        }})
+
+        return res.json(schedule)
+    }
+
     async edit(req, res) {
         const {id} = req.params
         const {time_start, time_end} = req.body

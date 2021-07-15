@@ -20,9 +20,69 @@ class PlaylistController {
     return res.json(addedContent)
   }
 
-  async deleteContent(req, res) {
+  async editContent(req, res) {
+    const {playlist_id, position_old, position_new} = req.body
 
-    return res.json("Фнукция находится в разработке")
+    const editingContent = await ContentInPlaylist.findOne({where: {
+      playlist_id: playlist_id,
+      position: position_old
+    }})
+
+    if (!editingContent){
+      return res.json("Такой записи не найдено")
+    }
+    
+    const collision = await ContentInPlaylist.findOne({where: {
+      playlist_id: playlist_id,
+      position: position_new
+    }})
+
+    if (!collision){
+      editingContent.position = position_new
+      const isSucceed = await editingContent.save()
+
+      if (isSucceed){
+        return res.json(isSucceed)
+      } else {
+        return res.json("Что-то пошло не так")
+      }
+
+    } else {
+      collision.position = -1
+      await collision.save()
+      
+      editingContent.position = position_new
+      await editingContent.save()
+
+      collision.position = position_old
+      await collision.save()
+
+      return res.json("Изменение прошло успешно")
+    }
+
+    
+  }
+
+  async getContent(req, res) {
+    const {id} = req.params
+
+    const content = await ContentInPlaylist.findAll({where : {
+      playlist_id: id
+    }})
+
+    return res.json(content)
+  }
+
+  async deleteContent(req, res) {
+    const {id} = req.params
+
+    const result = await ContentInPlaylist.destroy({where: {id}})
+
+    if (result) {
+      return res.json("Запись была успешно удалена из плейлиста")
+    } else {
+      return res.json("Запись не удалось удалить из плейлиста")
+    }
   }
   
   async edit(req, res) {

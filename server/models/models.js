@@ -75,12 +75,12 @@ ContentInPlaylist.belongsTo(Playlist)
 
 UserGroup.belongsToMany(DeviceGroup, {
   through: UserControlDeviceGroup,
-  as: 'usergroup',
+  as: 'devices',
   foreignKey: 'users_id'
 })
 DeviceGroup.belongsToMany(UserGroup, {
   through: UserControlDeviceGroup,
-  as: 'devicegroup',
+  as: 'users',
   foreignKey: 'devices_id'
 })
 
