@@ -35,6 +35,13 @@ class UserController {
   
   async login(req, res, next) {
     const {username, password} = req.body
+
+    if (!username)
+      return next(ApiError.badRequest('Было передано пустое имя пользователя'))
+
+    if(!password)
+      return next(ApiError.badRequest('Был передан пустой пароль'))
+
     const user = await User.findOne({where: {username}})
 
     if (!user)
@@ -66,13 +73,13 @@ class UserController {
 
     const isSucceed = await user.save()
 
-    return res.json(isSucceed)
+    return res.json({isSucceed})
   }
 
   async getAll(req, res) {
     const users = await User.findAll()
 
-    return res.json(users)
+    return res.json({users})
   }
   
   async getById(req, res) {
@@ -80,7 +87,7 @@ class UserController {
 
     const user = await User.findByPk(id)
 
-    return res.json(user)
+    return res.json({user})
   }
 
   async delete(req, res) {
@@ -95,7 +102,7 @@ class UserController {
       message = `Пользователь с id=${id} не найден`
     }
 
-    return res.json(message)
+    return res.json({message})
   }
 }
 
