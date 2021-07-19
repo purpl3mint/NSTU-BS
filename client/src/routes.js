@@ -1,5 +1,6 @@
 import React from "react"
 import { Switch, Route, Redirect } from 'react-router-dom'
+import { Sidebar } from "./components/Sidebar"
 import { AuthPage } from "./pages/AuthPage"
 import { CabinetPage } from "./pages/CabinetPage"
 import { DeviceGroupsPage } from "./pages/DeviceGroupsPage"
@@ -11,27 +12,33 @@ import { VideosPage } from "./pages/VideosPage"
 export const useRoutes = isAutheticated => {
     if (isAutheticated) {
         return (
-            <Switch>
-                <Route path="/" exact>
-                    <CabinetPage />
-                </Route>
-                <Route path="/videos" exact>
-                    <VideosPage />
-                </Route>
-                <Route path="/playlists" exact>
-                    <PlaylistsPage />
-                </Route>
-                <Route path="/schedules" exact>
-                    <SchedulesPage />
-                </Route>
-                <Route path="/devicegroups" exact>
-                    <DeviceGroupsPage />
-                </Route>
-                <Route path="/usergroups" exact>
-                    <UserGroupsPage />
-                </Route>
-                <Redirect to="/" />
-            </Switch>
+            <div className="row">
+                <Sidebar />
+
+                <div className="col s9 m9 l9 xl9 offset-s1 offset-m1 offset-x1 offset-xl1">
+                    <Switch>
+                        <Route path="/" exact>
+                            <CabinetPage />
+                        </Route>
+                        <Route path="/videos" exact>
+                            <VideosPage />
+                        </Route>
+                        <Route path="/playlists" exact>
+                            <PlaylistsPage />
+                        </Route>
+                        <Route path="/schedules" exact>
+                            <SchedulesPage />
+                        </Route>
+                        <Route path="/devicegroups" exact>
+                            <DeviceGroupsPage />
+                        </Route>
+                        <Route path="/usergroups" exact>
+                            <UserGroupsPage />
+                        </Route>
+                        <Redirect to="/" />
+                    </Switch>
+                </div>
+            </div>
         )
     }
 

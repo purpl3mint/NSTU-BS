@@ -2,6 +2,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { useAuth } from './hooks/auth.hook';
 import { useRoutes } from './routes';
 import { AuthContext } from './context/AuthContext';
+import { Navbar } from './components/Navbar';
 import 'materialize-css'
 
 function App() {
@@ -11,7 +12,9 @@ function App() {
   return (
     <AuthContext.Provider value={{token, login, logout, isAutheticated}}>
       <Router>
-        <div className="container">
+        { isAutheticated && <Navbar /> }
+
+        <div className="">
           {routes}
         </div>
       </Router>
