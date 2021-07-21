@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom'
 
 export const Sidebar = () => {
     return (
-        <div className="collection col s2" style={{padding: 0}}>
+        <div className="collection col s2" style={{padding: 0, marginRight: "4%"}}>
             <NavLink to="/videos" className="collection-item">Видео</NavLink>
             <NavLink to="/playlists" className="collection-item">Плейлисты</NavLink>
             <NavLink to="/schedules" className="collection-item">Расписания</NavLink>

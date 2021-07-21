@@ -15,7 +15,7 @@ export const useRoutes = isAutheticated => {
             <div className="row">
                 <Sidebar />
 
-                <div className="col s9 m9 l9 xl9 offset-s1 offset-m1 offset-x1 offset-xl1">
+                <div className="col s9 m9 l9 xl9">
                     <Switch>
                         <Route path="/" exact>
                             <CabinetPage />

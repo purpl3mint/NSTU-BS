@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from "react"
+//import jwt from 'jsonwebtoken'
 
 const storageName = 'userData'
 
@@ -7,6 +8,9 @@ export const useAuth = () => {
 
     const login = useCallback((jwtToken) => {
         setToken(jwtToken)
+
+        //Отправить эти данные в стор!!!
+        //const data = jwt.decode(jwtToken).username
 
         localStorage.setItem(storageName, JSON.stringify({token: jwtToken}))
     }, [])
@@ -18,7 +22,7 @@ export const useAuth = () => {
     }, [])
 
     useEffect(() => {
-        const data =  JSON.parse(localStorage.getItem(storageName))
+        const data = JSON.parse(localStorage.getItem(storageName))
 
         if (data && data.token) {
             login(data.token)
