@@ -1,9 +1,17 @@
+const uuid = require('uuid')
 const {DeviceGroup} = require('../models/models')
 
 class DeviceGroupController {
   async create(req, res) {
-    const {name} = req.body
-    const outer_link = name + '.html'
+    const {name, link} = req.body
+    let outer_link
+
+    if (link) {
+      outer_link = link + '.html'
+    } else {
+      outer_link = uuid.v4() + '.html'
+    }
+
 
     const deviceGroup = await DeviceGroup.create({name: name, outer_link: outer_link})
     

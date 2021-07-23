@@ -1,20 +1,20 @@
 import React, { useCallback, useEffect, useState } from "react"
-import { useHttp } from "../hooks/http.hook"
-import { useMessage } from "../hooks/message.hook"
-import { PlaylistCard } from "./PlaylistCard"
+import { useHttp } from "../../hooks/http.hook"
+import { useMessage } from "../../hooks/message.hook"
+import { VideoCard } from "./VideoCard"
 
-export const PlaylistsPage = () => {
+export const VideosPage = () => {
     const {loading, error, request, clearError} = useHttp()
     const message = useMessage()
-    const [playlists, setPlaylists] = useState()
+    const [videos, setVideos] = useState([])
 
     const loadHandler = useCallback ( async () => {
         try {
-            const data = await request("/api/playlist", "GET")
-            const newData = data.map(p => <PlaylistCard name={p.name} id={p.id}/>)
-            setPlaylists(newData)
+            const data = await request("/api/content", "GET")
+            const newData = data.map(v => <VideoCard key={v.id} name={v.name} id={v.id}/>)
+            setVideos(newData)
         } catch (e) {}
-    }, [request, setPlaylists])
+    }, [request, setVideos])
 
     useEffect(() => {
         message(error)
@@ -23,12 +23,13 @@ export const PlaylistsPage = () => {
 
     useEffect(() => {loadHandler()}, [loadHandler])
 
+
     return (
         <div>
-            <h1>Плейлисты</h1>
+            <h1>Поиск видео</h1>
             <div className="collection" style={{border: "0px"}}>
                 { loading && <div className="progress"><div className="indeterminate"></div></div> }
-                { playlists }
+                { videos }
             </div>
         </div>
     )

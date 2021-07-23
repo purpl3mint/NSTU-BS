@@ -1,20 +1,20 @@
 import React, { useCallback, useEffect, useState } from "react"
-import { useHttp } from "../hooks/http.hook"
-import { useMessage } from "../hooks/message.hook"
-import { DeviceGroupCard } from "./DeviceGroupCard"
+import { useHttp } from "../../hooks/http.hook"
+import { useMessage } from "../../hooks/message.hook"
+import { PlaylistCard } from "./PlaylistCard"
 
-export const DeviceGroupsPage = () => {
+export const PlaylistsPage = () => {
     const {loading, error, request, clearError} = useHttp()
     const message = useMessage()
-    const [deviceGroups, setDeviceGroups] = useState([])
+    const [playlists, setPlaylists] = useState()
 
     const loadHandler = useCallback ( async () => {
         try {
-            const data = await request("/api/devicegroup", "GET")
-            const newData = data.map(g => <DeviceGroupCard name={g.name} id={g.id} outerLink={g.outer_link}/>)
-            setDeviceGroups(newData)
+            const data = await request("/api/playlist", "GET")
+            const newData = data.map(p => <PlaylistCard key={p.id} name={p.name} id={p.id}/>)
+            setPlaylists(newData)
         } catch (e) {}
-    }, [request, setDeviceGroups])
+    }, [request, setPlaylists])
 
     useEffect(() => {
         message(error)
@@ -25,10 +25,10 @@ export const DeviceGroupsPage = () => {
 
     return (
         <div>
-            <h1>Группы устройств</h1>
+            <h1>Плейлисты</h1>
             <div className="collection" style={{border: "0px"}}>
                 { loading && <div className="progress"><div className="indeterminate"></div></div> }
-                { deviceGroups }
+                { playlists }
             </div>
         </div>
     )
