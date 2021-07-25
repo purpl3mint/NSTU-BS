@@ -26,7 +26,7 @@ export const VideosPage = () => {
 
     return (
         <div>
-            <h1>Поиск видео</h1>
+            <h1>Видео</h1>
             <div className="collection" style={{border: "0px"}}>
                 { loading && <div className="progress"><div className="indeterminate"></div></div> }
                 { videos }

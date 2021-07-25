@@ -10,18 +10,25 @@ export const ScheduleAddPage = () => {
     const [playlists, setPlaylists] = useState([])
     const [devicegroups, setDeviceGroups] = useState([])
     const [form, setForm] = useState({
-        playlist: '',
-        devices: '',
-        timeStart: '',
-        timeEnd: ''
+        playlist_id: '',
+        devices_id: '',
+        timeStart__hour: '00',
+        timeStart__min: '00',
+        timeStart__sec: '00',
+        timeEnd__hour: '00',
+        timeEnd__min: '00',
+        timeEnd__sec: '00'
     })
 
     const loadHandler = useCallback( async () => {
         const dataPlaylists = await request('/api/playlist', "GET")
         const dataDeviceGroups = await request('/api/devicegroup', "GET")
 
-        setPlaylists(dataPlaylists)
-        setDeviceGroups(dataDeviceGroups)
+        const newDataPlaylists = dataPlaylists.map(d => <option value={d.id}>{d.name}</option>)
+        const newDataDeviceGroups = dataDeviceGroups.map(d => <option value={d.id}>{d.name}</option>)
+
+        setPlaylists(newDataPlaylists)
+        setDeviceGroups(newDataDeviceGroups)
     }, [request, setPlaylists, setDeviceGroups])
 
     useEffect(() => {
@@ -37,17 +44,13 @@ export const ScheduleAddPage = () => {
 
     const createHandler = async () => {
         try {
-            await request("/api/schedule/create", "POST", {...form})
+            const time_start = form.timeStart__hour + ":" + form.timeStart__min + ":" + form.timeStart__sec
+            const time_end = form.timeEnd__hour + ":" + form.timeEnd__min + ":" + form.timeEnd__sec
+            await request("/api/schedule", "POST", {...form, time_start, time_end})
             message("Запись в расписании успешно создана")
             setSucceed(true)
         } catch (e) {}
     }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        var elems = document.querySelectorAll('.timepicker');
-        let options = {}
-        var instances = window.M.Timepicker.init(elems, options);
-    });
 
     return (
         <div>
@@ -57,21 +60,47 @@ export const ScheduleAddPage = () => {
                 <div className="col s12">
                     <div className="row">
                         <div className="input-field col s6">
-                            <input id="name" name="name" type="text" className="validate" onChange={changeHandler} />
-                            <label htmlFor="name">Название группы</label>
+                            <span>Время начала</span>
+                            <div className="row" style={{paddingLeft: "12px"}}>
+                                <input id="timeStart__hour" name="timeStart__hour" type="text" className="validate col s3" placeholder="ЧЧ" onChange={changeHandler}/>
+                                <input id="timeStart__min" name="timeStart__min" type="text" className="validate col s3 offset-s1" placeholder="ММ" onChange={changeHandler}/>
+                                <input id="timeStart__sec" name="timeStart__sec" type="text" className="validate col s3 offset-s1" placeholder="СС" onChange={changeHandler}/>
+                            </div>
                         </div>
                     </div>
                     <div className="row">
                         <div className="input-field col s6">
-                            <input id="timeStart" name="timeStart" type="text" className="timepicker" />
-                            <label htmlFor="timeStart">Время начала</label>
+                            <span>Время завершения</span>
+                            <div className="row" style={{paddingLeft: "12px"}}>
+                                <input id="timeEnd__hour" name="timeEnd__hour" type="text" className="validate col s3" placeholder="ЧЧ" onChange={changeHandler}/>
+                                <input id="timeEnd__min" name="timeEnd__min" type="text" className="validate col s3 offset-s1" placeholder="ММ" onChange={changeHandler}/>
+                                <input id="timeEnd__sec" name="timeEnd__sec" type="text" className="validate col s3 offset-s1" placeholder="СС" onChange={changeHandler}/>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col s12">
+                            <label>Плейлист</label>
+                            <select name="playlist_id" className="browser-default" onChange={changeHandler}>
+                                <option value="" disabled selected>Выберите плейлист</option>
+                                {playlists}
+                            </select>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col s12">
+                            <label>Группа устройств</label>
+                            <select name="devices_id" className="browser-default" onChange={changeHandler}>
+                                <option value="" disabled selected>Выберите группу устройств</option>
+                                {devicegroups}
+                            </select>
                         </div>
                     </div>
                     <button className="btn blue-grey darken-1" onClick={createHandler}>Создать</button>
                 </div>
             </div>
 
-            {isSucceed && <Redirect to="/schedules" />}
+            {isSucceed && <Redirect key="redirect" to="/schedules" />}
 
         </div>
     )

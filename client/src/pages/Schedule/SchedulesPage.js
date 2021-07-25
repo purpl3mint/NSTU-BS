@@ -9,6 +9,25 @@ export const SchedulesPage = () => {
     const message = useMessage()
     const [schedules, setSchedules] = useState([])
 
+    const deleteHandler = useCallback( async event => {
+        try {
+            const data = await request("/api/schedule/" + event.target.name, "DELETE")
+            message(data)
+            const scheduleUpd = await request("/api/schedule", "GET")
+            const newScheduleUpd = scheduleUpd.map(s => 
+            <ScheduleCard 
+                key={s.id} 
+                id={s.id} 
+                timeStart={s.time_start} 
+                timeEnd={s.time_end} 
+                deviceGroupId={s.devicegroupId} 
+                playlistId={s.playlistId}
+                deleteHandler={deleteHandler}
+            />)
+            setSchedules(newScheduleUpd)
+        } catch (e) {}
+    }, [message, request, setSchedules])
+
     const loadHandler = useCallback ( async () => {
         try {
             const data = await request("/api/schedule", "GET")
@@ -20,11 +39,12 @@ export const SchedulesPage = () => {
                     timeEnd={s.time_end} 
                     deviceGroupId={s.devicegroupId} 
                     playlistId={s.playlistId}
+                    deleteHandler={deleteHandler}
                 />
                 )
             setSchedules(newData)
         } catch (e) {}
-    }, [request, setSchedules])
+    }, [request, setSchedules, deleteHandler])
 
     useEffect(() => {
         message(error)

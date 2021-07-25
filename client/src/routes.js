@@ -6,6 +6,7 @@ import { CabinetPage } from "./pages/Cabinet/CabinetPage"
 import { DeviceGroupsPage } from "./pages/DeviceGroup/DeviceGroupsPage"
 import { DeviceGroupAddPage } from "./pages/DeviceGroup/DeviceGroupAddPage"
 import { PlaylistsPage } from "./pages/Playlist/PlaylistsPage"
+import { PlaylistAddPage } from "./pages/Playlist/PlaylistAddPage"
 import { SchedulesPage } from "./pages/Schedule/SchedulesPage"
 import { ScheduleAddPage } from "./pages/Schedule/ScheduleAddPage"
 import { UserGroupsPage } from "./pages/UserGroup/UserGroupsPage"
@@ -28,6 +29,9 @@ export const useRoutes = isAutheticated => {
                         </Route>
                         <Route path="/playlists" exact>
                             <PlaylistsPage />
+                        </Route>
+                        <Route path="/playlist/add" exact>
+                            <PlaylistAddPage />
                         </Route>
                         <Route path="/schedules" exact>
                             <SchedulesPage />
