@@ -9,6 +9,7 @@ export const Sidebar = () => {
             <NavLink to="/schedules" className="collection-item">Расписания</NavLink>
             <NavLink to="/devicegroups" className="collection-item">Группы устройств</NavLink>
             <NavLink to="/usergroups" className="collection-item">Группы пользователей</NavLink>
+            <NavLink to="/users" className="collection-item">Пользователи</NavLink>
         </div>
     )
 }

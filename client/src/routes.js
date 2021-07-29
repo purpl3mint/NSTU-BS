@@ -6,12 +6,18 @@ import { CabinetPage } from "./pages/Cabinet/CabinetPage"
 import { DeviceGroupsPage } from "./pages/DeviceGroup/DeviceGroupsPage"
 import { DeviceGroupAddPage } from "./pages/DeviceGroup/DeviceGroupAddPage"
 import { PlaylistsPage } from "./pages/Playlist/PlaylistsPage"
+import { PlaylistPage } from "./pages/Playlist/PlaylistPage"
 import { PlaylistAddPage } from "./pages/Playlist/PlaylistAddPage"
+import { PlaylistAddContentPage } from "./pages/Playlist/PlaylistAddContentPage"
 import { SchedulesPage } from "./pages/Schedule/SchedulesPage"
 import { ScheduleAddPage } from "./pages/Schedule/ScheduleAddPage"
 import { UserGroupsPage } from "./pages/UserGroup/UserGroupsPage"
 import { UserGroupAddPage } from "./pages/UserGroup/UserGroupAddPage"
 import { VideosPage } from "./pages/Video/VideosPage"
+import { VideoPage } from "./pages/Video/VideoPage"
+import { VideoAddPage } from "./pages/Video/VideoAddPage"
+import { UsersPage } from "./pages/User/UsersPage"
+import { UserAddPage } from "./pages/User/UserAddPage"
 
 export const useRoutes = isAutheticated => {
     if (isAutheticated) {
@@ -27,8 +33,20 @@ export const useRoutes = isAutheticated => {
                         <Route path="/videos" exact>
                             <VideosPage />
                         </Route>
+                        <Route path="/video/add" exact>
+                            <VideoAddPage />
+                        </Route>
+                        <Route path="/video/:id" exact>
+                            <VideoPage />
+                        </Route>
                         <Route path="/playlists" exact>
                             <PlaylistsPage />
+                        </Route>
+                        <Route path="/playlists/:id" exact>
+                            <PlaylistPage />
+                        </Route>
+                        <Route path="/playlist/addcontent/:id" exact>
+                            <PlaylistAddContentPage />
                         </Route>
                         <Route path="/playlist/add" exact>
                             <PlaylistAddPage />
@@ -50,6 +68,12 @@ export const useRoutes = isAutheticated => {
                         </Route>
                         <Route path="/usergroup/add" exact>
                             <UserGroupAddPage />
+                        </Route>
+                        <Route path="/users" exact>
+                            <UsersPage />
+                        </Route>
+                        <Route path="/user/add" exact>
+                            <UserAddPage />
                         </Route>
                         <Redirect to="/" />
                     </Switch>

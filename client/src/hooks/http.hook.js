@@ -7,9 +7,11 @@ export const useHttp = () => {
     const request = useCallback( async (url, method = 'GET', body = null, headers = {}) => {
         setLoading(true)
         try {
-            if (body) {
+            if (!headers['Content-Type']) {
+                (headers['Content-Type'] = 'application/json')
+            }
+            if (body && headers['Content-Type'] === 'application/json') {
                 body = JSON.stringify(body)
-                headers['Content-Type'] = 'application/json'
             }
             const response = await fetch(url, { method, body, headers })
             const data = await response.json()

@@ -4,6 +4,7 @@ import { useRoutes } from './routes';
 import { AuthContext } from './context/AuthContext';
 import { Navbar } from './components/Navbar';
 import 'materialize-css'
+import "../node_modules/video-react/dist/video-react.css"
 
 function App() {
   const {token, login, logout} = useAuth()
