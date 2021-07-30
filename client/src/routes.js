@@ -11,6 +11,7 @@ import { PlaylistAddPage } from "./pages/Playlist/PlaylistAddPage"
 import { PlaylistAddContentPage } from "./pages/Playlist/PlaylistAddContentPage"
 import { SchedulesPage } from "./pages/Schedule/SchedulesPage"
 import { ScheduleAddPage } from "./pages/Schedule/ScheduleAddPage"
+import { ScheduleEditPage } from "./pages/Schedule/ScheduleEditPage"
 import { UserGroupsPage } from "./pages/UserGroup/UserGroupsPage"
 import { UserGroupAddPage } from "./pages/UserGroup/UserGroupAddPage"
 import { VideosPage } from "./pages/Video/VideosPage"
@@ -18,6 +19,7 @@ import { VideoPage } from "./pages/Video/VideoPage"
 import { VideoAddPage } from "./pages/Video/VideoAddPage"
 import { UsersPage } from "./pages/User/UsersPage"
 import { UserAddPage } from "./pages/User/UserAddPage"
+import { UserSetGroupPage } from "./pages/User/UserSetGroupPage"
 
 export const useRoutes = isAutheticated => {
     if (isAutheticated) {
@@ -57,6 +59,9 @@ export const useRoutes = isAutheticated => {
                         <Route path="/schedule/add" exact>
                             <ScheduleAddPage />
                         </Route>
+                        <Route path="/schedule/edit/:id" exact>
+                            <ScheduleEditPage />
+                        </Route>
                         <Route path="/devicegroups" exact>
                             <DeviceGroupsPage />
                         </Route>
@@ -74,6 +79,9 @@ export const useRoutes = isAutheticated => {
                         </Route>
                         <Route path="/user/add" exact>
                             <UserAddPage />
+                        </Route>
+                        <Route path="/user/edit/:id" exact>
+                            <UserSetGroupPage />
                         </Route>
                         <Redirect to="/" />
                     </Switch>

@@ -1,8 +1,13 @@
-import React from "react"
+import React, { useCallback } from "react"
 import { NavLink } from 'react-router-dom'
 
 export const ScheduleCard = (props) => {
     const {id, timeStart, timeEnd, deviceGroupId, playlistId, deleteHandler} = props
+
+    const clickHandler = useCallback(() => {
+        const storageName = "currentSchedule"
+        localStorage.setItem(storageName, JSON.stringify({"id": id}))
+    }, [id])
 
     return (
         <div className="row">
@@ -13,7 +18,8 @@ export const ScheduleCard = (props) => {
                     <span className="schedule-card__playlist">Плейлист: {playlistId}</span>
                 </NavLink>
             </div>
-            <button name={id} className="btn col s1 offset-s1" onClick={deleteHandler}>Удалить</button>
+            <NavLink className="col s1 btn" to={"/schedule/edit/" + id} onClick={clickHandler}>Изменить</NavLink>
+            <button name={id} className="btn col s1" onClick={deleteHandler}>Удалить</button>
         </div>
     )
 }

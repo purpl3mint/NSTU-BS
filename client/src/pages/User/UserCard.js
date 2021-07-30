@@ -1,8 +1,13 @@
-import React from "react"
+import React, { useCallback } from "react"
 import { NavLink } from 'react-router-dom'
 
 export const UserCard = (props) => {
     const {username, id, deleteHandler} = props
+
+    const clickHandler = useCallback(() => {
+        const storageName = "currentUser"
+        localStorage.setItem(storageName, JSON.stringify({"username": username, "id": id}))
+    }, [username, id])
 
     return (
         <div className="row">
@@ -15,7 +20,8 @@ export const UserCard = (props) => {
                     {username}
                 </NavLink>
             </div>
-            <button name={id} className="btn col s1 offset-s1" onClick={deleteHandler}>Удалить</button>
+            <NavLink className="col s1 btn" to={"/user/edit/" + id} onClick={clickHandler}>Изменить</NavLink>
+            <button name={id} className="btn col s1" onClick={deleteHandler}>Удалить</button>
         </div>
         
     )
