@@ -30,7 +30,7 @@ export const UserSetGroupPage = () => {
             const dataGroupsTransformed = dataGroups.map(g => <option value={g.id}>{g.name}</option>)
             setUserGroups(dataGroupsTransformed)
         } catch (e) {}
-    }, [])
+    }, [id, request])
 
     useEffect(() => {
         message(error)

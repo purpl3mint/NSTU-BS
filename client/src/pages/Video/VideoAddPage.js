@@ -10,6 +10,7 @@ export const VideoAddPage = () => {
     const [form, setForm] = useState({
         name: '',
         filetype: '',
+        outerLink: '',
         file: null
     })
 
@@ -31,10 +32,14 @@ export const VideoAddPage = () => {
     const createHandler = async event => {
         event.preventDefault()
         try {
-            const data = new FormData(formRef.current)
+            //const data = new FormData(formRef.current)
 
             //await request("/api/content/create", "POST", data, {"Content-Type": "multipart/form-data"})
-            message("Функция в стадии разработки")
+
+            //message("Функция в стадии разработки")
+
+            const data = await request("/api/content/create", "POST", {...form})
+            message(data)
             setSucceed(true)
         } catch (e) {}
     }
@@ -56,20 +61,26 @@ export const VideoAddPage = () => {
                             <select className="browser-default" name="filetype" onChange={changeHandler}>
                                 <option value="" disabled selected>Выберите формат файла</option>
                                 <option value=".mp4">.mp4</option>
+                                <option value="youtube">Youtube</option>
                             </select>
                         </div>
                     </div>
+                    {form.filetype === "youtube" && <input type="text" name="outerLink" onChange={changeFile} placeholder="Вставьте ссылку"/>}
+                    {form.filetype === ".mp4" &&
+                    /*
                     <div className="file-field input-field">
                         <div className="btn">
                             <span>File</span>
-                            { !form.filetype && <input type="file" name="file" accept={form.filetype} disabled/> }
-                            { form.filetype && <input type="file" name="file" accept={form.filetype} onChange={changeFile}/> }
+                            { form.filetype === ".mp4" && <input type="file" name="file" accept={form.filetype} onChange={changeFile}/> }
                         </div>
                         <div className="file-path-wrapper">
                             <input className="file-path validate" type="text"/>
                         </div>
                     </div>
-                    <button className="btn blue-grey darken-1" onClick={createHandler}>Создать</button>
+                    */
+                    <span>Функция в стадии разработки</span>
+                    }
+                    {(form.filetype && form.filetype !== ".mp4") && <button className="btn blue-grey darken-1" onClick={createHandler}>Создать</button>}
                 </form>
             </div>
 

@@ -4,16 +4,30 @@ const {Content} = require('../models/models')
 
 class ContentController {
   async create(req, res) {
-    const {name, author_id, filetype} = req.body
-    const {file} = req.files
-    const filepath = uuid.v4()
-    const source = filepath + filetype
-    const link = filepath + ".mp4"
+    const {name, author_id, filetype, outerLink} = req.body
     const date_upload = new Date()
     const date_last_change = new Date()
 
+    let file;
+    let filepath;
+    let source;
+    let link;
 
-    file.mv(path.resolve(__dirname, '..', 'static', source))
+    if (filetype === ".mp4") {
+      const {newFile} = req.files
+      file = newFile
+      filepath = uuid.v4()
+      source = filepath + filetype
+      link = filepath + ".mp4"
+    } else if (filetype === "youtube") {
+      source = outerLink
+      link = outerLink
+    }
+    
+
+    if (file){
+      file.mv(path.resolve(__dirname, '..', 'static', source))
+    }
 
     const content = await Content.create({
       name: name,
@@ -48,6 +62,8 @@ class ContentController {
   async getOneContent(req, res) {
     const {id} = req.params
     const content = await Content.findOne({where: {id}})
+
+    console.log(content);
 
     return res.json(content)
   }
