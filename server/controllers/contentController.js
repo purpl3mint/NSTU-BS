@@ -1,5 +1,6 @@
 const uuid = require('uuid')
 const path = require('path')
+const { unlink } = require('fs')
 const {Content} = require('../models/models')
 
 class ContentController {
@@ -8,25 +9,26 @@ class ContentController {
     const date_upload = new Date()
     const date_last_change = new Date()
 
-    let file;
-    let filepath;
-    let source;
-    let link;
+    let message = ""
+
+    let newFile = null;
+    let filepath = "";
+    let source = "";
+    let link = "";
 
     if (filetype === ".mp4") {
-      const {newFile} = req.files
-      file = newFile
+      const {file} = req.files
+      newFile = file
       filepath = uuid.v4()
-      source = filepath + filetype
+      source = "static"
       link = filepath + ".mp4"
     } else if (filetype === "youtube") {
-      source = outerLink
+      source = filetype
       link = outerLink
     }
-    
 
-    if (file){
-      file.mv(path.resolve(__dirname, '..', 'static', source))
+    if (newFile){
+      newFile.mv(path.resolve(__dirname, '..', 'static', link))
     }
 
     const content = await Content.create({
@@ -50,7 +52,9 @@ class ContentController {
     content.is_approved = true
     const isSucceed = await content.save()
     
-    return res.json(isSucceed)
+    isSucceed ? message = "Контент успешно загружен" : message = "Контент не удалось сохранить"
+
+    return res.json(message)
   }
   
   async getAllContent(req, res) {
@@ -71,6 +75,13 @@ class ContentController {
   async delete(req, res) {
     let message = ''
     const {id} = req.params
+    const data = await Content.findByPk(id)
+
+    unlink(path.resolve(__dirname, '..', 'static', data.link), (err) => {
+      if (err) throw err
+      console.log('Файл был успешно удален');
+    })
+
     const deletedContent = await Content.destroy({where: {id}})
 
     if (deletedContent) {

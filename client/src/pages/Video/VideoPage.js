@@ -3,16 +3,23 @@ import ReactPlayer from "react-player"
 import { useHttp } from "../../hooks/http.hook"
 
 export const VideoPage = (props) => {
+    const proxy = "http://localhost:5000/"
     const {loading, error, request, clearError} = useHttp()
     const [name, setName] = useState("")
     const [id, setId] = useState(0)
     const [link, setLink] = useState("")
+    const [source, setSource] = useState("")
 
     
     const getLink = useCallback( async() => {
         try {
             const data = await request("/api/content/" + id, "GET")
-            setLink(data.link)
+            if (data.source === "static") {
+                setLink(proxy + data.link)
+            } else {
+                setLink(data.link)
+            }
+            setSource(data.source)
             console.log(link);
         } catch (e) {}
     }, [request, id, link])
@@ -38,7 +45,7 @@ export const VideoPage = (props) => {
     return (
         <div className="row">
             <h1 className="video-tltle">{name}</h1>
-            <ReactPlayer url={link}/>
+            <ReactPlayer url={link} controls={source === "static"}/>
         </div>
     )
 }

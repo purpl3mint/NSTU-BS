@@ -34,12 +34,28 @@ export const VideoAddPage = () => {
         try {
             //const data = new FormData(formRef.current)
 
-            //await request("/api/content/create", "POST", data, {"Content-Type": "multipart/form-data"})
+            //const data = await request("/api/content/create", "POST", form, {"Content-Type": "multipart/form-data"})
 
             //message("Функция в стадии разработки")
 
-            const data = await request("/api/content/create", "POST", {...form})
-            message(data)
+            if (form.filetype === "youtube") {
+                /* NEXT LINE WORKS FOR YOUTUBE */
+                const data = await request("/api/content/create", "POST", {...form})
+
+                //console.log({...form});
+                message(data.message)
+            } else {            
+                const data = new FormData()
+                data.append("name", form.name)
+                data.append("filetype", form.filetype)
+                data.append("outerLink", form.outerLink)
+                data.append("file", form.file)
+                
+                const XHRRequest = new XMLHttpRequest()
+                XHRRequest.open("POST", "/api/content/create")
+                XHRRequest.send(data)
+            }
+
             setSucceed(true)
         } catch (e) {}
     }
@@ -65,9 +81,9 @@ export const VideoAddPage = () => {
                             </select>
                         </div>
                     </div>
-                    {form.filetype === "youtube" && <input type="text" name="outerLink" onChange={changeFile} placeholder="Вставьте ссылку"/>}
+                    {form.filetype === "youtube" && <input type="text" name="outerLink" onChange={changeHandler} placeholder="Вставьте ссылку"/>}
                     {form.filetype === ".mp4" &&
-                    /*
+                    
                     <div className="file-field input-field">
                         <div className="btn">
                             <span>File</span>
@@ -77,10 +93,10 @@ export const VideoAddPage = () => {
                             <input className="file-path validate" type="text"/>
                         </div>
                     </div>
-                    */
-                    <span>Функция в стадии разработки</span>
+                    
+                    //<span>Функция в стадии разработки</span>
                     }
-                    {(form.filetype && form.filetype !== ".mp4") && <button className="btn blue-grey darken-1" onClick={createHandler}>Создать</button>}
+                    {(form.filetype) && <button className="btn blue-grey darken-1" onClick={createHandler}>Создать</button>}
                 </form>
             </div>
 
