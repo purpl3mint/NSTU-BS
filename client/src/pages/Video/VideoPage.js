@@ -1,14 +1,17 @@
 import React, { useEffect, useState, useCallback } from "react"
 import ReactPlayer from "react-player"
 import { useHttp } from "../../hooks/http.hook"
+import { useMessage } from "../../hooks/message.hook"
 
 export const VideoPage = (props) => {
     const proxy = "http://localhost:5000/"
     const {loading, error, request, clearError} = useHttp()
+    const message = useMessage()
     const [name, setName] = useState("")
     const [id, setId] = useState(0)
     const [link, setLink] = useState("")
     const [source, setSource] = useState("")
+    const [isApproved, setIsApproved] = useState(false)
 
     
     const getLink = useCallback( async() => {
@@ -20,10 +23,19 @@ export const VideoPage = (props) => {
                 setLink(data.link)
             }
             setSource(data.source)
+            setIsApproved(data.is_approved)
             console.log(link);
+            console.log("Is approved: ", data.is_approved);
         } catch (e) {}
     }, [request, id, link])
     
+    const approvingHandler = useCallback( async () => {
+        try {
+            const data = await request("/api/content/approving", "PUT", {id: id})
+            message(data.message)
+            setIsApproved(data.isSucceed)
+        } catch (e) {}
+    }, [id, message, request])
 
     useEffect(() => {
         const data = JSON.parse(localStorage.getItem("currentVideo"))
@@ -43,9 +55,50 @@ export const VideoPage = (props) => {
 
 
     return (
-        <div className="row">
-            <h1 className="video-tltle">{name}</h1>
+        <div className="row" style={{ marginTop: "10px"}}>
             <ReactPlayer url={link} controls={source === "static"}/>
+            <h3 className="video-tltle">{name}</h3>
+            {!isApproved && 
+            <div 
+                class="approving-container" 
+                style={{display: "flex", flexDirection: "row"}}
+            >
+                <div 
+                    className="approving-card" 
+                    style={{
+                        width: "120px", 
+                        textAlign: "center", 
+                        paddingTop: "5px", 
+                        backgroundColor: "red",
+                        marginRight: "20px"
+                    }}
+                >
+                    Не одобрено
+                </div>
+                <button className="approving-button btn" onClick={approvingHandler}>Одобрить</button>
+            </div>
+            }
+
+            {isApproved && 
+            <div 
+            class="approving-container" 
+            style={{display: "flex", flexDirection: "row"}}
+        >
+            <div 
+                className="approving-card" 
+                style={{
+                    width: "120px", 
+                    textAlign: "center", 
+                    paddingTop: "5px", 
+                    paddingBottom: "5px", 
+                    backgroundColor: "green",
+                    marginRight: "20px",
+                    color: "white"
+                }}
+            >
+                Одобрено
+            </div>
+        </div>}
         </div>
     )
 }

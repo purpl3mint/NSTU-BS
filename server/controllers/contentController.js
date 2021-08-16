@@ -46,15 +46,21 @@ class ContentController {
   
   async approving(req, res) {
     const {id} = req.body
+    let message = ""
+    const content = await Content.findByPk(id)
 
-    const content = await Content.findOne({where: {id}})
+    if (!content) {
+      message = "Некорректный идентификатор контента"
+      return res.json({ message, isSucceed: false })
+    }
 
     content.is_approved = true
     const isSucceed = await content.save()
-    
-    isSucceed ? message = "Контент успешно загружен" : message = "Контент не удалось сохранить"
+    /*Почему не работает без log???*/
+    console.log("Is approved: ", isSucceed.is_approved);
+    (isSucceed && isSucceed.is_approved) ? message = "Контент успешно обновлен" : message = "Контент не удалось сохранить"
 
-    return res.json(message)
+    return res.json({ message, isSucceed: isSucceed.is_approved })
   }
   
   async getAllContent(req, res) {
