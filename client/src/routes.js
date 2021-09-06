@@ -20,6 +20,7 @@ import { VideoAddPage } from "./pages/Video/VideoAddPage"
 import { UsersPage } from "./pages/User/UsersPage"
 import { UserAddPage } from "./pages/User/UserAddPage"
 import { UserSetGroupPage } from "./pages/User/UserSetGroupPage"
+import { WatchPage } from "./pages/Watch/WatchPage"
 
 export const useRoutes = isAutheticated => {
     if (isAutheticated) {
@@ -82,6 +83,9 @@ export const useRoutes = isAutheticated => {
                         </Route>
                         <Route path="/user/edit/:id" exact>
                             <UserSetGroupPage />
+                        </Route>
+                        <Route path="/watch/:deivcegroup" exact>
+                            <WatchPage />
                         </Route>
                         <Redirect to="/" />
                     </Switch>

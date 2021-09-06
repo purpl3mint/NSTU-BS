@@ -77,6 +77,21 @@ class PlaylistController {
     return res.json(content)
   }
 
+  async getContentByLink(req, res) {
+    const {link} = req.params
+
+    const content = await ContentInPlaylist.findAll({
+      where : {
+        playlist_id: 2
+      },
+      include: {
+        model: Content
+      }
+    })
+
+    return res.json(content)
+  }
+
   async deleteContent(req, res) {
     const {id} = req.params
 

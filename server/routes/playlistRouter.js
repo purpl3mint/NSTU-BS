@@ -9,6 +9,7 @@ router.put('/editcontent', playlistController.editContent)
 router.get('/', playlistController.getAllPlaylists)
 router.get('/:id', playlistController.getOnePlaylist)
 router.get('/content/:id', playlistController.getContent)
+router.get('/contentlink/:link', playlistController.getContentByLink)
 router.delete('/:id', playlistController.delete)
 router.delete('/deletecontent/:id', playlistController.deleteContent)
 

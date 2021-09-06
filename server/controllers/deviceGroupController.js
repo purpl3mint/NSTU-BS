@@ -7,9 +7,9 @@ class DeviceGroupController {
     let outer_link
 
     if (link) {
-      outer_link = link + '.html'
+      outer_link = link
     } else {
-      outer_link = uuid.v4() + '.html'
+      outer_link = uuid.v4()
     }
 
 

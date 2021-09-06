@@ -8,7 +8,7 @@ export const DeviceGroupCard = (props) => {
         <div className="row">
             <div className="col s10">
                 <NavLink 
-                    to={"/devicegroups/" + outerLink} 
+                    to={"/watch/" + outerLink} 
                     className="collection-item card" 
                     style={{marginBottom: "25px", border: "1px solid grey"}}
                 >
