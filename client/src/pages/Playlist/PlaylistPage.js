@@ -33,7 +33,13 @@ export const PlaylistPage = () => {
             }
 
             const data = await request("/api/playlist/content/" + id, "GET")
-            const newData = data.map(p => <PlaylistVideoCard key={p.id} name={p.name} id={p.id} deleteHandler={deleteHandler}/>)
+
+            console.log(data);
+
+            const newData = data.map(p => 
+                p.contentId 
+                    ? <PlaylistVideoCard key={p.id} name={p.name} id={p.contentId} deleteHandler={deleteHandler}/>
+                    : <PlaylistVideoCard key={p.id} name={p.name} id={p.content_id} deleteHandler={deleteHandler}/>)
             setVideos(newData)
         } catch (e) {}
     }, [id, request, setVideos, deleteHandler])

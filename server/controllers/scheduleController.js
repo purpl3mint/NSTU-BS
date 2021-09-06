@@ -1,4 +1,4 @@
-const {Schedule} = require('../models/models')
+const {Schedule, DeviceGroup, Playlist} = require('../models/models')
 
 class ScheduleController {
     async create(req, res) {
@@ -15,7 +15,13 @@ class ScheduleController {
     }
 
     async getAllSchedules(req, res) {
-        const schedules = await Schedule.findAll()
+        let schedules = await Schedule.findAll({
+            include: [{
+                model: DeviceGroup
+            }, {
+                model: Playlist
+            }]
+        })
 
         return res.json(schedules)
     }

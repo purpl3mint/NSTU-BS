@@ -2,7 +2,7 @@ import React, { useCallback } from "react"
 import { NavLink } from 'react-router-dom'
 
 export const ScheduleCard = (props) => {
-    const {id, timeStart, timeEnd, deviceGroupId, playlistId, deleteHandler} = props
+    const {id, timeStart, timeEnd, deviceGroupName, playlistName, deleteHandler} = props
 
     const clickHandler = useCallback(() => {
         const storageName = "currentSchedule"
@@ -14,8 +14,8 @@ export const ScheduleCard = (props) => {
             <div className="col s10">
                 <NavLink to={"/schedules/" + id} className="collection-item card" style={{marginBottom: "50px", border: "1px solid grey"}}>
                     <span className="schedule-card__time">{timeStart + " - " + timeEnd}</span><br/>
-                    <span className="schedule-card__devices">Группа устройств: {deviceGroupId}</span><br/>
-                    <span className="schedule-card__playlist">Плейлист: {playlistId}</span>
+                    <span className="schedule-card__devices">Группа устройств: {deviceGroupName}</span><br/>
+                    <span className="schedule-card__playlist">Плейлист: {playlistName}</span>
                 </NavLink>
             </div>
             <NavLink className="col s1 btn" to={"/schedule/edit/" + id} onClick={clickHandler}>Изменить</NavLink>

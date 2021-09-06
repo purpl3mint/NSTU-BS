@@ -37,8 +37,8 @@ export const SchedulesPage = () => {
                     id={s.id} 
                     timeStart={s.time_start} 
                     timeEnd={s.time_end} 
-                    deviceGroupId={s.devicegroupId} 
-                    playlistId={s.playlistId}
+                    deviceGroupName={s.devicegroup.name} 
+                    playlistName={s.playlist.name}
                     deleteHandler={deleteHandler}
                 />
                 )

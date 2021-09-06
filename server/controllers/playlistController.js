@@ -1,5 +1,4 @@
-const {Playlist} = require('../models/models')
-const {ContentInPlaylist} = require('../models/models')
+const {Playlist, ContentInPlaylist, Content} = require('../models/models')
 
 class PlaylistController {
   async create(req, res) {
@@ -14,7 +13,7 @@ class PlaylistController {
     const addedContent = await ContentInPlaylist.create({
       position: position,
       playlist_id: playlist_id,
-      content_id: content_id
+      contentId: content_id
     })
 
     return res.json(addedContent)
@@ -66,9 +65,14 @@ class PlaylistController {
   async getContent(req, res) {
     const {id} = req.params
 
-    const content = await ContentInPlaylist.findAll({where : {
-      playlist_id: id
-    }})
+    const content = await ContentInPlaylist.findAll({
+      where : {
+        playlist_id: id
+      },
+      include: {
+        model: Content
+      }
+    })
 
     return res.json(content)
   }
