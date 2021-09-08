@@ -14,7 +14,7 @@ export const UsersPage = () => {
             const data = await request("/api/user/" + event.target.name, "DELETE")
             message("Пользователь успешно удален")
             const deviceGroupUpd = await request("/api/user", "GET")
-            const newDeviceGroupUpd = deviceGroupUpd.map(u => <UserCard key={u.id} username={u.username} id={u.id} outerLink={u.outer_link} deleteHandler={deleteHandler}/>)
+            const newDeviceGroupUpd = deviceGroupUpd.map(u => <UserCard key={u.id} username={u.username} id={u.id} level={u.level} deleteHandler={deleteHandler}/>)
             setUsers(newDeviceGroupUpd)
         } catch (e) {}
     }, [message, request, setUsers])
@@ -22,7 +22,7 @@ export const UsersPage = () => {
     const loadHandler = useCallback ( async () => {
         try {
             const data = await request("/api/user", "GET")
-            const newData = data.map(u => <UserCard key={u.id} username={u.username} id={u.id} outerLink={u.outer_link} deleteHandler={deleteHandler}/>)
+            const newData = data.map(u => <UserCard key={u.id} username={u.username} id={u.id} level={u.level} deleteHandler={deleteHandler}/>)
             setUsers(newData)
         } catch (e) {}
     }, [request, setUsers, deleteHandler])

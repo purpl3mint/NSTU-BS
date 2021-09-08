@@ -2,11 +2,11 @@ import React, { useCallback } from "react"
 import { NavLink } from 'react-router-dom'
 
 export const UserCard = (props) => {
-    const {username, id, deleteHandler} = props
+    const {username, id, level, deleteHandler} = props
 
     const clickHandler = useCallback(() => {
         const storageName = "currentUser"
-        localStorage.setItem(storageName, JSON.stringify({"username": username, "id": id}))
+        localStorage.setItem(storageName, JSON.stringify({"username": username, "id": id, "level": level}))
     }, [username, id])
 
     return (
@@ -17,7 +17,8 @@ export const UserCard = (props) => {
                     className="collection-item card" 
                     style={{marginBottom: "25px", border: "1px solid grey"}}
                 >
-                    {username}
+                    {username}<br/>
+                    Уровень: {level}
                 </NavLink>
             </div>
             <NavLink className="col s1 btn" to={"/user/edit/" + id} onClick={clickHandler}>Изменить</NavLink>

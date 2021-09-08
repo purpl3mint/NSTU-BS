@@ -10,6 +10,7 @@ export const UserSetGroupPage = () => {
     const [userGroups, setUserGroups] = useState(null)
     const [username, setUsername] = useState("")
     const [id, setId] = useState(0)
+    const [level, setLevel] = useState(0)
     const [form, setForm] = useState({
         group_id: 0
     })
@@ -23,8 +24,9 @@ export const UserSetGroupPage = () => {
             if (dataStorage && dataStorage.id) {
                 setId(dataStorage.id)
             }
-            
-            console.log("ID: ", id);
+            if (dataStorage && dataStorage.level) {
+                setLevel(dataStorage.level)
+            }
 
             const dataGroups = await request("/api/usergroup", "GET")
             const dataGroupsTransformed = dataGroups.map(g => <option value={g.id}>{g.name}</option>)
@@ -59,13 +61,23 @@ export const UserSetGroupPage = () => {
             <div className="row">
                 <div className="col s12">
                     <span>Имя пользователя: {username}</span>
-                    <div className="row">
-                        <select className="col s6 browser-default" name="group_id" onChange={changeHandler}>
-                            <option value="" disabled selected>Выберите группу пользователей</option>
-                            {userGroups}
-                        </select>
-                    </div>
-                    <button className="btn blue-grey darken-1" onClick={saveHandler}>Сохранить</button>
+                    {   level === 1 &&
+                        <div className="row">
+                            <select className="col s6 browser-default" name="group_id" onChange={changeHandler}>
+                                <option value="" disabled selected>Выберите группу пользователей</option>
+                                {userGroups}
+                            </select>
+                        </div>
+                    }
+                    {   level !== 1 && 
+                        <div className="row">
+                            <span className="col s6">Внимание! Данному пользователю нельзя присвоить группу</span>
+                        </div>
+                    }
+                    
+                    {   level === 1 &&
+                        <button className="btn blue-grey darken-1" onClick={saveHandler}>Сохранить</button>
+                    }
                 </div>
             </div>
 
