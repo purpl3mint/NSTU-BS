@@ -84,7 +84,7 @@ export const useRoutes = isAutheticated => {
                         <Route path="/user/edit/:id" exact>
                             <UserSetGroupPage />
                         </Route>
-                        <Route path="/watch/:deivcegroup" exact>
+                        <Route path="/watch/:link" exact>
                             <WatchPage />
                         </Route>
                         <Redirect to="/" />

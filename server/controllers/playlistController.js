@@ -1,4 +1,4 @@
-const {Playlist, ContentInPlaylist, Content} = require('../models/models')
+const {Playlist, ContentInPlaylist, Content, DeviceGroup, Schedule} = require('../models/models')
 
 class PlaylistController {
   async create(req, res) {
@@ -79,17 +79,74 @@ class PlaylistController {
 
   async getContentByLink(req, res) {
     const {link} = req.params
+    const now = new Date()
+
+    //Get Device Group Id by its link
+    const deviceGroup = await DeviceGroup.findOne({where: {
+      outer_link: link
+    }})
+
+    //Get all schedules for chosen group
+    const schedules = await Schedule.findAll({where: {
+      devicegroupId: deviceGroup.id
+      }, include: {
+        model: Playlist
+    }})
+    
+    //Parsing time for all schedule records
+    const schedulesTimeParsed = schedules.map(function(s) {
+      const timeStartComponents = s.time_start.split(':')
+      let timeStart = new Date()
+      timeStart.setHours(timeStartComponents[0])
+      timeStart.setMinutes(timeStartComponents[1])
+      timeStart.setSeconds(timeStartComponents[2])
+
+      const timeEndComponents = s.time_end.split(':')
+      let timeEnd = new Date()
+      timeEnd.setHours(timeEndComponents[0])
+      timeEnd.setMinutes(timeEndComponents[1])
+      timeEnd.setSeconds(timeEndComponents[2])
+
+      if (timeStart > timeEnd)
+        timeEnd.setDate(timeEnd.getDate() + 1)
+
+      return {timeStart, timeEnd}
+    })
+
+    function chooseCurrentPlaylist() {
+      if (schedules.length === 1)
+        return {
+          chosenPlaylist: schedules[0].playlistId,
+          timeEnd: schedulesTimeParsed[0].timeEnd
+        }
+      else {
+        for(let i = 0; i < schedules.length; i++) {
+          if (schedulesTimeParsed[i].timeStart < now && schedulesTimeParsed[i].timeEnd > now)
+            return {
+              chosenPlaylist: schedules[i].playlistId,
+              timeEnd: schedulesTimeParsed[i].timeEnd
+            }
+        }
+      }
+
+      return {
+        chosenPlaylist: 2,
+        timeEnd: null
+      }
+    }
+
+    const {chosenPlaylist, timeEnd} = chooseCurrentPlaylist()
 
     const content = await ContentInPlaylist.findAll({
       where : {
-        playlist_id: 2
+        playlist_id: chosenPlaylist
       },
       include: {
         model: Content
       }
     })
 
-    return res.json(content)
+    return res.json( {content, timeEnd} )
   }
 
   async deleteContent(req, res) {

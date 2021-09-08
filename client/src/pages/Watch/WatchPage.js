@@ -12,20 +12,36 @@ export const WatchPage = (props) => {
   const [currentVideo, setCurrentVideo] = useState(0)
   const [playlist, setPlaylist] = useState(null)
   const [isLoaded, setIsLoaded] = useState(false)
+  const [timeEnd, setTimeEnd] = useState(null)
+
   
   const initHandler = useCallback( async () => {
     try {
+      setIsLoaded(false)
+
       const data = await request('/api/playlist/contentlink/' + link, 'GET')
-      const links = data.map(v => v.content.source === 'static' ? proxy + v.content.link : v.content.link)
+      const links = data.content.map(v => v.content.source === 'static' ? proxy + v.content.link : v.content.link)
+
+      const timeEnd = new Date(data.timeEnd)
 
       setPlaylist(links)
-
+      setTimeEnd(timeEnd)
       setIsLoaded(true)
     } catch (e) {}
   }, [request, link])
 
   const endVideoHandler = () => {
-    (currentVideo + 1) === playlist.length ? setCurrentVideo(0) : setCurrentVideo(currentVideo + 1)
+    const now = new Date()
+    if (timeEnd < now)
+      initHandler()
+    else {
+
+      if (playlist.length === 1) {
+        setIsLoaded(false)
+        setIsLoaded(true)
+      } else 
+        (currentVideo + 1) === playlist.length ? setCurrentVideo(0) : setCurrentVideo(currentVideo + 1)
+    }
   }
 
   useEffect( () => { initHandler() }, [initHandler])

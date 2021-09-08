@@ -22,7 +22,8 @@ export const PlaylistAddContentPage = () => {
         }
         
         const videosRequest = await request("/api/content", "GET")
-        const videosTransformed = videosRequest.map(v => <option name="content_id" value={v.id}>{v.name}</option>)
+        const videosFiltered = videosRequest.filter(v => v.is_approved)
+        const videosTransformed = videosFiltered.map(v => <option name="content_id" value={v.id}>{v.name}</option>)
         setVideos(videosTransformed)
     }, [request])
 

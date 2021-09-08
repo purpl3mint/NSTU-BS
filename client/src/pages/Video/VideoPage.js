@@ -24,8 +24,6 @@ export const VideoPage = (props) => {
             }
             setSource(data.source)
             setIsApproved(data.is_approved)
-            console.log(link);
-            console.log("Is approved: ", data.is_approved);
         } catch (e) {}
     }, [request, id, link])
     
@@ -56,7 +54,7 @@ export const VideoPage = (props) => {
 
     return (
         <div className="row" style={{ marginTop: "10px"}}>
-            <ReactPlayer url={link} controls={source === "static"}/>
+            <ReactPlayer url={link} controls='true'/>
             <h3 className="video-tltle">{name}</h3>
             {!isApproved && 
             <div 

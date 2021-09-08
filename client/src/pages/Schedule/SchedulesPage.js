@@ -32,6 +32,8 @@ export const SchedulesPage = () => {
         try {
             const data = await request("/api/schedule", "GET")
             
+            console.log(data);
+
             const newData = data.map(s => <ScheduleCard 
                     key={s.id} 
                     id={s.id} 
