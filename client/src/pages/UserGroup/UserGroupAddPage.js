@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { Redirect } from "react-router-dom"
 import { useHttp } from "../../hooks/http.hook"
 import { useMessage } from "../../hooks/message.hook"
@@ -7,14 +7,17 @@ export const UserGroupAddPage = () => {
     const {error, request, clearError} = useHttp()
     const message = useMessage()
     const [isSucceed, setSucceed] = useState(false)
+    const [deviceGroups, setDeviceGroups] = useState(null)
     const [form, setForm] = useState({
-        name: ''
+        name: '',
+        devicegroupId: 0
     })
 
-    useEffect(() => {
-        message(error)
-        clearError()
-    }, [error, message, clearError])
+    const initHandler = useCallback( async () => {
+        const data = await request('/api/devicegroup', 'GET')
+        const dataTransformed = data.map(d => <option name="devicegroupId" value={d.id}>{d.name}</option>)
+        setDeviceGroups(dataTransformed)
+    }, [request])
 
     const changeHandler = event => {
         setForm({ ...form, [event.target.name]: event.target.value})
@@ -22,11 +25,23 @@ export const UserGroupAddPage = () => {
 
     const createHandler = async () => {
         try {
-            await request("/api/usergroup/create", "POST", {...form})
+            const resultCreation = await request("/api/usergroup/create", "POST", {name: form.name})
+
+            if (resultCreation != null) {
+                const resultSetDeviceGroup = await request('/api/usergroup/devicegroup', 'PUT', {...form})
+
+            }
             message("Группа устройств успешно создана")
             setSucceed(true)
         } catch (e) {}
     }
+
+
+    useEffect(() => {
+        message(error)
+        clearError()
+        initHandler()
+    }, [error, message, clearError, initHandler])
 
     return (
         <div>
@@ -38,6 +53,10 @@ export const UserGroupAddPage = () => {
                         <div className="input-field col s6">
                             <input id="name" name="name" type="text" className="validate" onChange={changeHandler} />
                             <label htmlFor="name">Название группы</label>
+                            <select className="col browser-default" name="devicegroupId" onChange={changeHandler}>
+                                <option value="" disabled selected>Выберите группу устройств</option>
+                                {deviceGroups}
+                            </select>
                         </div>
                     </div>
                     <button className="btn blue-grey darken-1" onClick={createHandler}>Создать</button>

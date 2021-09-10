@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from "react"
 import { Redirect } from "react-router-dom"
 import { useHttp } from "../../hooks/http.hook"
 import { useMessage } from "../../hooks/message.hook"
+const jwt = require('jsonwebtoken')
 
 export const ScheduleAddPage = () => {
     const {error, request, clearError} = useHttp()
@@ -21,8 +22,33 @@ export const ScheduleAddPage = () => {
     })
 
     const loadHandler = useCallback( async () => {
+        const token = JSON.parse(localStorage.getItem('userData')).token
+        const dataToken = jwt.decode(token)
+        let userid = 0
+
+        console.log(dataToken);
+        if (dataToken && dataToken.id) {
+            userid = dataToken.id
+        }
+
+        let level = 0
+        if (dataToken && dataToken.level) {
+            level = dataToken.level
+        }
+
+        console.log(userid);
+        
+        const userData = await request('/api/user/' + userid, 'GET')
+
+
         const dataPlaylists = await request('/api/playlist', "GET")
-        const dataDeviceGroups = await request('/api/devicegroup', "GET")
+
+        let dataDeviceGroups = []
+        if (level === 1 && userData && userData.devices != {})
+            dataDeviceGroups = userData.devices
+        else
+            dataDeviceGroups = await request('/api/devicegroup', "GET")
+            
 
         const newDataPlaylists = dataPlaylists.map(d => <option value={d.id}>{d.name}</option>)
         const newDataDeviceGroups = dataDeviceGroups.map(d => <option value={d.id}>{d.name}</option>)

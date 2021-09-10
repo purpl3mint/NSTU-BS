@@ -1,15 +1,25 @@
-const {UserGroup} = require('../models/models')
+const {UserGroup, DeviceGroup, User, UserControlDeviceGroup} = require('../models/models')
 const apiError = require('../error/apiError')
 
 class UserGroupController {
   async create(req, res) {
     const {name} = req.body
     const userGroup = await UserGroup.create({name: name})
+
     return res.json(userGroup)
   }
   
   async addDeviceGroup(req, res) {
-    return res.json('Функция добавления группы устройств в стадии разработки')
+    const {name, devicegroupId} = req.body
+    const userGroup = await UserGroup.findOne({where: {name: name}})
+    const deviceGroup = await DeviceGroup.findByPk(devicegroupId)
+
+    const connectingResponce = await UserControlDeviceGroup.create({
+      devices_id: devicegroupId,
+      users_id: userGroup.id
+    })
+
+    return res.json('Группа успешно сопоставлена')
   }
   
   async getAllGroups(req, res) {

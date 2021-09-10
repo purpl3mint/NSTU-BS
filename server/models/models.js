@@ -73,6 +73,7 @@ ContentInPlaylist.belongsTo(Content)
 Playlist.hasMany(ContentInPlaylist)
 ContentInPlaylist.belongsTo(Playlist)
 
+
 UserGroup.belongsToMany(DeviceGroup, {
   through: UserControlDeviceGroup,
   as: 'devices',
@@ -84,6 +85,15 @@ DeviceGroup.belongsToMany(UserGroup, {
   foreignKey: 'devices_id'
 })
 
+/*
+UserGroup.belongsToMany(DeviceGroup, {
+  through: UserControlDeviceGroup
+})
+DeviceGroup.belongsToMany(UserGroup, {
+  through: UserControlDeviceGroup
+})
+*/
+
 module.exports = {
   User,
   UserGroup,
@@ -91,5 +101,6 @@ module.exports = {
   Playlist,
   DeviceGroup,
   Schedule,
-  ContentInPlaylist
+  ContentInPlaylist,
+  UserControlDeviceGroup
 }

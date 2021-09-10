@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from "react"
 import ReactPlayer from "react-player"
 import { useHttp } from "../../hooks/http.hook"
 import { useMessage } from "../../hooks/message.hook"
+const jwt = require('jsonwebtoken')
 
 export const VideoPage = (props) => {
     const proxy = "http://localhost:5000/"
@@ -12,7 +13,8 @@ export const VideoPage = (props) => {
     const [link, setLink] = useState("")
     const [source, setSource] = useState("")
     const [isApproved, setIsApproved] = useState(false)
-
+    const [token, setToken] = useState('')
+    const [level, setLevel] = useState('')
     
     const getLink = useCallback( async() => {
         try {
@@ -48,7 +50,16 @@ export const VideoPage = (props) => {
         }
 
         getLink()
-    }, [id, name, getLink])
+
+        setToken(JSON.parse(localStorage.getItem('userData')).token)
+        const dataToken = jwt.decode(token)
+
+        if (dataToken) {
+            setLevel(dataToken.level)
+        } else {
+            setLevel('неизвестно')
+        }
+    }, [id, name, getLink, token])
 
 
 
@@ -73,7 +84,9 @@ export const VideoPage = (props) => {
                 >
                     Не одобрено
                 </div>
-                <button className="approving-button btn" onClick={approvingHandler}>Одобрить</button>
+                {   (level === 1 || level === 2) && 
+                    <button className="approving-button btn" onClick={approvingHandler}>Одобрить</button>
+                }
             </div>
             }
 

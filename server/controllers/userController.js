@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const {User} = require('../models/models')
+const {User, UserGroup, UserControlDeviceGroup, DeviceGroup} = require('../models/models')
 const ApiError = require('../error/apiError')
 
 class UserController {
@@ -69,7 +69,7 @@ class UserController {
     const {group_id} = req.body
 
     const user = await User.findByPk(id)
-    user.group_id = group_id
+    user.usergroupId = group_id
 
     const isSucceed = await user.save()
 
@@ -77,7 +77,9 @@ class UserController {
   }
 
   async getAll(req, res) {
-    const users = await User.findAll()
+    const users = await User.findAll({include: {
+      model: UserGroup
+    }})
 
     return res.json(users)
   }
@@ -85,9 +87,24 @@ class UserController {
   async getById(req, res) {
     const {id} = req.params
 
-    const user = await User.findByPk(id)
+    const user = await User.findOne({
+      where: {id: id},
+      include: {model: UserGroup}
+    })
 
-    return res.json({user})
+    //Need refactoring for easiest access!!!
+    let devices = []
+    if (user.level === 1) {
+      const connector = await UserControlDeviceGroup.findOne({where: {users_id: user.usergroup.id}})
+
+      const devicesCurrent = await DeviceGroup.findByPk(connector.devices_id)
+      devices.push(devicesCurrent)
+    } else {
+      devices = await DeviceGroup.findAll()
+    }
+
+
+    return res.json({user, devices})
   }
 
   async delete(req, res) {

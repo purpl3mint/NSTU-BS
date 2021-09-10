@@ -1,14 +1,28 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { NavLink } from 'react-router-dom'
+const jwt = require('jsonwebtoken')
 
 export const VideoCard = (props) => {
     const {name, id, deleteHandler} = props
+    const [token, setToken] = useState('')
+    const [level, setLevel] = useState('')
     
     const clickHandler = e =>  {
         const storageName = "currentVideo"
 
         localStorage.setItem(storageName, JSON.stringify({"name": name, "id": id}))
     }
+
+    useEffect( () => {
+        setToken(JSON.parse(localStorage.getItem('userData')).token)
+        const data = jwt.decode(token)
+
+        if (data) {
+            setLevel(data.level)
+        } else {
+            setLevel('неизвестно')
+        }
+    }, [token])
 
     return (
         <div className="row">
@@ -22,7 +36,9 @@ export const VideoCard = (props) => {
                     {name}
                 </NavLink>
             </div>
-            <button name={id} className="btn col s1 offset-s1" onClick={deleteHandler}>Удалить</button>
+            {   (level === 1 || level === 2) && 
+                <button name={id} className="btn col s1 offset-s1" onClick={deleteHandler}>Удалить</button>
+            }
         </div>
     )
 }

@@ -22,7 +22,11 @@ export const UsersPage = () => {
     const loadHandler = useCallback ( async () => {
         try {
             const data = await request("/api/user", "GET")
-            const newData = data.map(u => <UserCard key={u.id} username={u.username} id={u.id} level={u.level} deleteHandler={deleteHandler}/>)
+            console.log(data);
+            const newData = data.map(u => (u.usergroup && u.usergroup.name) 
+                ? <UserCard key={u.id} username={u.username} id={u.id} level={u.level} usergroup={u.usergroup.name} deleteHandler={deleteHandler}/>
+                : <UserCard key={u.id} username={u.username} id={u.id} level={u.level} usergroup='не определена' deleteHandler={deleteHandler}/>
+            )
             setUsers(newData)
         } catch (e) {}
     }, [request, setUsers, deleteHandler])
