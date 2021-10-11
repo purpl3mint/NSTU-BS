@@ -1,31 +1,34 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import { Redirect } from "react-router-dom"
 import { useHttp } from "../../hooks/http.hook"
 import { useMessage } from "../../hooks/message.hook"
+import { deviceGroupSetForm, deviceGroupSetSucceed } from "../../store/actionCreators/deviceGroupActionCreator"
 
 export const DeviceGroupAddPage = () => {
     const {error, request, clearError} = useHttp()
     const message = useMessage()
-    const [isSucceed, setSucceed] = useState(false)
-    const [form, setForm] = useState({
-        name: '',
-        link: ''
-    })
+    const dispatch = useDispatch()
+    
+    const form = useSelector (store => store.deviceGroupReducer.form)
+    const isSucceed = useSelector (store => store.deviceGroupReducer.isSucceed)
+
 
     useEffect(() => {
         message(error)
         clearError()
     }, [error, message, clearError])
 
+    
     const changeHandler = event => {
-        setForm({ ...form, [event.target.name]: event.target.value})
+        dispatch(deviceGroupSetForm(event.target.name, event.target.value));
     }
 
     const createHandler = async () => {
         try {
             await request("/api/devicegroup/create", "POST", {...form})
             message("Группа устройств успешно создана")
-            setSucceed(true)
+            dispatch(deviceGroupSetSucceed(true))
         } catch (e) {}
     }
 
@@ -37,13 +40,13 @@ export const DeviceGroupAddPage = () => {
                 <div className="col s12">
                     <div className="row">
                         <div className="input-field col s6">
-                            <input id="name" name="name" type="text" className="validate" onChange={changeHandler} />
+                            <input id="name" name="name" value={form.name} type="text" className="validate" onChange={changeHandler} />
                             <label htmlFor="name">Название группы</label>
                         </div>
                     </div>
                     <div className="row">
                         <div className="input-field col s6">
-                            <input id="link" name="link" type="text" onChange={changeHandler} />
+                            <input id="link" name="link" value={form.link} type="text" onChange={changeHandler} />
                             <label htmlFor="link">Ссылка на группу(необязательно)</label>
                         </div>
                     </div>
