@@ -13,3 +13,17 @@ export function deviceGroupSetForm (target, value) {
     data: { target, value }
   }
 }
+
+export function deviceGroupAddGroup (form) {
+  return async (dispatch) => {
+    console.log("form from thunk > ", form);
+
+    const method = 'POST'
+    const headers = {'Content-Type': 'application/json'}
+    const body = JSON.stringify({...form})
+    
+    const responce = await fetch("/api/devicegroup/create", {method, headers, body})
+    if (responce.ok)
+      dispatch(deviceGroupSetSucceed(true))
+  }
+}

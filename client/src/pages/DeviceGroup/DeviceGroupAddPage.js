@@ -1,35 +1,23 @@
-import React, { useEffect } from "react"
+import React from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Redirect } from "react-router-dom"
-import { useHttp } from "../../hooks/http.hook"
-import { useMessage } from "../../hooks/message.hook"
-import { deviceGroupSetForm, deviceGroupSetSucceed } from "../../store/actionCreators/deviceGroupActionCreator"
+//import { useMessage } from "../../hooks/message.hook"
+import { deviceGroupAddGroup, deviceGroupSetForm} from "../../store/actionCreators/deviceGroupActionCreator"
 
 export const DeviceGroupAddPage = () => {
-    const {error, request, clearError} = useHttp()
-    const message = useMessage()
+    //const message = useMessage()
     const dispatch = useDispatch()
     
     const form = useSelector (store => store.deviceGroupReducer.form)
     const isSucceed = useSelector (store => store.deviceGroupReducer.isSucceed)
 
 
-    useEffect(() => {
-        message(error)
-        clearError()
-    }, [error, message, clearError])
-
-    
     const changeHandler = event => {
         dispatch(deviceGroupSetForm(event.target.name, event.target.value));
     }
 
     const createHandler = async () => {
-        try {
-            await request("/api/devicegroup/create", "POST", {...form})
-            message("Группа устройств успешно создана")
-            dispatch(deviceGroupSetSucceed(true))
-        } catch (e) {}
+       dispatch(deviceGroupAddGroup(form))
     }
 
     return (
