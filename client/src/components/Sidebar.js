@@ -19,7 +19,6 @@ export const Sidebar = () => {
         } else {
             setLevel('неизвестно')
         }
-        console.log(level);
 
         let newComponent
         switch(level){

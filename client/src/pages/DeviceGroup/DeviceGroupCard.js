@@ -1,8 +1,15 @@
-import React from "react"
+import React, { useCallback } from "react"
 import { NavLink } from 'react-router-dom'
+import { useDispatch } from "react-redux"
+import { deviceGroupDelete } from "../../store/actionCreators/deviceGroupActionCreator"
 
 export const DeviceGroupCard = (props) => {
-    const {name, id, outerLink, deleteHandler} = props
+    const dispatch = useDispatch()
+    const {name, id, outerLink} = props
+
+    const deleteHandler = useCallback(() => {
+        dispatch(deviceGroupDelete(id))
+    }, [])
 
     return (
         <div className="row">

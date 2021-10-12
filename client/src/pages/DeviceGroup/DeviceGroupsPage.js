@@ -1,38 +1,41 @@
 import React, { useCallback, useEffect, useState } from "react"
 import { NavLink } from "react-router-dom"
 import { useHttp } from "../../hooks/http.hook"
-import { useMessage } from "../../hooks/message.hook"
+//import { useMessage } from "../../hooks/message.hook"
+import { useDispatch, useSelector} from 'react-redux'
 import { DeviceGroupCard } from "./DeviceGroupCard"
+import { deviceGroupLoad } from "../../store/actionCreators/deviceGroupActionCreator"
 
 export const DeviceGroupsPage = () => {
-    const {loading, error, request, clearError} = useHttp()
-    const message = useMessage()
-    const [deviceGroups, setDeviceGroups] = useState([])
+    const {loading} = useHttp()
+    //const message = useMessage()
+    const dispatch = useDispatch()
 
-    const deleteHandler = useCallback( async event => {
-        try {
-            const data = await request("/api/devicegroup/" + event.target.name, "DELETE")
-            message(data)
-            const deviceGroupUpd = await request("/api/devicegroup", "GET")
-            const newDeviceGroupUpd = deviceGroupUpd.map(g => <DeviceGroupCard key={g.id} name={g.name} id={g.id} outerLink={g.outer_link} deleteHandler={deleteHandler}/>)
-            setDeviceGroups(newDeviceGroupUpd)
-        } catch (e) {}
-    }, [message, request, setDeviceGroups])
+    const deviceGroups = useSelector(state => {
+        const groups = state.deviceGroupReducer.deviceGroups
+        const transformedGroups = groups.map(g => 
+            <DeviceGroupCard 
+                key={g.id} 
+                name={g.name} 
+                id={g.id} 
+                outerLink={g.outer_link} 
+            />)
+        return transformedGroups
+    })
 
-    const loadHandler = useCallback ( async () => {
-        try {
-            const data = await request("/api/devicegroup", "GET")
-            const newData = data.map(g => <DeviceGroupCard key={g.id} name={g.name} id={g.id} outerLink={g.outer_link} deleteHandler={deleteHandler}/>)
-            setDeviceGroups(newData)
-        } catch (e) {}
-    }, [request, setDeviceGroups, deleteHandler])
+    const loadHandler = useCallback(() => {
+        dispatch(deviceGroupLoad())
+    }, [dispatch, deviceGroupLoad])
 
+    /*
     useEffect(() => {
         message(error)
         clearError()
     }, [error, message, clearError])
+    */
 
     useEffect(() => {loadHandler()}, [loadHandler])
+    
 
     return (
         <div>

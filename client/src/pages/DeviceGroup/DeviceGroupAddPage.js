@@ -2,7 +2,7 @@ import React from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Redirect } from "react-router-dom"
 //import { useMessage } from "../../hooks/message.hook"
-import { deviceGroupAddGroup, deviceGroupSetForm} from "../../store/actionCreators/deviceGroupActionCreator"
+import { deviceGroupAdd, deviceGroupSetForm} from "../../store/actionCreators/deviceGroupActionCreator"
 
 export const DeviceGroupAddPage = () => {
     //const message = useMessage()
@@ -17,7 +17,7 @@ export const DeviceGroupAddPage = () => {
     }
 
     const createHandler = async () => {
-       dispatch(deviceGroupAddGroup(form))
+       dispatch(deviceGroupAdd(form))
     }
 
     return (

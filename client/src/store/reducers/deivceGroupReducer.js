@@ -1,11 +1,16 @@
-import {DEVICE_GROUP_SET_SUCCEED, DEVICE_GROUP_SET_FORM} from '../actions/deviceGroupActions'
+import {
+  DEVICE_GROUP_SET_SUCCEED, 
+  DEVICE_GROUP_SET_FORM, 
+  DEVICE_GROUP_SET_GROUPS
+} from '../actions/deviceGroupActions'
 
 const initialState = {
   isSucceed: false,
   form: {
     name: '',
     link: ''
-  }
+  },
+  deviceGroups: []
 }
 
 
@@ -19,7 +24,9 @@ function deviceGroupReducer(state = initialState, action) {
       const result = {...state, form: newForm}
       return result
     }
-
+    case DEVICE_GROUP_SET_GROUPS: {
+      return {...state, deviceGroups: action.data}
+    }
     default: return state
   }
 }
