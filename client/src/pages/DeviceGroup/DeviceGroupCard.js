@@ -9,7 +9,7 @@ export const DeviceGroupCard = (props) => {
 
     const deleteHandler = useCallback(() => {
         dispatch(deviceGroupDelete(id))
-    }, [])
+    }, [dispatch, id])
 
     return (
         <div className="row">

@@ -1,45 +1,21 @@
-import React, { useEffect, useState } from "react"
-const jwt = require('jsonwebtoken')
+import React, { useCallback, useEffect} from "react"
+import { useDispatch, useSelector } from 'react-redux'
+import { cabinetSetData } from "../../store/actionCreators/cabinetActionCreator"
 
 export const CabinetPage = () => {
-    //Подключить redux для данных пользователя!!!
-    const [token, setToken] = useState('')
-    const [username, setUsername] = useState('')
-    const [level, setLevel] = useState('')
-    const [levelName, setLevelName] = useState('')
+    const dispatch = useDispatch()
 
-    useEffect( () => {
-        setToken(JSON.parse(localStorage.getItem('userData')).token)
-        const data = jwt.decode(token)
+    const username = useSelector(state => state.cabinetReducer.username)
+    const levelName = useSelector(state => state.cabinetReducer.levelName)
 
-        if (data && data.username) {
-            setUsername(data.username)
-        } else {
-            setUsername('неизвестно')
-        }
+    const loadHandler = useCallback(() => {
+        dispatch(cabinetSetData(JSON.parse(localStorage.getItem('userData')).token))
+    }, [dispatch])
 
-        if (data) {
-            setLevel(data.level)
-        } else {
-            setLevel('неизвестно')
-        }
+    useEffect(() => {
+        loadHandler()
+    }, [loadHandler])
 
-        switch(level) {
-            case 'неизвестно': 
-                setLevelName('не определена')
-                break
-            case 0: 
-                setLevelName('Пользователь')
-                break
-            case 2: 
-                setLevelName('Администратор')
-                break
-            case 1: 
-                setLevelName('Модератор')
-                break
-        }
-
-    }, [token, level])
 
     return (
         <div>

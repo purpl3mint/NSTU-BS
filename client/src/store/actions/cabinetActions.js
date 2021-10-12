@@ -1,0 +1,1 @@
+export const CABINET_SET_DATA = 'CABINET_SET_DATA'

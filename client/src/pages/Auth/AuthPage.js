@@ -1,4 +1,4 @@
-import React, {useCallback, useContext, useEffect, useState} from "react"
+import React, {useCallback, useContext} from "react"
 import { useDispatch, useSelector } from 'react-redux'
 import { AuthContext } from "../../context/AuthContext"
 import { useHttp } from "../../hooks/http.hook"
@@ -19,7 +19,7 @@ export const AuthPage = () => {
 
     const loginHandler = useCallback(() => {
         dispatch(authLogin(form, auth))
-    }, [authLogin, form, auth])
+    }, [dispatch, form, auth])
 
 
     return (
