@@ -11,7 +11,7 @@ class DeviceGroupController {
     } else {
       outer_link = uuid.v4()
     }
-
+    
 
     const deviceGroup = await DeviceGroup.create({name: name, outer_link: outer_link})
     

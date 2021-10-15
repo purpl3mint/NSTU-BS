@@ -1,38 +1,32 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect } from "react"
 import { NavLink } from "react-router-dom"
 import { useHttp } from "../../hooks/http.hook"
-import { useMessage } from "../../hooks/message.hook"
 import { PlaylistCard } from "./PlaylistCard"
+import { useDispatch, useSelector } from "react-redux"
+import { playlistLoadAll } from "../../store/actionCreators/playlistActionCreator"
 
 export const PlaylistsPage = () => {
-    const {loading, error, request, clearError} = useHttp()
-    const message = useMessage()
-    const [playlists, setPlaylists] = useState()
+    const {loading} = useHttp()
+    const dispatch = useDispatch()
 
-    const deleteHandler = useCallback( async event => {
-        try {
-            const data = await request("/api/playlist/" + event.target.name, "DELETE")
-            message(data)
-            const playlistUpd = await request("/api/playlist", "GET")
-            const newPlyalistUpd = playlistUpd.map(p => <PlaylistCard key={p.id} name={p.name} id={p.id} deleteHandler={deleteHandler}/>)
-            setPlaylists(newPlyalistUpd)
-        } catch (e) {}
-    }, [message, request, setPlaylists])
+    const playlists = useSelector(state => {
+        console.log("playlists state > ", state.playlistReducer);
+        const rawPlaylists = state.playlistReducer.playlists
+        const transformedPlaylists = rawPlaylists.map(p => 
+            <PlaylistCard 
+                key={p.id} 
+                name={p.name} 
+                id={p.id} 
+            />
+        )
+        return transformedPlaylists
+    })
 
-    const loadHandler = useCallback ( async () => {
-        try {
-            const data = await request("/api/playlist", "GET")
-            const newData = data.map(p => <PlaylistCard key={p.id} name={p.name} id={p.id} deleteHandler={deleteHandler}/>)
-            setPlaylists(newData)
-        } catch (e) {}
-    }, [request, setPlaylists, deleteHandler])
+    const loadHandler = useCallback( () => {
+        dispatch(playlistLoadAll())
+    }, [dispatch])
 
-    useEffect(() => {
-        message(error)
-        clearError()
-    }, [error, message, clearError])
-
-    useEffect(() => {loadHandler()}, [loadHandler])
+    useEffect(() => loadHandler(), [loadHandler])
 
     return (
         <div>

@@ -73,8 +73,6 @@ class ContentController {
     const {id} = req.params
     const content = await Content.findOne({where: {id}})
 
-    console.log(content);
-
     return res.json(content)
   }
   

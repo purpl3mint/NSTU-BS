@@ -1,13 +1,20 @@
 import React, { useCallback } from "react"
 import { NavLink } from 'react-router-dom'
+import { useDispatch } from "react-redux"
+import { playlistDelete, playlistSetCurrent } from "../../store/actionCreators/playlistActionCreator"
 
 export const PlaylistCard = (props) => {
-    const {name, id, deleteHandler} = props
+    const {name, id} = props
+    const dispatch = useDispatch()
+    
+    const deleteHandler = useCallback( () => {
+        dispatch(playlistDelete(id))
+    }, [id, dispatch])
 
-    const clickHandler = useCallback( event => {
-        const storageName = "currentPlaylist"
-        localStorage.setItem(storageName, JSON.stringify({"name": name, "id": id}))
-    }, [id, name])
+    const clickHandler = useCallback( () => {
+        dispatch(playlistSetCurrent(id, name))
+    }, [dispatch, id, name])
+
 
     return (
         <div className="row">

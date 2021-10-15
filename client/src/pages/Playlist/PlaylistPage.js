@@ -1,16 +1,50 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect } from "react"
 import { NavLink } from "react-router-dom"
 import { useHttp } from "../../hooks/http.hook"
-import { useMessage } from "../../hooks/message.hook"
 import { PlaylistVideoCard } from "./PlaylistVideoCard"
+import { useDispatch, useSelector } from "react-redux"
+import { playlistLoadContent, playlistNewSetSucceed } from "../../store/actionCreators/playlistActionCreator"
 
 export const PlaylistPage = () => {
-    const {loading, error, request, clearError} = useHttp()
-    const message = useMessage()
-    const [videos, setVideos] = useState(null)
-    const [id, setId] = useState(1)
-    const [name, setName] = useState("")
+    const {loading} = useHttp()
+    const dispatch = useDispatch()
 
+    const id = useSelector(state => state.playlistReducer.currentPlaylistId)
+    const name = useSelector(state => state.playlistReducer.currentPlaylistName)
+    const videos = useSelector(state => {
+        const rawVideos = state.playlistReducer.currentPlaylistContents
+        //console.log("raw videos > ", rawVideos);
+        const transformedVideos = rawVideos.map(v => 
+            v.contentId
+            ?   <PlaylistVideoCard 
+                    key={v.id} 
+                    name={v.content.name} 
+                    id={v.id}
+                    playlistId={id}
+                    contentId={v.contentId}
+                />
+            :   <PlaylistVideoCard 
+                    key={v.id} 
+                    name={v.content.name} 
+                    id={v.id}
+                    playlistId={id}
+                    contentId={v.content_id}
+                />
+        )
+
+        return transformedVideos
+    })
+
+
+    const loadHandler = useCallback (event => {
+        dispatch(playlistLoadContent(id))
+        dispatch(playlistNewSetSucceed(false))
+    }, [dispatch, id])
+
+    useEffect(() => {
+        loadHandler()
+    }, [loadHandler])
+    /*
     const deleteHandler = useCallback( async event => {
         try {
             const data = await request("/api/playlist/deletecontent/" + event.target.id, "DELETE")
@@ -50,6 +84,8 @@ export const PlaylistPage = () => {
     }, [error, message, clearError])
 
     useEffect(() => {loadHandler()}, [loadHandler])
+    */
+
 
     return (
         <div>

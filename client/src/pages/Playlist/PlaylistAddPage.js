@@ -1,31 +1,26 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import { Redirect } from "react-router-dom"
-import { useHttp } from "../../hooks/http.hook"
+import { useDispatch, useSelector } from "react-redux"
+import { playlistNewCreate, playlistNewSetForm } from "../../store/actionCreators/playlistActionCreator"
 import { useMessage } from "../../hooks/message.hook"
 
 export const PlaylistAddPage = () => {
-    const {error, request, clearError} = useHttp()
+    const dispatch = useDispatch()
     const message = useMessage()
-    const [isSucceed, setSucceed] = useState(false)
-    const [form, setForm] = useState({
-        name: ''
-    })
 
-    useEffect(() => {
-        message(error)
-        clearError()
-    }, [error, message, clearError])
+    const isSucceed = useSelector(state => state.playlistReducer.isSucceed)
+    const form = useSelector(state => state.playlistReducer.form)
 
     const changeHandler = event => {
-        setForm({ ...form, [event.target.name]: event.target.value})
+        dispatch(playlistNewSetForm(event.target.name, event.target.value))
     }
 
-    const createHandler = async () => {
-        try {
-            await request("/api/playlist/create", "POST", {...form})
-            message("Плейлист успешно создан")
-            setSucceed(true)
-        } catch (e) {}
+    const createHandler = event => {
+        if (!form.name) {
+            message("Ошибка: имя плейлиста не задано")
+            return;
+        }
+        dispatch(playlistNewCreate(form))
     }
 
     return (
@@ -36,7 +31,7 @@ export const PlaylistAddPage = () => {
                 <div className="col s12">
                     <div className="row">
                         <div className="input-field col s6">
-                            <input id="name" name="name" type="text" className="validate" onChange={changeHandler} />
+                            <input id="name" name="name" type="text" value={form.name} className="validate" onChange={changeHandler} />
                             <label htmlFor="name">Название плейлиста</label>
                         </div>
                     </div>
