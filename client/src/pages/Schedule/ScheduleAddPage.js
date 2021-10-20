@@ -2,11 +2,45 @@ import React, { useEffect, useState, useCallback } from "react"
 import { Redirect } from "react-router-dom"
 import { useHttp } from "../../hooks/http.hook"
 import { useMessage } from "../../hooks/message.hook"
+import { useDispatch, useSelector } from "react-redux"
+import { 
+    shedulesGetDeviceGroups, 
+    shedulesGetPlaylists, 
+    schedulesSetIsSucceed, 
+    scheduleSetAddForm,
+    schedulesAdd
+} from "../../store/actionCreators/scheduleActionCreator"
+
 const jwt = require('jsonwebtoken')
 
 export const ScheduleAddPage = () => {
     const {error, request, clearError} = useHttp()
     const message = useMessage()
+    const dispatch = useDispatch()
+
+    const store = useSelector(state => state.scheduleReducer)
+    const isSucceed = useSelector(state => state.scheduleReducer.isSucceed)
+    const playlists = useSelector(state => state.scheduleReducer.playlists)
+    const devicegroups = useSelector(state => state.scheduleReducer.deviceGroups)
+    const form = useSelector(state => state.scheduleReducer.addForm)
+
+
+    const loadHandler = useCallback(() => {
+        dispatch(shedulesGetDeviceGroups())
+        dispatch(shedulesGetPlaylists())
+        dispatch(schedulesSetIsSucceed(false))
+    }, [dispatch])
+
+    const changeHandler = useCallback((e) => {
+        dispatch(scheduleSetAddForm(e.target.name, e.target.value))
+    }, [dispatch])
+
+    const createHandler = useCallback(() => {
+        dispatch(schedulesAdd(form))
+    }, [dispatch, form])
+
+    useEffect(() => {loadHandler()}, [loadHandler])
+    /*
     const [isSucceed, setSucceed] = useState(false)
     const [playlists, setPlaylists] = useState([])
     const [devicegroups, setDeviceGroups] = useState([])
@@ -77,6 +111,7 @@ export const ScheduleAddPage = () => {
             setSucceed(true)
         } catch (e) {}
     }
+    */
 
     return (
         <div>

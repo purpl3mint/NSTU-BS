@@ -1,13 +1,23 @@
 import React, { useCallback } from "react"
 import { NavLink } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { scheduleDelete, scheduleSetCurrent } from "../../store/actionCreators/scheduleActionCreator"
 
 export const ScheduleCard = (props) => {
-    const {id, timeStart, timeEnd, deviceGroupName, playlistName, deleteHandler} = props
+    const {id, timeStart, timeEnd, deviceGroupName, playlistName} = props
+    const dispatch = useDispatch()
+
+    
+
+    const deleteHandler = useCallback( () => {
+        dispatch(scheduleDelete(id))
+    }, [dispatch, id])
 
     const clickHandler = useCallback(() => {
-        const storageName = "currentSchedule"
-        localStorage.setItem(storageName, JSON.stringify({"id": id}))
-    }, [id])
+        //const storageName = "currentSchedule"
+        //localStorage.setItem(storageName, JSON.stringify({"id": id}))
+        dispatch(scheduleSetCurrent(id))
+    }, [dispatch, id])
 
     return (
         <div className="row">

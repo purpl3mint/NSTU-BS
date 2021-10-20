@@ -2,10 +2,37 @@ import React, { useCallback, useEffect, useState } from "react"
 import { Redirect } from "react-router-dom"
 import { useHttp } from "../../hooks/http.hook"
 import { useMessage } from "../../hooks/message.hook"
+import { useDispatch, useSelector } from 'react-redux'
+import { 
+    schedulesSetIsSucceed,
+    schedulesSetUpdateForm,
+    schedulesUpdate
+} from "../../store/actionCreators/scheduleActionCreator"
 
 export const ScheduleEditPage = () => {
     const {error, request, clearError} = useHttp()
     const message = useMessage()
+    const dispatch = useDispatch()
+
+    const form = useSelector(state => state.scheduleReducer.updateForm)
+    const isSucceed = useSelector(state => state.scheduleReducer.isSucceed)
+    const id = useSelector(state => state.scheduleReducer.currentScheduleId)
+
+    const initializeHandler = useCallback( () => {
+        dispatch(schedulesSetIsSucceed(false))
+    }, [dispatch])
+
+    const changeHandler = useCallback((e) => {
+        dispatch(schedulesSetUpdateForm(e.target.name, e.target.value))
+    }, [dispatch])
+
+    const saveHandler = useCallback(() => {
+        dispatch(schedulesUpdate(form, id))
+    }, [dispatch, form, id])
+
+    useEffect(() => { initializeHandler() }, [initializeHandler])
+    
+    /*
     const [isSucceed, setSucceed] = useState(false)
     const [id, setId] = useState(0)
     const [form, setForm] = useState({
@@ -17,6 +44,7 @@ export const ScheduleEditPage = () => {
         timeEnd__sec: '00'
     })
 
+    
     const initializeHandler = useCallback(() => {
         try {
             const dataStorage = JSON.parse(localStorage.getItem("currentSchedule"))
@@ -49,6 +77,7 @@ export const ScheduleEditPage = () => {
             setSucceed(true)
         } catch (e) {}
     }
+    */
 
     return (
         <div>

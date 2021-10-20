@@ -27,7 +27,6 @@ const initialState = {
 }
 
 function playlistReducer(state = initialState, action) {
-  console.log("playlist reducer > ", action);
   
   switch(action.type){
     case PLAYLIST_NEW_SET_SUCCEED: {

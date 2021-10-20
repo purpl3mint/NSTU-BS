@@ -11,8 +11,6 @@ const initialState = {
 }
 
 function cabinetReducer(state = initialState, action) {
-  console.log('cabinet reducer > ', action);
-
   switch(action.type){
     case CABINET_SET_DATA: {
       const token = action.token;
