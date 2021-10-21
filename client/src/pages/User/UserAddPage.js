@@ -1,11 +1,26 @@
-import React, { useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { Redirect } from "react-router-dom"
 import { useHttp } from "../../hooks/http.hook"
 import { useMessage } from "../../hooks/message.hook"
+import { useDispatch, useSelector } from "react-redux"
+import { userSetAddForm, userAdd } from "../../store/actionCreators/userActionCreator"
 
 export const UserAddPage = () => {
     const {error, request, clearError} = useHttp()
     const message = useMessage()
+    const dispatch = useDispatch()
+
+    const isSucceed = useSelector(state => state.userReducer.isSucceed)
+    const form = useSelector(state => state.userReducer.addForm)
+
+    const changeHandler = useCallback( (e) => {
+        dispatch(userSetAddForm(e.target.name, e.target.value))
+    }, [dispatch])
+
+    const createHandler = useCallback( () => {
+        dispatch(userAdd(form))
+    }, [dispatch, form])
+    /*
     const [isSucceed, setSucceed] = useState(false)
     const [form, setForm] = useState({
         username: '',
@@ -29,6 +44,7 @@ export const UserAddPage = () => {
             setSucceed(true)
         } catch (e) {}
     }
+    */
 
     return (
         <div>

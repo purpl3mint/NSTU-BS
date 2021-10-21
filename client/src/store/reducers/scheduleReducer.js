@@ -39,7 +39,6 @@ const initialState = {
 }
 
 function scheduleReducer(state = initialState, action) {
-  console.log("schedule reducer > ", action);
   switch(action.type){
     case SCHEDULE_SET_ALL: {
       return {

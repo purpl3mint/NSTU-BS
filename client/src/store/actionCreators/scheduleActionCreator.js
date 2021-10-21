@@ -124,8 +124,6 @@ export function schedulesSetUpdateForm(target, value) {
 }
 
 export function schedulesUpdate(form, scheduleId) {
-  console.log("form >>> ", form);
-  console.log("id >>>", scheduleId);
   return async (dispatch) => {
     const method = 'PUT'
     const headers = {'Content-Type': 'application/json'}

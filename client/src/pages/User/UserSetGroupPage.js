@@ -2,10 +2,14 @@ import React, { useCallback, useEffect, useState } from "react"
 import { Redirect } from "react-router-dom"
 import { useHttp } from "../../hooks/http.hook"
 import { useMessage } from "../../hooks/message.hook"
+import { useDispatch, useSelector } from "react-redux"
+import { userLoadGroup, userSetGroup, userSetGroupsForm } from "../../store/actionCreators/userActionCreator"
 
 export const UserSetGroupPage = () => {
     const {error, request, clearError} = useHttp()
     const message = useMessage()
+    const dispatch = useDispatch()
+    /*
     const [isSucceed, setSucceed] = useState(false)
     const [userGroups, setUserGroups] = useState(null)
     const [username, setUsername] = useState("")
@@ -14,7 +18,31 @@ export const UserSetGroupPage = () => {
     const [form, setForm] = useState({
         group_id: 0
     })
+    */
 
+    const isSucceed = useSelector(state => state.userReducer.isSucceed)
+    const userGroups = useSelector(state => state.userReducer.userGroups)
+    const username = useSelector(state => state.userReducer.currentUsername)
+    const id = useSelector(state => state.userReducer.currentUserId)
+    const level = useSelector(state => state.userReducer.currentUserLevel)
+    const form = useSelector(state => state.userReducer.groupForm)
+
+
+    const initializeHandler = useCallback(() => {
+        dispatch(userLoadGroup())
+    }, [dispatch])
+
+    const changeHandler = useCallback((e) => {
+        dispatch(userSetGroupsForm(e.target.name, e.target.value))
+    }, [dispatch])
+
+    const saveHandler = useCallback(() => {
+        dispatch(userSetGroup(form, id))
+    }, [dispatch, form, id])
+
+    useEffect( () => { initializeHandler() }, [initializeHandler])
+
+    /*
     const initializeHandler = useCallback(async () => {
         try {
             const dataStorage = JSON.parse(localStorage.getItem("currentUser"))
@@ -53,6 +81,8 @@ export const UserSetGroupPage = () => {
             setSucceed(true)
         } catch (e) {}
     }
+
+    */
 
     return (
         <div>
