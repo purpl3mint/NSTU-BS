@@ -3,10 +3,34 @@ import { NavLink } from "react-router-dom"
 import { useHttp } from "../../hooks/http.hook"
 import { useMessage } from "../../hooks/message.hook"
 import { VideoCard } from "./VideoCard"
+import { useDispatch, useSelector } from "react-redux"
+import { videoLoadVideos, videoSetSucceed } from "../../store/actionCreators/videoActionCreator"
 
 export const VideosPage = () => {
     const {loading, error, request, clearError} = useHttp()
     const message = useMessage()
+    const dispatch = useDispatch()
+
+    const videos = useSelector(state => {
+        const videosRaw = state.videoReducer.videos
+        const videos = videosRaw.map(v => 
+        <VideoCard 
+            key={v.id} 
+            name={v.name} 
+            id={v.id}
+            link={v.link}
+            source={v.source}
+        />)
+        return videos
+    })
+
+    const initializeHandler = useCallback ( () => {
+        dispatch(videoLoadVideos())
+        dispatch(videoSetSucceed(false))
+    }, [dispatch])
+    
+    useEffect( () => {initializeHandler()}, [initializeHandler])
+    /*
     const [videos, setVideos] = useState([])
 
     const deleteHandler = useCallback( async event => {
@@ -33,7 +57,7 @@ export const VideosPage = () => {
     }, [error, message, clearError])
 
     useEffect(() => {loadHandler()}, [loadHandler])
-
+    */
 
     return (
         <div>

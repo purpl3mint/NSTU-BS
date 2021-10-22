@@ -1,11 +1,34 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import { Redirect } from "react-router-dom"
 import { useHttp } from "../../hooks/http.hook"
 import { useMessage } from "../../hooks/message.hook"
+import { useDispatch, useSelector } from "react-redux"
+import { videoAdd, videoSetAddForm } from "../../store/actionCreators/videoActionCreator"
 
 export const VideoAddPage = () => {
     const {error, request, clearError} = useHttp()
     const message = useMessage()
+    const dispatch = useDispatch()
+
+    const isSucceed = useSelector(state => state.videoReducer.isSucceed)
+    const form = useSelector(state => state.videoReducer.addVideoForm)
+
+    const changeHandler = useCallback ( (e) => {
+        dispatch(videoSetAddForm(e.target.name, e.target.value))
+    }, [dispatch])
+
+    const changeFile = useCallback ( (e) => {
+        dispatch(videoSetAddForm(e.target.name, e.target.files[0]))
+    }, [dispatch])
+
+    const createHandler = useCallback ( (e) => {
+        e.preventDefault()
+        dispatch(videoAdd(form))
+    }, [dispatch, form])
+
+    console.log("video add form >>> ", form);
+
+    /*
     const [isSucceed, setSucceed] = useState(false)
     const [form, setForm] = useState({
         name: '',
@@ -39,7 +62,7 @@ export const VideoAddPage = () => {
             //message("Функция в стадии разработки")
 
             if (form.filetype === "youtube") {
-                /* NEXT LINE WORKS FOR YOUTUBE */
+                // NEXT LINE WORKS FOR YOUTUBE 
                 const data = await request("/api/content/create", "POST", {...form})
 
                 //console.log({...form});
@@ -59,13 +82,14 @@ export const VideoAddPage = () => {
             setSucceed(true)
         } catch (e) {}
     }
+    */
 
     return (
         <div>
             <h1>Загрузка нового видео</h1>
 
             <div className="row">
-                <form ref={formRef} className="col s12">
+                <form className="col s12">
                     <div className="row">
                         <div className="input-field col s6">
                             <input id="name" name="name" type="text" className="validate" onChange={changeHandler} />

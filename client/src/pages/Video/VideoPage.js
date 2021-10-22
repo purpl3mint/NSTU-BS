@@ -2,12 +2,35 @@ import React, { useEffect, useState, useCallback } from "react"
 import ReactPlayer from "react-player"
 import { useHttp } from "../../hooks/http.hook"
 import { useMessage } from "../../hooks/message.hook"
+import { useDispatch, useSelector } from "react-redux"
+import { videoSetApprovedVideo, videoGetApproved } from "../../store/actionCreators/videoActionCreator"
 const jwt = require('jsonwebtoken')
 
 export const VideoPage = (props) => {
-    const proxy = "http://localhost:5000/"
     const {loading, error, request, clearError} = useHttp()
     const message = useMessage()
+    const dispatch = useDispatch()
+
+    const name = useSelector(state => state.videoReducer.currentVideo.name)
+    const id = useSelector(state => state.videoReducer.currentVideo.id)
+    const link = useSelector(state => state.videoReducer.currentVideo.link)
+    const source = useSelector(state => state.videoReducer.currentVideo.source)
+    const isApproved = useSelector(state => state.videoReducer.currentVideo.isApproved)
+    
+    const level = useSelector(state => state.videoReducer.userLevel)
+
+    const approvingHandler = useCallback ( () => {
+        const currentVideo = { id, name, link, source, isApproved }
+        dispatch(videoSetApprovedVideo(currentVideo))
+    }, [dispatch, name, id, link, source, isApproved])
+
+    const initializeHandler = useCallback( () => {
+        dispatch(videoGetApproved(id))
+    }, [dispatch, id])
+
+    useEffect( () => { initializeHandler() }, [initializeHandler])
+
+    /*
     const [name, setName] = useState("")
     const [id, setId] = useState(0)
     const [link, setLink] = useState("")
@@ -61,15 +84,16 @@ export const VideoPage = (props) => {
         }
     }, [id, name, getLink, token])
 
+    */
 
 
     return (
         <div className="row" style={{ marginTop: "10px"}}>
-            <ReactPlayer url={link} controls='true'/>
+            <ReactPlayer url={link} controls={true}/>
             <h3 className="video-tltle">{name}</h3>
             {!isApproved && 
             <div 
-                class="approving-container" 
+                className="approving-container" 
                 style={{display: "flex", flexDirection: "row"}}
             >
                 <div 

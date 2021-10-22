@@ -6,6 +6,7 @@ import cabinetReducer from './reducers/cabinetReducer'
 import playlistReducer from './reducers/playlistReducer'
 import scheduleReducer from './reducers/scheduleReducer'
 import userReducer from './reducers/userReducer'
+import videoReducer from './reducers/videoReducer'
 
 const rootReducer = combineReducers({
   authReducer,
@@ -13,7 +14,8 @@ const rootReducer = combineReducers({
   deviceGroupReducer,
   playlistReducer,
   scheduleReducer,
-  userReducer
+  userReducer,
+  videoReducer
 })
 
 const store = createStore(rootReducer, compose(

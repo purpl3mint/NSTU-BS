@@ -27,7 +27,6 @@ const initialState = {
 }
 
 function userReducer (state = initialState, action) {
-  console.log("user reducer >>> ", action);
   switch(action.type){
     case USER_SET_ADD_FORM: {
       let newAddForm = {...state.addForm, [action.data.name]: action.data.value}
