@@ -3,10 +3,27 @@ import { NavLink } from "react-router-dom"
 import { useHttp } from "../../hooks/http.hook"
 import { useMessage } from "../../hooks/message.hook"
 import { UserGroupCard } from "./UserGroupCard"
+import { useDispatch, useSelector } from "react-redux"
+import { usergroupLoadGroups, usergroupSetSucceed } from "../../store/actionCreators/usergroupActionCreator"
 
 export const UserGroupsPage = () => {
     const {loading, error, request, clearError} = useHttp()
     const message = useMessage()
+    const dispatch = useDispatch()
+
+    const userGroups = useSelector(state => {
+        const dataRaw = state.usergroupReducer.userGroups
+        const data = dataRaw.map(g => <UserGroupCard key={g.id} name={g.name} id={g.id}/>)
+        return data
+    })
+
+    const initializeHandler = useCallback( () => {
+        dispatch(usergroupSetSucceed(false))
+        dispatch(usergroupLoadGroups())
+    }, [dispatch])
+
+    useEffect( () => {initializeHandler()}, [initializeHandler])
+    /*
     const [userGroups, setUserGroups] = useState([])
 
     const deleteHandler = useCallback( async event => {
@@ -33,7 +50,7 @@ export const UserGroupsPage = () => {
     }, [error, message, clearError])
 
     useEffect(() => {loadHandler()}, [loadHandler])
-
+    */
 
     return (
         <div>
