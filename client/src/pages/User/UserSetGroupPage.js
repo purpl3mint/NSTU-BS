@@ -1,24 +1,12 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect } from "react"
 import { Redirect } from "react-router-dom"
-import { useHttp } from "../../hooks/http.hook"
-import { useMessage } from "../../hooks/message.hook"
 import { useDispatch, useSelector } from "react-redux"
 import { userLoadGroup, userSetGroup, userSetGroupsForm } from "../../store/actionCreators/userActionCreator"
+import { useMessage } from "../../hooks/message.hook"
 
 export const UserSetGroupPage = () => {
-    const {error, request, clearError} = useHttp()
     const message = useMessage()
     const dispatch = useDispatch()
-    /*
-    const [isSucceed, setSucceed] = useState(false)
-    const [userGroups, setUserGroups] = useState(null)
-    const [username, setUsername] = useState("")
-    const [id, setId] = useState(0)
-    const [level, setLevel] = useState(0)
-    const [form, setForm] = useState({
-        group_id: 0
-    })
-    */
 
     const isSucceed = useSelector(state => state.userReducer.isSucceed)
     const userGroups = useSelector(state => state.userReducer.userGroups)
@@ -37,52 +25,14 @@ export const UserSetGroupPage = () => {
     }, [dispatch])
 
     const saveHandler = useCallback(() => {
+        if (!form.group_id){
+            message("Ошибка: не задана группа пользователей")
+            return
+        }
         dispatch(userSetGroup(form, id))
-    }, [dispatch, form, id])
+    }, [dispatch, message, form, id])
 
     useEffect( () => { initializeHandler() }, [initializeHandler])
-
-    /*
-    const initializeHandler = useCallback(async () => {
-        try {
-            const dataStorage = JSON.parse(localStorage.getItem("currentUser"))
-            if (dataStorage && dataStorage.username) {
-                setUsername(dataStorage.username)
-            }
-            if (dataStorage && dataStorage.id) {
-                setId(dataStorage.id)
-            }
-            if (dataStorage && dataStorage.level) {
-                setLevel(dataStorage.level)
-            }
-
-            const dataGroups = await request("/api/usergroup", "GET")
-            const dataGroupsTransformed = dataGroups.map(g => <option value={g.id}>{g.name}</option>)
-            setUserGroups(dataGroupsTransformed)
-        } catch (e) {}
-    }, [id, request])
-
-    useEffect(() => {
-        message(error)
-        clearError()
-    }, [error, message, clearError])
-
-    useEffect(() => { initializeHandler() }, [initializeHandler])
-
-    const changeHandler = event => {
-        setForm({ ...form, [event.target.name]: event.target.value})
-        console.log(form);
-    }
-
-    const saveHandler = async () => {
-        try {
-            await request("/api/user/setgroup/" + id, "PUT", {...form})
-            message("Данные успешно изменены")
-            setSucceed(true)
-        } catch (e) {}
-    }
-
-    */
 
     return (
         <div>
@@ -93,8 +43,8 @@ export const UserSetGroupPage = () => {
                     <span>Имя пользователя: {username}</span>
                     {   level === 1 &&
                         <div className="row">
-                            <select className="col s6 browser-default" name="group_id" onChange={changeHandler}>
-                                <option value="" disabled selected>Выберите группу пользователей</option>
+                            <select defaultValue="" className="col s6 browser-default" name="group_id" onChange={changeHandler}>
+                                <option value="" disabled>Выберите группу пользователей</option>
                                 {userGroups}
                             </select>
                         </div>

@@ -1,14 +1,12 @@
 import React, { useCallback, useEffect } from "react"
 import { NavLink } from "react-router-dom"
 import { useHttp } from "../../hooks/http.hook"
-//import { useMessage } from "../../hooks/message.hook"
 import { useDispatch, useSelector} from 'react-redux'
 import { DeviceGroupCard } from "./DeviceGroupCard"
 import { deviceGroupLoad } from "../../store/actionCreators/deviceGroupActionCreator"
 
 export const DeviceGroupsPage = () => {
     const {loading} = useHttp()
-    //const message = useMessage()
     const dispatch = useDispatch()
 
     const deviceGroups = useSelector(state => {
@@ -26,13 +24,6 @@ export const DeviceGroupsPage = () => {
     const loadHandler = useCallback(() => {
         dispatch(deviceGroupLoad())
     }, [dispatch])
-
-    /*
-    useEffect(() => {
-        message(error)
-        clearError()
-    }, [error, message, clearError])
-    */
 
     useEffect(() => {loadHandler()}, [loadHandler])
     

@@ -1,11 +1,11 @@
 import React from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Redirect } from "react-router-dom"
-//import { useMessage } from "../../hooks/message.hook"
+import { useMessage } from "../../hooks/message.hook"
 import { deviceGroupAdd, deviceGroupSetForm} from "../../store/actionCreators/deviceGroupActionCreator"
 
 export const DeviceGroupAddPage = () => {
-    //const message = useMessage()
+    const message = useMessage()
     const dispatch = useDispatch()
     
     const form = useSelector (store => store.deviceGroupReducer.form)
@@ -17,7 +17,12 @@ export const DeviceGroupAddPage = () => {
     }
 
     const createHandler = async () => {
-       dispatch(deviceGroupAdd(form))
+        if (!form.name) {
+            message("Ошибка: не задано имя группы")
+            return
+        }
+
+        dispatch(deviceGroupAdd(form))
     }
 
     return (

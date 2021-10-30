@@ -12,9 +12,7 @@ export const CabinetPage = () => {
         dispatch(cabinetSetData(JSON.parse(localStorage.getItem('userData')).token))
     }, [dispatch])
 
-    useEffect(() => {
-        loadHandler()
-    }, [loadHandler])
+    useEffect(() => { loadHandler() }, [loadHandler])
 
 
     return (

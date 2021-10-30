@@ -1,7 +1,5 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect } from "react"
 import { Redirect } from "react-router-dom"
-import { useHttp } from "../../hooks/http.hook"
-import { useMessage } from "../../hooks/message.hook"
 import { useDispatch, useSelector } from 'react-redux'
 import { 
     schedulesSetIsSucceed,
@@ -10,8 +8,6 @@ import {
 } from "../../store/actionCreators/scheduleActionCreator"
 
 export const ScheduleEditPage = () => {
-    const {error, request, clearError} = useHttp()
-    const message = useMessage()
     const dispatch = useDispatch()
 
     const form = useSelector(state => state.scheduleReducer.updateForm)
@@ -27,58 +23,17 @@ export const ScheduleEditPage = () => {
     }, [dispatch])
 
     const saveHandler = useCallback(() => {
+        if (!form.timeStart__hour && !form.timeStart__min && !form.timeStart__sec &&
+            !form.timeEnd__hour && !form.timeEnd__min && !form.timeEnd__sec) {
+            dispatch(schedulesSetIsSucceed(true))
+            return
+        }
+        
         dispatch(schedulesUpdate(form, id))
     }, [dispatch, form, id])
 
     useEffect(() => { initializeHandler() }, [initializeHandler])
     
-    /*
-    const [isSucceed, setSucceed] = useState(false)
-    const [id, setId] = useState(0)
-    const [form, setForm] = useState({
-        timeStart__hour: '00',
-        timeStart__min: '00',
-        timeStart__sec: '00',
-        timeEnd__hour: '00',
-        timeEnd__min: '00',
-        timeEnd__sec: '00'
-    })
-
-    
-    const initializeHandler = useCallback(() => {
-        try {
-            const dataStorage = JSON.parse(localStorage.getItem("currentSchedule"))
-            if (dataStorage && dataStorage.id) {
-                setId(dataStorage.id)
-            }
-            
-            console.log("ID: ", id);
-        } catch (e) {}
-    }, [id])
-
-    useEffect(() => {
-        message(error)
-        clearError()
-    }, [error, message, clearError])
-
-    useEffect(() => { initializeHandler() }, [initializeHandler])
-
-    const changeHandler = event => {
-        setForm({ ...form, [event.target.name]: event.target.value})
-        console.log(form);
-    }
-
-    const saveHandler = async () => {
-        try {
-            const time_start = form.timeStart__hour + ":" + form.timeStart__min + ":" + form.timeStart__sec
-            const time_end = form.timeEnd__hour + ":" + form.timeEnd__min + ":" + form.timeEnd__sec
-            await request("/api/schedule/" + id, "PUT", {time_start, time_end})
-            message("Данные успешно изменены")
-            setSucceed(true)
-        } catch (e) {}
-    }
-    */
-
     return (
         <div>
             <h1>Изменение расписания</h1>

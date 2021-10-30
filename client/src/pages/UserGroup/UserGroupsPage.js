@@ -1,14 +1,12 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect } from "react"
 import { NavLink } from "react-router-dom"
 import { useHttp } from "../../hooks/http.hook"
-import { useMessage } from "../../hooks/message.hook"
 import { UserGroupCard } from "./UserGroupCard"
 import { useDispatch, useSelector } from "react-redux"
 import { usergroupLoadGroups, usergroupSetSucceed } from "../../store/actionCreators/usergroupActionCreator"
 
 export const UserGroupsPage = () => {
-    const {loading, error, request, clearError} = useHttp()
-    const message = useMessage()
+    const {loading} = useHttp()
     const dispatch = useDispatch()
 
     const userGroups = useSelector(state => {
@@ -23,34 +21,6 @@ export const UserGroupsPage = () => {
     }, [dispatch])
 
     useEffect( () => {initializeHandler()}, [initializeHandler])
-    /*
-    const [userGroups, setUserGroups] = useState([])
-
-    const deleteHandler = useCallback( async event => {
-        try {
-            const data = await request("/api/usergroup/" + event.target.name, "DELETE")
-            message(data)
-            const deviceGroupUpd = await request("/api/usergroup", "GET")
-            const newDeviceGroupUpd = deviceGroupUpd.map(g => <UserGroupCard key={g.id} name={g.name} id={g.id} deleteHandler={deleteHandler}/>)
-            setUserGroups(newDeviceGroupUpd)
-        } catch (e) {}
-    }, [message, request, setUserGroups])
-
-    const loadHandler = useCallback ( async () => {
-        try {
-            const data = await request("/api/usergroup", "GET")
-            const newData = data.map(g => <UserGroupCard key={g.id} name={g.name} id={g.id} deleteHandler={deleteHandler}/>)
-            setUserGroups(newData)
-        } catch (e) {}
-    }, [request, setUserGroups, deleteHandler])
-
-    useEffect(() => {
-        message(error)
-        clearError()
-    }, [error, message, clearError])
-
-    useEffect(() => {loadHandler()}, [loadHandler])
-    */
 
     return (
         <div>

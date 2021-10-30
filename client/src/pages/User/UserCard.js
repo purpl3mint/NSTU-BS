@@ -13,8 +13,6 @@ export const UserCard = (props) => {
     const [levelName, setLevelName] = useState('неизвестно')
     const [usergroupOutput, setUserGroupOutput] = useState('')
 
-    console.log("usergroup card >>> ", usergroup);
-
     const dispatch = useDispatch()
 
     const clickHandler = useCallback(() => {
@@ -42,6 +40,9 @@ export const UserCard = (props) => {
                 setLevelName('Администратор')
                 setUserGroupOutput('Администратор')
                 break
+            default:
+                setLevelName('Неизвестно')
+                setUserGroupOutput('Неизвестно')
         }
     }, [level, usergroup])
 

@@ -1,7 +1,5 @@
-import React, { useEffect, useState, useCallback } from "react"
+import React, { useEffect, useCallback } from "react"
 import { Redirect } from "react-router-dom"
-import { useHttp } from "../../hooks/http.hook"
-import { useMessage } from "../../hooks/message.hook"
 import { useDispatch, useSelector } from "react-redux"
 import { 
     shedulesGetDeviceGroups, 
@@ -10,20 +8,17 @@ import {
     scheduleSetAddForm,
     schedulesAdd
 } from "../../store/actionCreators/scheduleActionCreator"
+import { useMessage } from "../../hooks/message.hook"
 
-const jwt = require('jsonwebtoken')
 
 export const ScheduleAddPage = () => {
-    const {error, request, clearError} = useHttp()
     const message = useMessage()
     const dispatch = useDispatch()
 
-    const store = useSelector(state => state.scheduleReducer)
     const isSucceed = useSelector(state => state.scheduleReducer.isSucceed)
     const playlists = useSelector(state => state.scheduleReducer.playlists)
     const devicegroups = useSelector(state => state.scheduleReducer.deviceGroups)
     const form = useSelector(state => state.scheduleReducer.addForm)
-
 
     const loadHandler = useCallback(() => {
         dispatch(shedulesGetDeviceGroups())
@@ -36,82 +31,20 @@ export const ScheduleAddPage = () => {
     }, [dispatch])
 
     const createHandler = useCallback(() => {
+        if (!form.playlist_id){
+            message("Ошибка: не задан плейлист")
+            return
+        }
+        if (!form.devices_id){
+            message("Ошибка: не задана группа устройств")
+            return
+        }
+
         dispatch(schedulesAdd(form))
-    }, [dispatch, form])
+    }, [dispatch, message, form])
 
     useEffect(() => {loadHandler()}, [loadHandler])
-    /*
-    const [isSucceed, setSucceed] = useState(false)
-    const [playlists, setPlaylists] = useState([])
-    const [devicegroups, setDeviceGroups] = useState([])
-    const [form, setForm] = useState({
-        playlist_id: '',
-        devices_id: '',
-        timeStart__hour: '00',
-        timeStart__min: '00',
-        timeStart__sec: '00',
-        timeEnd__hour: '00',
-        timeEnd__min: '00',
-        timeEnd__sec: '00'
-    })
 
-    const loadHandler = useCallback( async () => {
-        const token = JSON.parse(localStorage.getItem('userData')).token
-        const dataToken = jwt.decode(token)
-        let userid = 0
-
-        console.log(dataToken);
-        if (dataToken && dataToken.id) {
-            userid = dataToken.id
-        }
-
-        let level = 0
-        if (dataToken && dataToken.level) {
-            level = dataToken.level
-        }
-
-        console.log(userid);
-        
-        const userData = await request('/api/user/' + userid, 'GET')
-
-
-        const dataPlaylists = await request('/api/playlist', "GET")
-
-        let dataDeviceGroups = []
-        if (level === 1 && userData && userData.devices != {})
-            dataDeviceGroups = userData.devices
-        else
-            dataDeviceGroups = await request('/api/devicegroup', "GET")
-            
-
-        const newDataPlaylists = dataPlaylists.map(d => <option value={d.id}>{d.name}</option>)
-        const newDataDeviceGroups = dataDeviceGroups.map(d => <option value={d.id}>{d.name}</option>)
-
-        setPlaylists(newDataPlaylists)
-        setDeviceGroups(newDataDeviceGroups)
-    }, [request, setPlaylists, setDeviceGroups])
-
-    useEffect(() => {
-        message(error)
-        clearError()
-    }, [error, message, clearError])
-
-    useEffect(() => { loadHandler() }, [loadHandler])
-
-    const changeHandler = event => {
-        setForm({ ...form, [event.target.name]: event.target.value})
-    }
-
-    const createHandler = async () => {
-        try {
-            const time_start = form.timeStart__hour + ":" + form.timeStart__min + ":" + form.timeStart__sec
-            const time_end = form.timeEnd__hour + ":" + form.timeEnd__min + ":" + form.timeEnd__sec
-            await request("/api/schedule", "POST", {...form, time_start, time_end})
-            message("Запись в расписании успешно создана")
-            setSucceed(true)
-        } catch (e) {}
-    }
-    */
 
     return (
         <div>

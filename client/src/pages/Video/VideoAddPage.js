@@ -1,12 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from "react"
+import React, { useCallback } from "react"
 import { Redirect } from "react-router-dom"
-import { useHttp } from "../../hooks/http.hook"
-import { useMessage } from "../../hooks/message.hook"
 import { useDispatch, useSelector } from "react-redux"
 import { videoAdd, videoSetAddForm } from "../../store/actionCreators/videoActionCreator"
+import { useMessage } from "../../hooks/message.hook"
 
 export const VideoAddPage = () => {
-    const {error, request, clearError} = useHttp()
     const message = useMessage()
     const dispatch = useDispatch()
 
@@ -23,66 +21,35 @@ export const VideoAddPage = () => {
 
     const createHandler = useCallback ( (e) => {
         e.preventDefault()
-        dispatch(videoAdd(form))
-    }, [dispatch, form])
 
-    console.log("video add form >>> ", form);
-
-    /*
-    const [isSucceed, setSucceed] = useState(false)
-    const [form, setForm] = useState({
-        name: '',
-        filetype: '',
-        outerLink: '',
-        file: null
-    })
-
-    const formRef = useRef(null)
-
-    useEffect(() => {
-        message(error)
-        clearError()
-    }, [error, message, clearError])
-
-    const changeHandler = event => {
-        setForm({ ...form, [event.target.name]: event.target.value})
-    }
-
-    const changeFile = event => {
-        setForm({...form, [event.target.name]: event.target.files[0]})
-    }
-
-    const createHandler = async event => {
-        event.preventDefault()
-        try {
-            //const data = new FormData(formRef.current)
-
-            //const data = await request("/api/content/create", "POST", form, {"Content-Type": "multipart/form-data"})
-
-            //message("Функция в стадии разработки")
-
-            if (form.filetype === "youtube") {
-                // NEXT LINE WORKS FOR YOUTUBE 
-                const data = await request("/api/content/create", "POST", {...form})
-
-                //console.log({...form});
-                message(data.message)
-            } else {            
-                const data = new FormData()
-                data.append("name", form.name)
-                data.append("filetype", form.filetype)
-                data.append("outerLink", form.outerLink)
-                data.append("file", form.file)
-                
-                const XHRRequest = new XMLHttpRequest()
-                XHRRequest.open("POST", "/api/content/create")
-                XHRRequest.send(data)
+        if (!form.name) {
+            message("Ошибка: не задано имя контента")
+            return
+        }
+        if (!form.filetype) {
+            message("Ошибка: не задан тип контента")
+            return
+        } else {
+            switch (form.filetype){
+                case "youtube":
+                    if (!form.outerLink) {
+                        message("Ошибка: не задана ссылка на контент")
+                        return
+                    }
+                    break
+                case ".mp4":
+                    if (!form.file) {
+                        message("Ошибка: не указан файл")
+                        return
+                    }
+                    break
+                default:
+                    return
             }
-
-            setSucceed(true)
-        } catch (e) {}
-    }
-    */
+        }
+        
+        dispatch(videoAdd(form))
+    }, [dispatch, message, form])
 
     return (
         <div>
@@ -98,8 +65,8 @@ export const VideoAddPage = () => {
                     </div>
                     <div className="row">
                         <div className="input-field col s6">
-                            <select className="browser-default" name="filetype" onChange={changeHandler}>
-                                <option value="" disabled selected>Выберите формат файла</option>
+                            <select defaultValue="" className="browser-default" name="filetype" onChange={changeHandler}>
+                                <option value="" disabled>Выберите формат файла</option>
                                 <option value=".mp4">.mp4</option>
                                 <option value="youtube">Youtube</option>
                             </select>

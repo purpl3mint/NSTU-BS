@@ -50,6 +50,12 @@ export const Sidebar = () => {
                     </div>
                 )
                 break
+            default:
+                newComponent = (
+                    <div className="collection col s2" style={{padding: 0, marginRight: "4%"}}>
+                        <NavLink to="/videos" className="collection-item">Видео</NavLink>
+                    </div>
+                )
         }
         setComponent(newComponent)
 

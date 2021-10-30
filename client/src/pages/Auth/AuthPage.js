@@ -9,9 +9,7 @@ export const AuthPage = () => {
     const {loading} = useHttp()
     const dispatch = useDispatch()
 
-
     const form = useSelector(state => state.authReducer.form)
-
 
     const changeHandler = event => {
         dispatch(authSetForm(event.target.name, event.target.value))

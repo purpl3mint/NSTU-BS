@@ -1,14 +1,12 @@
 import React, { useEffect, useState, useCallback } from "react"
 import ReactPlayer from "react-player"
 import { useHttp } from "../../hooks/http.hook"
-//import { useMessage } from "../../hooks/message.hook"
 import { useParams } from "react-router"
 
 export const WatchPage = (props) => {
   const proxy = 'http://localhost:5000/'
   const { link } = useParams()
   const {request} = useHttp()
-  //const {message} = useMessage
   const [currentVideo, setCurrentVideo] = useState(0)
   const [playlist, setPlaylist] = useState(null)
   const [isLoaded, setIsLoaded] = useState(false)

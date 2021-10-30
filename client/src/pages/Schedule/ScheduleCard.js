@@ -7,15 +7,11 @@ export const ScheduleCard = (props) => {
     const {id, timeStart, timeEnd, deviceGroupName, playlistName} = props
     const dispatch = useDispatch()
 
-    
-
     const deleteHandler = useCallback( () => {
         dispatch(scheduleDelete(id))
     }, [dispatch, id])
 
     const clickHandler = useCallback(() => {
-        //const storageName = "currentSchedule"
-        //localStorage.setItem(storageName, JSON.stringify({"id": id}))
         dispatch(scheduleSetCurrent(id))
     }, [dispatch, id])
 

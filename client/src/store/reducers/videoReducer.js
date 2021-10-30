@@ -27,7 +27,6 @@ const initialState = {
 }
 
 function videoReducer (state = initialState, action) {
-  console.log("video reducer >>> ", action);
   switch (action.type) {
     case VIDEO_SET_VIDEOS: 
       return { ...state, videos: action.data }

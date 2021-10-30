@@ -91,8 +91,6 @@ export function playlistLoadContent (playlistId) {
 
     const data = await responce.json()
     if (responce.ok){
-
-      console.log("playlist content data >>>", data);
       dispatch(playlistSetContent(data))
     }
   }
@@ -104,7 +102,6 @@ export function playlistDeleteContent (playlistId, contentId) {
     const headers = {'Content-Type': 'application/json'}
     const responce = await fetch("/api/playlist/deletecontent/" + contentId, {method, headers})
 
-    console.log("responce >>>", responce);
     if (responce.ok){
       dispatch(playlistLoadContent(playlistId))
     }

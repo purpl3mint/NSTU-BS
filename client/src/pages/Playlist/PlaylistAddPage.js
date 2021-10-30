@@ -17,8 +17,8 @@ export const PlaylistAddPage = () => {
 
     const createHandler = event => {
         if (!form.name) {
-            message("Ошибка: имя плейлиста не задано")
-            return;
+            message("Ошибка: не задано имя плейлиста")
+            return
         }
         dispatch(playlistNewCreate(form))
     }

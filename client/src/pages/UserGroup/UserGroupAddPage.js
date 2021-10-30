@@ -1,19 +1,17 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect } from "react"
 import { Redirect } from "react-router-dom"
-import { useHttp } from "../../hooks/http.hook"
-import { useMessage } from "../../hooks/message.hook"
 import { useDispatch, useSelector } from "react-redux"
 import { usergroupAdd, usergroupLoadDeviceGroups, usergroupSetForm } from "../../store/actionCreators/usergroupActionCreator"
+import { useMessage } from "../../hooks/message.hook"
 
 export const UserGroupAddPage = () => {
-    const {error, request, clearError} = useHttp()
     const message = useMessage()
     const dispatch = useDispatch()
 
     const isSucceed = useSelector(state => state.usergroupReducer.isSucceed)
     const deviceGroups = useSelector(state => {
         const dataRaw = state.usergroupReducer.deviceGroups
-        const data = dataRaw.map(d => <option name="devicegroupId" value={d.id}>{d.name}</option>)
+        const data = dataRaw.map(d => <option name="devicegroupId" key={d.id} value={d.id}>{d.name}</option>)
         return data
     })
     const form = useSelector(state => state.usergroupReducer.addForm)
@@ -27,48 +25,18 @@ export const UserGroupAddPage = () => {
     }, [dispatch])
 
     const createHandler = useCallback( (e) => {
+        if (!form.name) {
+            message("Ошибка: не задано название группы")
+            return
+        }
+        if (!form.deviceGroups) {
+            message("Ошибка: не задана группа устройств")
+            return
+        }
         dispatch(usergroupAdd(form))
-    }, [dispatch, form])
+    }, [dispatch, message, form])
 
     useEffect( () => {initializeHandler()}, [initializeHandler])
-    /*
-    const [isSucceed, setSucceed] = useState(false)
-    const [deviceGroups, setDeviceGroups] = useState(null)
-    const [form, setForm] = useState({
-        name: '',
-        devicegroupId: 0
-    })
-
-    const initHandler = useCallback( async () => {
-        const data = await request('/api/devicegroup', 'GET')
-        const dataTransformed = data.map(d => <option name="devicegroupId" value={d.id}>{d.name}</option>)
-        setDeviceGroups(dataTransformed)
-    }, [request])
-
-    const changeHandler = event => {
-        setForm({ ...form, [event.target.name]: event.target.value})
-    }
-
-    const createHandler = async () => {
-        try {
-            const resultCreation = await request("/api/usergroup/create", "POST", {name: form.name})
-
-            if (resultCreation != null) {
-                const resultSetDeviceGroup = await request('/api/usergroup/devicegroup', 'PUT', {...form})
-
-            }
-            message("Группа устройств успешно создана")
-            setSucceed(true)
-        } catch (e) {}
-    }
-
-
-    useEffect(() => {
-        message(error)
-        clearError()
-        initHandler()
-    }, [error, message, clearError, initHandler])
-    */
 
     return (
         <div>

@@ -10,7 +10,6 @@ export const PlaylistsPage = () => {
     const dispatch = useDispatch()
 
     const playlists = useSelector(state => {
-        console.log("playlists state > ", state.playlistReducer);
         const rawPlaylists = state.playlistReducer.playlists
         const transformedPlaylists = rawPlaylists.map(p => 
             <PlaylistCard 

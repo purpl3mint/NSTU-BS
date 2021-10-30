@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect } from "react"
 import { NavLink } from 'react-router-dom'
 import { useDispatch, useSelector } from "react-redux"
 import { videoDeleteVideo, videoSetCurrentVideo, videoSetUserLevel } from "../../store/actionCreators/videoActionCreator"
@@ -10,7 +10,6 @@ export const VideoCard = (props) => {
     const dispatch = useDispatch()
 
     const level = useSelector(state => state.videoReducer.userLevel)
-//    const [token, setToken] = useState('')
 
     const clickHandler = useCallback( () => {
         let finalLink
@@ -31,33 +30,11 @@ export const VideoCard = (props) => {
         const data = jwt.decode(token)
 
         if (data) {
-            //setLevel(data.level)
             dispatch(videoSetUserLevel(data.level))
         } else {
             dispatch(videoSetUserLevel('неизвестно'))
         }
     }, [dispatch])
-    /*
-    const [token, setToken] = useState('')
-    const [level, setLevel] = useState('')
-    
-    const clickHandler = e =>  {
-        const storageName = "currentVideo"
-
-        localStorage.setItem(storageName, JSON.stringify({"name": name, "id": id}))
-    }
-
-    useEffect( () => {
-        setToken(JSON.parse(localStorage.getItem('userData')).token)
-        const data = jwt.decode(token)
-
-        if (data) {
-            setLevel(data.level)
-        } else {
-            setLevel('неизвестно')
-        }
-    }, [token])
-    */
 
     return (
         <div className="row">

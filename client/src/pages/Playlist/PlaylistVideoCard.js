@@ -2,23 +2,26 @@ import React, { useCallback } from "react"
 import { NavLink } from 'react-router-dom'
 import { useDispatch} from "react-redux"
 import { playlistDeleteContent } from "../../store/actionCreators/playlistActionCreator"
+import { videoSetCurrentVideo } from "../../store/actionCreators/videoActionCreator"
 
 export const PlaylistVideoCard = (props) => {
-    const {name, id, playlistId, contentId} = props
+    const {name, id, playlistId, contentId, link, source, isApproved} = props
+    const proxy = "http://localhost:5000/"
     const dispatch = useDispatch()
-    
-    console.log("video card props > ", props);
 
     const deleteHandler = useCallback(event => {
         dispatch(playlistDeleteContent(playlistId, id))
     }, [dispatch, id, playlistId])
     
-    /*!!! REMOVE THIS !!!*/
-    const clickHandler = e =>  {
-        const storageName = "currentVideo"
-
-        localStorage.setItem(storageName, JSON.stringify({"name": name, "id": contentId}))
-    }
+    const clickHandler = useCallback( event => {
+        let finalLink
+        if (source === "static")
+            finalLink = proxy + link
+        else
+            finalLink = link 
+        
+        dispatch(videoSetCurrentVideo(contentId, name, finalLink, source, isApproved))
+    }, [dispatch, contentId, name, link, source, isApproved])
     
 
     return (
