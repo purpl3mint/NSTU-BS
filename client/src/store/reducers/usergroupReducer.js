@@ -3,7 +3,8 @@ import {
   USERGROUP_SET_FORM,
   USERGROUP_SET_DEVICE_GROUPS,
   USERGROUP_SET_SUCCEED,
-  USERGROUP_CLEAR_FORM
+  USERGROUP_CLEAR_FORM,
+  USERGROUP_SET_PRELOADER
 } from "../actions/usergroupActions"
 
 const initialState = {
@@ -13,7 +14,8 @@ const initialState = {
     devicegroupId: 0
   },
   deviceGroups: [],
-  isSucceed: 0
+  isSucceed: 0,
+  preloader: false
 }
 
 function usergroupReducer (state = initialState, action) {
@@ -34,6 +36,9 @@ function usergroupReducer (state = initialState, action) {
 
     case USERGROUP_CLEAR_FORM: 
       return { ...state, addForm: initialState.addForm}
+
+    case USERGROUP_SET_PRELOADER:
+      return { ...state, preloader: action.data}
       
     default: 
       return state

@@ -7,7 +7,8 @@ import {
   PLAYLIST_SET_ALL_VIDEOS,
   PLAYLIST_NEW_CONTENT_FORM,
   PLAYLIST_NEW_CLEAR_FORM,
-  PLAYLIST_NEW_CLEAR_CONTENT_FORM
+  PLAYLIST_NEW_CLEAR_CONTENT_FORM,
+  PLAYLIST_SET_PRELOADER
 } from '../actions/playlistActions'
 
 const initialState = {
@@ -25,7 +26,8 @@ const initialState = {
   },
   allVideos: [],
   currentVideoId: 0,
-  currentVideoName: ""
+  currentVideoName: "",
+  preloader: false
 }
 
 function playlistReducer(state = initialState, action) {
@@ -79,6 +81,10 @@ function playlistReducer(state = initialState, action) {
 
     case PLAYLIST_NEW_CLEAR_CONTENT_FORM: {
       return {...state, addContentForm: initialState.addContentForm}
+    }
+
+    case PLAYLIST_SET_PRELOADER: {
+      return {...state, preloader: action.data}
     }
 
     default: return state

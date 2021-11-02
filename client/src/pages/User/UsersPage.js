@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect } from "react"
 import { NavLink } from "react-router-dom"
-import { useHttp } from "../../hooks/http.hook"
 import { UserCard } from "./UserCard"
+import { Preloader } from '../../components/Preloader'
 import { useDispatch, useSelector } from "react-redux"
 import { userLoadUsers, userSetSucceed } from "../../store/actionCreators/userActionCreator"
 
 export const UsersPage = () => {
-    const {loading} = useHttp()
     const dispatch = useDispatch()
     
+    const loading = useSelector(state => state.userReducer.preloader)
     const users = useSelector(state => {
         const usersRaw = state.userReducer.users
         const users = usersRaw.map(u => {
@@ -33,11 +33,18 @@ export const UsersPage = () => {
     return (
         <div className="row">
             <h1>Пользователи</h1>
-            <NavLink key="new" to="/user/add" className="waves-effect waves-light btn">Добавить</NavLink>
-            <div className="collection" style={{border: "0px"}}>
-                { loading && <div key="devgroup_loader" className="progress"><div className="indeterminate"></div></div> }
-                { users }
+
+            { loading && <Preloader />}
+
+            { !loading && 
+            <div>
+                <NavLink key="new" to="/user/add" className="waves-effect waves-light btn">Добавить</NavLink>
+                <div className="collection" style={{border: "0px"}}>
+                    { loading && <div key="devgroup_loader" className="progress"><div className="indeterminate"></div></div> }
+                    { users }
+                </div>
             </div>
+            }
 
         </div>
     )

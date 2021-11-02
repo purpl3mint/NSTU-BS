@@ -7,7 +7,8 @@ import {
   SCHEDULE_SET_SUCCEED,
   SCHEDULE_SET_UPDATE_FORM,
   SCHEDULE_CLEAR_ADD_FORM,
-  SCHEDULE_CLEAR_UPDATE_FORM
+  SCHEDULE_CLEAR_UPDATE_FORM,
+  SCHEDULE_SET_PRELOADER
 } from "../actions/scheduleActions"
 
 export function scheduleSetAll(data){
@@ -26,6 +27,8 @@ export function scheduleSetCurrent(scheduleId){
 
 export function scheduleLoadAll() {
   return async(dispatch) => {
+    dispatch(scheduleSetPreloader(true))
+
     const method = 'GET'
     const headers = {'Content-Type': 'application/json'}
     const responce = await fetch("/api/schedule", {method, headers})
@@ -34,11 +37,15 @@ export function scheduleLoadAll() {
     if (responce.ok){
       dispatch(scheduleSetAll(data))
     }
+
+    dispatch(scheduleSetPreloader(false))
   }
 }
 
 export function scheduleDelete(scheduleId) {
   return async(dispatch) => {
+    dispatch(scheduleSetPreloader(true))
+
     const method = 'DELETE'
     const headers = {'Content-Type': 'application/json'}
     const responce = await fetch("/api/schedule/" + scheduleId, {method, headers})
@@ -46,6 +53,8 @@ export function scheduleDelete(scheduleId) {
     if (responce.ok){
       dispatch(scheduleLoadAll())
     }
+
+    dispatch(scheduleSetPreloader(false))
   }
 }
 
@@ -72,6 +81,8 @@ export function scheduleSetPlaylists(data) {
 
 export function shedulesGetDeviceGroups() {
   return async (dispatch) => {
+    dispatch(scheduleSetPreloader(true))
+
     const method = 'GET'
     const headers = {'Content-Type': 'application/json'}
     const responce = await fetch("/api/devicegroup", {method, headers})
@@ -80,11 +91,15 @@ export function shedulesGetDeviceGroups() {
     if (responce.ok){
       dispatch(scheduleSetDeviceGroups(data))
     }
+
+    dispatch(scheduleSetPreloader(false))
   }
 }
 
 export function shedulesGetPlaylists() {
   return async (dispatch) => {
+    dispatch(scheduleSetPreloader(true))
+
     const method = 'GET'
     const headers = {'Content-Type': 'application/json'}
     const responce = await fetch("/api/playlist", {method, headers})
@@ -93,11 +108,15 @@ export function shedulesGetPlaylists() {
     if (responce.ok){
       dispatch(scheduleSetPlaylists(data))
     }
+
+    dispatch(scheduleSetPreloader(false))
   }
 }
 
 export function schedulesAdd(form) {
   return async (dispatch) => {
+    dispatch(scheduleSetPreloader(true))
+
     const method = 'POST'
     const headers = {'Content-Type': 'application/json'}
     const body = JSON.stringify({...form})
@@ -107,6 +126,8 @@ export function schedulesAdd(form) {
       dispatch(schedulesSetIsSucceed(true))
       dispatch(scheduleClearAddForm())
     }
+
+    dispatch(scheduleSetPreloader(false))
   }
 }
 
@@ -126,6 +147,8 @@ export function schedulesSetUpdateForm(target, value) {
 
 export function schedulesUpdate(form, scheduleId) {
   return async (dispatch) => {
+    dispatch(scheduleSetPreloader(true))
+
     const method = 'PUT'
     const headers = {'Content-Type': 'application/json'}
     const body = JSON.stringify({...form})
@@ -136,6 +159,8 @@ export function schedulesUpdate(form, scheduleId) {
       dispatch(schedulesSetIsSucceed(true))
       dispatch(scheduleClearUpdateForm())
     }
+
+    dispatch(scheduleSetPreloader(false))
   }
 }
 
@@ -148,5 +173,12 @@ export function scheduleClearAddForm () {
 export function scheduleClearUpdateForm () {
   return {
     type: SCHEDULE_CLEAR_UPDATE_FORM
+  }
+}
+
+export function scheduleSetPreloader(isLoading) {
+  return {
+    type: SCHEDULE_SET_PRELOADER,
+    data: isLoading
   }
 }

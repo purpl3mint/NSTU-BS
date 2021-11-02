@@ -8,7 +8,8 @@ import {
   USER_SET_GROUP_FORM,
   USER_SET_USERS,
   USER_CLEAR_ADD_FORM,
-  USER_CLEAR_GROUP_FORM
+  USER_CLEAR_GROUP_FORM,
+  USER_SET_PRELOADER
 } from "../actions/userActions"
 
 const initialState = {
@@ -25,7 +26,8 @@ const initialState = {
   groupForm: {
     group_id: 0
   },
-  users: []
+  users: [],
+  preloader: false
 }
 
 function userReducer (state = initialState, action) {
@@ -63,6 +65,9 @@ function userReducer (state = initialState, action) {
 
     case USER_CLEAR_GROUP_FORM: 
       return { ...state, groupForm: initialState.groupForm }
+
+    case USER_SET_PRELOADER:
+      return { ...state, preloader: action.data}
 
     default: 
       return state

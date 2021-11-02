@@ -8,7 +8,8 @@ import {
   USER_SET_GROUP_FORM,
   USER_SET_USERS,
   USER_CLEAR_ADD_FORM,
-  USER_CLEAR_GROUP_FORM
+  USER_CLEAR_GROUP_FORM,
+  USER_SET_PRELOADER
 } from "../actions/userActions"
 
 export function userSetAddForm(name, value){
@@ -20,6 +21,8 @@ export function userSetAddForm(name, value){
 
 export function userAdd(form){
   return async(dispatch) => {
+    dispatch(userSetPreloader(true))
+    
     const method = 'POST'
     const headers = {'Content-Type': 'application/json'}
     const body = JSON.stringify({...form})
@@ -29,6 +32,8 @@ export function userAdd(form){
       dispatch(userSetSucceed(true))
       dispatch(userClearAddForm())
     }
+
+    dispatch(userSetPreloader(false))
   }
 }
 
@@ -48,6 +53,8 @@ export function userSetGroups(data) {
 
 export function userLoadGroup() {
   return async(dispatch) => {
+    dispatch(userSetPreloader(true))
+
     const method = 'GET'
     const headers = {'Content-Type': 'application/json'}
     const responce = await fetch("/api/usergroup", {method, headers})
@@ -56,6 +63,8 @@ export function userLoadGroup() {
     if (responce.ok) {
       dispatch(userSetGroups(data))
     }
+
+    dispatch(userSetPreloader(false))
   }
 }
 
@@ -89,6 +98,8 @@ export function userSetGroupsForm(name, value){
 
 export function userSetGroup(form, userId) {
   return async(dispatch) => {
+    dispatch(userSetPreloader(true))
+
     const method = 'PUT'
     const headers = {'Content-Type': 'application/json'}
     const body = JSON.stringify({...form})
@@ -98,6 +109,8 @@ export function userSetGroup(form, userId) {
       dispatch(userSetSucceed(true))
       dispatch(userClearGroupForm())
     }
+
+    dispatch(userSetPreloader(false))
   }
 }
 
@@ -110,6 +123,8 @@ export function userSetUsers(data) {
 
 export function userLoadUsers() {
   return async(dispatch) => {
+    dispatch(userSetPreloader(true))
+
     const method = 'GET'
     const headers = {'Content-Type': 'application/json'}
     const responce = await fetch("/api/user", {method, headers})
@@ -118,11 +133,15 @@ export function userLoadUsers() {
     if (responce.ok) {
       dispatch(userSetUsers(data))
     }
+
+    dispatch(userSetPreloader(false))
   }
 }
 
 export function userDeleteUser(userId) {
   return async(dispatch) => {
+    dispatch(userSetPreloader(true))
+
     const method = 'DELETE'
     const headers = {'Content-Type': 'application/json'}
     const responce = await fetch("/api/user/" + userId, {method, headers})
@@ -130,6 +149,8 @@ export function userDeleteUser(userId) {
     if (responce.ok) {
       dispatch(userLoadUsers())
     }
+
+    dispatch(userSetPreloader(false))
   }
 }
 
@@ -144,3 +165,11 @@ export function userClearGroupForm () {
     type: USER_CLEAR_GROUP_FORM
   }
 }
+
+export function userSetPreloader (isLoading) {
+  return {
+    type: USER_SET_PRELOADER,
+    data: isLoading
+  }
+}
+

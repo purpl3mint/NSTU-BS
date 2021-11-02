@@ -5,7 +5,8 @@ import {
   VIDEO_SET_ADD_FORM,
   VIDEO_SET_SUCCEED,
   VIDEO_SET_APPROVED,
-  VIDEO_CLEAR_ADD_FORM
+  VIDEO_CLEAR_ADD_FORM,
+  VIDEO_SET_PRELOADER
 } from "../actions/videoActions"
 
 const initialState = {
@@ -24,7 +25,8 @@ const initialState = {
     outerLink: "",
     file: null
   },
-  isSucceed: false
+  isSucceed: false,
+  preloader: false
 }
 
 function videoReducer (state = initialState, action) {
@@ -60,6 +62,10 @@ function videoReducer (state = initialState, action) {
 
     case VIDEO_CLEAR_ADD_FORM: {
       return {...state, addVideoForm: initialState.addVideoForm}
+    }
+
+    case VIDEO_SET_PRELOADER: {
+      return {...state, preloader: action.data}
     }
 
     default:

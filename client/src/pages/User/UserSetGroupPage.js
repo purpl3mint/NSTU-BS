@@ -3,11 +3,13 @@ import { Redirect } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { userLoadGroup, userSetGroup, userSetGroupsForm } from "../../store/actionCreators/userActionCreator"
 import { useMessage } from "../../hooks/message.hook"
+import { Preloader } from '../../components/Preloader'
 
 export const UserSetGroupPage = () => {
     const message = useMessage()
     const dispatch = useDispatch()
 
+    const loading = useSelector(state => state.userReducer.preloader)
     const isSucceed = useSelector(state => state.userReducer.isSucceed)
     const userGroups = useSelector(state => {
         const dataRaw = state.userReducer.userGroups
@@ -43,6 +45,9 @@ export const UserSetGroupPage = () => {
         <div>
             <h1>Изменение группы пользователя</h1>
 
+            { loading && <Preloader /> }
+
+            { !loading && 
             <div className="row">
                 <div className="col s12">
                     <span>Имя пользователя: {username}</span>
@@ -65,6 +70,7 @@ export const UserSetGroupPage = () => {
                     }
                 </div>
             </div>
+            }
 
             {isSucceed && <Redirect to="/users" />}
 

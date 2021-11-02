@@ -5,7 +5,8 @@ import {
   VIDEO_SET_ADD_FORM,
   VIDEO_SET_SUCCEED,
   VIDEO_SET_APPROVED,
-  VIDEO_CLEAR_ADD_FORM
+  VIDEO_CLEAR_ADD_FORM,
+  VIDEO_SET_PRELOADER
 } from "../actions/videoActions"
 
 export function videoSetVideos(data) {
@@ -17,6 +18,8 @@ export function videoSetVideos(data) {
 
 export function videoLoadVideos() {
   return async(dispatch) => {
+    dispatch(videoSetPreloader(true))
+
     const method = 'GET'
     const headers = {'Content-Type': 'application/json'}
     const responce = await fetch("/api/content", {method, headers})
@@ -25,11 +28,15 @@ export function videoLoadVideos() {
     if (responce.ok) {
       dispatch(videoSetVideos(data))
     }
+
+    dispatch(videoSetPreloader(false))
   }
 }
 
 export function videoDeleteVideo(videoId) {
   return async(dispatch) => {
+    dispatch(videoSetPreloader(true))
+
     const method = 'DELETE'
     const headers = {'Content-Type': 'application/json'}
     const responce = await fetch("/api/content/" + videoId, {method, headers})
@@ -37,6 +44,8 @@ export function videoDeleteVideo(videoId) {
     if (responce.ok) {
       dispatch(videoLoadVideos())
     }
+
+    dispatch(videoSetPreloader(false))
   }
 }
 
@@ -63,6 +72,8 @@ export function videoSetAddForm(name, value) {
 
 export function videoAdd(form) {
   return async (dispatch) => {
+    dispatch(videoSetPreloader(true))
+
     if (form && form.filetype === "youtube") {
       const method = 'POST'
       const headers = {'Content-Type': 'application/json'}
@@ -93,6 +104,7 @@ export function videoAdd(form) {
       }
     }
 
+    dispatch(videoSetPreloader(false))
   }
 }
 
@@ -105,6 +117,8 @@ export function videoSetSucceed(value) {
 
 export function videoSetApprovedVideo(currentVideo) {
   return async(dispatch) => {
+    dispatch(videoSetPreloader(true))
+
     const method = 'PUT'
     const headers = {'Content-Type': 'application/json'}
     const body = JSON.stringify({id: currentVideo.id})
@@ -119,6 +133,8 @@ export function videoSetApprovedVideo(currentVideo) {
         currentVideo.source, 
         true))
     }
+
+    dispatch(videoSetPreloader(false))
   }
 }
 
@@ -131,6 +147,8 @@ export function videoSetApprovedField(value) {
 
 export function videoGetApproved(videoId) {
   return async(dispatch) => {
+    dispatch(videoSetPreloader(true))
+
     const method = 'GET'
     const headers = {'Content-Type': 'application/json'}
     const responce = await fetch("/api/content/" + videoId, {method, headers})
@@ -140,11 +158,20 @@ export function videoGetApproved(videoId) {
     if (responce.ok) {
       dispatch(videoSetApprovedField(data.is_approved))
     }
+
+    dispatch(videoSetPreloader(false))
   }
 }
 
 export function videoClearAddForm() {
   return {
     type: VIDEO_CLEAR_ADD_FORM
+  }
+}
+
+export function videoSetPreloader(isLoading) {
+  return {
+    type: VIDEO_SET_PRELOADER,
+    data: isLoading
   }
 }

@@ -2,7 +2,8 @@ import {
   DEVICE_GROUP_SET_SUCCEED, 
   DEVICE_GROUP_SET_FORM, 
   DEVICE_GROUP_SET_GROUPS,
-  DEVICE_GROUP_CLEAR_FORM
+  DEVICE_GROUP_CLEAR_FORM,
+  DEVICE_GROUP_SET_PRELOADER
 } from '../actions/deviceGroupActions'
 
 export function deviceGroupSetSucceed (newIsSucceed) {
@@ -34,6 +35,7 @@ export function deviceGroupSetGroups (data) {
 
 export function deviceGroupAdd (form) {
   return async (dispatch) => {
+    dispatch(deviceGroupSetPreloader(true))
 
     const method = 'POST'
     const headers = {'Content-Type': 'application/json'}
@@ -42,12 +44,15 @@ export function deviceGroupAdd (form) {
     const responce = await fetch("/api/devicegroup/create", {method, headers, body})
     if (responce.ok)
       dispatch(deviceGroupSetSucceed(true))
-      dispatch(deviceGroupClearForm())
+
+    dispatch(deviceGroupClearForm())
+    dispatch(deviceGroupSetPreloader(false))
   }
 }
 
 export function deviceGroupLoad() {
   return async (dispatch) => {
+    dispatch(deviceGroupSetPreloader(true))
 
     const method = 'GET'
     const headers = {'Content-Type': 'application/json'}
@@ -57,16 +62,27 @@ export function deviceGroupLoad() {
     if (responce.ok){
       dispatch(deviceGroupSetGroups(data))
     }
+    dispatch(deviceGroupSetPreloader(false))
   }
 }
 
 export function deviceGroupDelete(id) {
   return async (dispatch) => {
+    dispatch(deviceGroupSetPreloader(true))
     const method = 'DELETE'
     const headers = {'Content-Type': 'application/json'}
 
     const responce = await fetch("/api/devicegroup/" + id, {method, headers})
     if (responce.ok)
       dispatch(deviceGroupLoad())
+
+    dispatch(deviceGroupSetPreloader(false))
+  }
+}
+
+export function deviceGroupSetPreloader(isLoading) {
+  return {
+    type: DEVICE_GROUP_SET_PRELOADER,
+    data: isLoading
   }
 }

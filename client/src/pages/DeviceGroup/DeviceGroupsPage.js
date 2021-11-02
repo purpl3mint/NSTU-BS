@@ -3,10 +3,11 @@ import { NavLink } from "react-router-dom"
 import { useHttp } from "../../hooks/http.hook"
 import { useDispatch, useSelector} from 'react-redux'
 import { DeviceGroupCard } from "./DeviceGroupCard"
+import { Preloader } from "../../components/Preloader"
 import { deviceGroupLoad, deviceGroupSetSucceed } from "../../store/actionCreators/deviceGroupActionCreator"
 
 export const DeviceGroupsPage = () => {
-    const {loading} = useHttp()
+    //const {loading} = useHttp()
     const dispatch = useDispatch()
 
     const deviceGroups = useSelector(state => {
@@ -20,6 +21,7 @@ export const DeviceGroupsPage = () => {
             />)
         return transformedGroups
     })
+    const loading = useSelector(state => state.deviceGroupReducer.preloader)
 
     const loadHandler = useCallback(() => {
         dispatch(deviceGroupSetSucceed(false))
@@ -32,11 +34,14 @@ export const DeviceGroupsPage = () => {
     return (
         <div>
             <h1>Группы устройств</h1>
-            <NavLink key="new" to="/devicegroup/add" className="waves-effect waves-light btn">Добавить</NavLink>
-            <div className="collection" style={{border: "0px"}}>
-                { loading && <div key="devgroup_loader" className="progress"><div className="indeterminate"></div></div> }
-                { deviceGroups }
+            { loading && <Preloader />}
+            { !loading && <div>
+                <NavLink key="new" to="/devicegroup/add" className="waves-effect waves-light btn">Добавить</NavLink>
+                <div className="collection" style={{border: "0px"}}>
+                    { !loading && deviceGroups }
+                </div>
             </div>
+            }
         </div>
     )
 }

@@ -8,7 +8,8 @@ import {
   PLAYLIST_NEW_CONTENT_FORM,
   PLAYLIST_SET_CURRENT_VIDEO,
   PLAYLIST_NEW_CLEAR_FORM,
-  PLAYLIST_NEW_CLEAR_CONTENT_FORM
+  PLAYLIST_NEW_CLEAR_CONTENT_FORM,
+  PLAYLIST_SET_PRELOADER
 } from '../actions/playlistActions'
 
 export function playlistNewSetSucceed (newIsSucceed) {
@@ -27,6 +28,8 @@ export function playlistNewSetForm (target, value) {
 
 export function playlistNewCreate (form) {
   return async (dispatch) => {
+    dispatch(playlistSetPreloader(true))
+
     const method = 'POST'
     const headers = {'Content-Type': 'application/json'}
     const body = JSON.stringify({...form})
@@ -34,7 +37,9 @@ export function playlistNewCreate (form) {
     const responce = await fetch("/api/playlist/create", {method, headers, body})
     if (responce.ok)
       dispatch(playlistNewSetSucceed(true))
-      dispatch(playlistNewClearForm())
+    
+    dispatch(playlistNewClearForm())
+    dispatch(playlistSetPreloader(false))
   }
 }
 
@@ -47,7 +52,8 @@ export function playlistSetAll (data) {
 
 export function playlistLoadAll () {
   return async (dispatch) => {
-    
+    dispatch(playlistSetPreloader(true))
+
     const method = 'GET'
     const headers = {'Content-Type': 'application/json'}
     const responce = await fetch("/api/playlist", {method, headers})
@@ -56,12 +62,15 @@ export function playlistLoadAll () {
     if (responce.ok){
       dispatch(playlistSetAll(data))
     }
+
+    dispatch(playlistSetPreloader(false))
   }
 }
 
 export function playlistDelete (id) {
   return async (dispatch) => {
-    
+    dispatch(playlistSetPreloader(true))
+
     const method = 'DELETE'
     const headers = {'Content-Type': 'application/json'}
     const responce = await fetch("/api/playlist/" + id, {method, headers})
@@ -69,6 +78,8 @@ export function playlistDelete (id) {
     if (responce.ok){
       dispatch(playlistLoadAll())
     }
+
+    dispatch(playlistSetPreloader(false))
   }
 }
 
@@ -88,6 +99,8 @@ export function playlistSetContent (data) {
 
 export function playlistLoadContent (playlistId) {
   return async (dispatch) => {
+    dispatch(playlistSetPreloader(true))
+
     const method = 'GET'
     const headers = {'Content-Type': 'application/json'}
     const responce = await fetch("/api/playlist/content/" + playlistId, {method, headers})
@@ -96,11 +109,15 @@ export function playlistLoadContent (playlistId) {
     if (responce.ok){
       dispatch(playlistSetContent(data))
     }
+
+    dispatch(playlistSetPreloader(false))
   }
 }
 
 export function playlistDeleteContent (playlistId, contentId) {
   return async (dispatch) => {
+    dispatch(playlistSetPreloader(true))
+
     const method = 'DELETE'
     const headers = {'Content-Type': 'application/json'}
     const responce = await fetch("/api/playlist/deletecontent/" + contentId, {method, headers})
@@ -108,11 +125,15 @@ export function playlistDeleteContent (playlistId, contentId) {
     if (responce.ok){
       dispatch(playlistLoadContent(playlistId))
     }
+
+    dispatch(playlistSetPreloader(false))
   }
 }
 
 export function playlistAddContent (playlistId, contentId, position){
   return async (dispatch) => {
+    dispatch(playlistSetPreloader(true))
+
     const method = 'POST'
     const headers = {'Content-Type': 'application/json'}
     const body = JSON.stringify({
@@ -128,6 +149,8 @@ export function playlistAddContent (playlistId, contentId, position){
       dispatch(playlistNewSetSucceed(true))
       dispatch(playlistNewContentClearForm())
     }
+
+    dispatch(playlistSetPreloader(false))
   }
 }
 
@@ -140,6 +163,8 @@ export function playlistSetAllVideos(data) {
 
 export function playlistGetInsertableVideos() {
   return async (dispatch) => {
+    dispatch(playlistSetPreloader(true))
+
     const method = 'GET'
     const headers = {'Content-Type': 'application/json'}
     const responce = await fetch("/api/content", {method, headers})
@@ -149,6 +174,8 @@ export function playlistGetInsertableVideos() {
     if (responce.ok){
       dispatch(playlistSetAllVideos(filteredData))
     }
+
+    dispatch(playlistSetPreloader(false))
   }
 }
 
@@ -175,5 +202,12 @@ export function playlistNewClearForm () {
 export function playlistNewContentClearForm () {
   return {
     type: PLAYLIST_NEW_CLEAR_CONTENT_FORM
+  }
+}
+
+export function playlistSetPreloader(isLoading) {
+  return {
+    type: PLAYLIST_SET_PRELOADER,
+    data: isLoading
   }
 }

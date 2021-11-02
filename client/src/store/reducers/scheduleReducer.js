@@ -7,7 +7,8 @@ import {
   SCHEDULE_SET_SUCCEED,
   SCHEDULE_SET_UPDATE_FORM,
   SCHEDULE_CLEAR_ADD_FORM,
-  SCHEDULE_CLEAR_UPDATE_FORM
+  SCHEDULE_CLEAR_UPDATE_FORM,
+  SCHEDULE_SET_PRELOADER
 } from "../actions/scheduleActions"
 
 const initialState = {
@@ -37,7 +38,8 @@ const initialState = {
     timeEnd__sec: '00',
     time_start: '',
     time_end: ''
-  }
+  },
+  preloader: false
 }
 
 function scheduleReducer(state = initialState, action) {
@@ -110,6 +112,10 @@ function scheduleReducer(state = initialState, action) {
 
     case SCHEDULE_CLEAR_UPDATE_FORM: {
       return {...state, updateForm: initialState.updateForm}
+    }
+
+    case SCHEDULE_SET_PRELOADER: {
+      return {...state, preloader: action.data}
     }
 
     default: 

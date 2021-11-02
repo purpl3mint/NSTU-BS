@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect } from "react"
 import { NavLink } from "react-router-dom"
-import { useHttp } from "../../hooks/http.hook"
 import { PlaylistCard } from "./PlaylistCard"
+import { Preloader } from '../../components/Preloader'
 import { useDispatch, useSelector } from "react-redux"
 import { playlistLoadAll, playlistNewSetSucceed } from "../../store/actionCreators/playlistActionCreator"
 
 export const PlaylistsPage = () => {
-    const {loading} = useHttp()
+    //const {loading} = useHttp()
     const dispatch = useDispatch()
 
     const playlists = useSelector(state => {
@@ -20,6 +20,7 @@ export const PlaylistsPage = () => {
         )
         return transformedPlaylists
     })
+    const loading = useSelector(state => state.playlistReducer.preloader)
 
     const loadHandler = useCallback( () => {
         dispatch(playlistNewSetSucceed(false))
@@ -31,11 +32,17 @@ export const PlaylistsPage = () => {
     return (
         <div>
             <h1>Плейлисты</h1>
-            <NavLink key="new" to="/playlist/add" className="waves-effect waves-light btn">Добавить</NavLink>
-            <div className="collection" style={{border: "0px"}}>
-                { loading && <div className="progress"><div className="indeterminate"></div></div> }
-                { playlists }
+            { loading && <Preloader />}
+
+            { !loading &&
+            <div>
+                <NavLink key="new" to="/playlist/add" className="waves-effect waves-light btn">Добавить</NavLink>
+                <div className="collection" style={{border: "0px"}}>
+                    { playlists }
+                </div>
             </div>
+            }
+
         </div>
     )
 }

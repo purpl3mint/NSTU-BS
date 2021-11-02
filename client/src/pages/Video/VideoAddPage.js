@@ -3,11 +3,13 @@ import { Redirect } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { videoAdd, videoSetAddForm } from "../../store/actionCreators/videoActionCreator"
 import { useMessage } from "../../hooks/message.hook"
+import { Preloader } from '../../components/Preloader'
 
 export const VideoAddPage = () => {
     const message = useMessage()
     const dispatch = useDispatch()
 
+    const loading = useSelector(state => state.videoReducer.preloader)
     const isSucceed = useSelector(state => state.videoReducer.isSucceed)
     const form = useSelector(state => state.videoReducer.addVideoForm)
 
@@ -55,6 +57,9 @@ export const VideoAddPage = () => {
         <div>
             <h1>Загрузка нового видео</h1>
 
+            { loading && <Preloader />}
+
+            { !loading && 
             <div className="row">
                 <form className="col s12">
                     <div className="row">
@@ -90,6 +95,7 @@ export const VideoAddPage = () => {
                     {(form.filetype) && <button className="btn blue-grey darken-1" onClick={createHandler}>Создать</button>}
                 </form>
             </div>
+            }
 
             {isSucceed && <Redirect to="/videos" />}
 
