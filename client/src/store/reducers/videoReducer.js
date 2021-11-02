@@ -4,7 +4,8 @@ import {
   VIDEO_SET_USER_LEVEL,
   VIDEO_SET_ADD_FORM,
   VIDEO_SET_SUCCEED,
-  VIDEO_SET_APPROVED
+  VIDEO_SET_APPROVED,
+  VIDEO_CLEAR_ADD_FORM
 } from "../actions/videoActions"
 
 const initialState = {
@@ -55,6 +56,10 @@ function videoReducer (state = initialState, action) {
     case VIDEO_SET_APPROVED: {
       const newCurrentVideo = { ...state.currentVideo, isApproved: action.data.value }
       return { ...state, currentVideo: newCurrentVideo}
+    }
+
+    case VIDEO_CLEAR_ADD_FORM: {
+      return {...state, addVideoForm: initialState.addVideoForm}
     }
 
     default:

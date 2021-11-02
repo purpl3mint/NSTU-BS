@@ -6,7 +6,9 @@ import {
   PLAYLIST_SET_CONTENT,
   PLAYLIST_SET_ALL_VIDEOS,
   PLAYLIST_NEW_CONTENT_FORM,
-  PLAYLIST_SET_CURRENT_VIDEO
+  PLAYLIST_SET_CURRENT_VIDEO,
+  PLAYLIST_NEW_CLEAR_FORM,
+  PLAYLIST_NEW_CLEAR_CONTENT_FORM
 } from '../actions/playlistActions'
 
 export function playlistNewSetSucceed (newIsSucceed) {
@@ -32,6 +34,7 @@ export function playlistNewCreate (form) {
     const responce = await fetch("/api/playlist/create", {method, headers, body})
     if (responce.ok)
       dispatch(playlistNewSetSucceed(true))
+      dispatch(playlistNewClearForm())
   }
 }
 
@@ -123,6 +126,7 @@ export function playlistAddContent (playlistId, contentId, position){
     if (responce.ok){
       dispatch(playlistLoadContent(playlistId))
       dispatch(playlistNewSetSucceed(true))
+      dispatch(playlistNewContentClearForm())
     }
   }
 }
@@ -159,5 +163,17 @@ export function playlistSetCurrentVideo (id, name) {
   return {
     type: PLAYLIST_SET_CURRENT_VIDEO,
     data: {id, name}
+  }
+}
+
+export function playlistNewClearForm () {
+  return {
+    type: PLAYLIST_NEW_CLEAR_FORM
+  }
+}
+
+export function playlistNewContentClearForm () {
+  return {
+    type: PLAYLIST_NEW_CLEAR_CONTENT_FORM
   }
 }

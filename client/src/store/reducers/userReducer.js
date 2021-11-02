@@ -6,7 +6,9 @@ import {
   USER_SET_CURRENT_ID,
   USER_SET_CURRENT_LEVEL,
   USER_SET_GROUP_FORM,
-  USER_SET_USERS
+  USER_SET_USERS,
+  USER_CLEAR_ADD_FORM,
+  USER_CLEAR_GROUP_FORM
 } from "../actions/userActions"
 
 const initialState = {
@@ -55,6 +57,12 @@ function userReducer (state = initialState, action) {
 
     case USER_SET_USERS:
       return { ...state, users: action.data }
+
+    case USER_CLEAR_ADD_FORM:
+      return { ...state, addForm: initialState.addForm }
+
+    case USER_CLEAR_GROUP_FORM: 
+      return { ...state, groupForm: initialState.groupForm }
 
     default: 
       return state

@@ -5,7 +5,9 @@ import {
   SCHEDULE_SET_DEVICE_GROUPS,
   SCHEDULE_SET_ADD_FORM,
   SCHEDULE_SET_SUCCEED,
-  SCHEDULE_SET_UPDATE_FORM
+  SCHEDULE_SET_UPDATE_FORM,
+  SCHEDULE_CLEAR_ADD_FORM,
+  SCHEDULE_CLEAR_UPDATE_FORM
 } from "../actions/scheduleActions"
 
 const initialState = {
@@ -100,6 +102,14 @@ function scheduleReducer(state = initialState, action) {
         ...state,
         updateForm: newUpdateForm
       }
+    }
+
+    case SCHEDULE_CLEAR_ADD_FORM: {
+      return {...state, addForm: initialState.addForm}
+    }
+
+    case SCHEDULE_CLEAR_UPDATE_FORM: {
+      return {...state, updateForm: initialState.updateForm}
     }
 
     default: 

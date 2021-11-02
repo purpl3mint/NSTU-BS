@@ -2,7 +2,8 @@ import {
   USERGROUP_SET_GROUPS,
   USERGROUP_SET_FORM,
   USERGROUP_SET_DEVICE_GROUPS,
-  USERGROUP_SET_SUCCEED
+  USERGROUP_SET_SUCCEED,
+  USERGROUP_CLEAR_FORM
 } from "../actions/usergroupActions"
 
 const initialState = {
@@ -31,6 +32,9 @@ function usergroupReducer (state = initialState, action) {
     case USERGROUP_SET_SUCCEED:
       return { ...state, isSucceed: action.data.isSucceed }
 
+    case USERGROUP_CLEAR_FORM: 
+      return { ...state, addForm: initialState.addForm}
+      
     default: 
       return state
   }

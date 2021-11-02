@@ -1,7 +1,8 @@
 import {
   DEVICE_GROUP_SET_SUCCEED, 
   DEVICE_GROUP_SET_FORM, 
-  DEVICE_GROUP_SET_GROUPS
+  DEVICE_GROUP_SET_GROUPS,
+  DEVICE_GROUP_CLEAR_FORM
 } from '../actions/deviceGroupActions'
 
 export function deviceGroupSetSucceed (newIsSucceed) {
@@ -15,6 +16,12 @@ export function deviceGroupSetForm (target, value) {
   return {
     type: DEVICE_GROUP_SET_FORM,
     data: { target, value }
+  }
+}
+
+export function deviceGroupClearForm () {
+  return {
+    type: DEVICE_GROUP_CLEAR_FORM
   }
 }
 
@@ -35,6 +42,7 @@ export function deviceGroupAdd (form) {
     const responce = await fetch("/api/devicegroup/create", {method, headers, body})
     if (responce.ok)
       dispatch(deviceGroupSetSucceed(true))
+      dispatch(deviceGroupClearForm())
   }
 }
 

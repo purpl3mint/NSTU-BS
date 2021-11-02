@@ -26,7 +26,7 @@ export const UserAddPage = () => {
         }
 
         dispatch(userAdd(form))
-    }, [dispatch, form])
+    }, [dispatch, message, form])
 
     return (
         <div>

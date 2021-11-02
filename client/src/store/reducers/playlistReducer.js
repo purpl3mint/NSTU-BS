@@ -5,7 +5,9 @@ import {
   PLAYLIST_SET_CURRENT,
   PLAYLIST_SET_CONTENT,
   PLAYLIST_SET_ALL_VIDEOS,
-  PLAYLIST_NEW_CONTENT_FORM
+  PLAYLIST_NEW_CONTENT_FORM,
+  PLAYLIST_NEW_CLEAR_FORM,
+  PLAYLIST_NEW_CLEAR_CONTENT_FORM
 } from '../actions/playlistActions'
 
 const initialState = {
@@ -69,6 +71,14 @@ function playlistReducer(state = initialState, action) {
       const newForm = {...state.addContentForm, [action.data.target]: action.data.value}
       const result = {...state, addContentForm: newForm}
       return result
+    }
+
+    case PLAYLIST_NEW_CLEAR_FORM: {
+      return {...state, form: initialState.form}
+    }
+
+    case PLAYLIST_NEW_CLEAR_CONTENT_FORM: {
+      return {...state, addContentForm: initialState.addContentForm}
     }
 
     default: return state

@@ -9,7 +9,12 @@ export const UserSetGroupPage = () => {
     const dispatch = useDispatch()
 
     const isSucceed = useSelector(state => state.userReducer.isSucceed)
-    const userGroups = useSelector(state => state.userReducer.userGroups)
+    const userGroups = useSelector(state => {
+        const dataRaw = state.userReducer.userGroups
+        const data = dataRaw.map(g => <option key={g.id} value={g.id}>{g.name}</option>)
+
+        return data
+    })
     const username = useSelector(state => state.userReducer.currentUsername)
     const id = useSelector(state => state.userReducer.currentUserId)
     const level = useSelector(state => state.userReducer.currentUserLevel)

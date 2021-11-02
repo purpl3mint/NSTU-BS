@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom"
 import { useHttp } from "../../hooks/http.hook"
 import { useDispatch, useSelector} from 'react-redux'
 import { DeviceGroupCard } from "./DeviceGroupCard"
-import { deviceGroupLoad } from "../../store/actionCreators/deviceGroupActionCreator"
+import { deviceGroupLoad, deviceGroupSetSucceed } from "../../store/actionCreators/deviceGroupActionCreator"
 
 export const DeviceGroupsPage = () => {
     const {loading} = useHttp()
@@ -22,6 +22,7 @@ export const DeviceGroupsPage = () => {
     })
 
     const loadHandler = useCallback(() => {
+        dispatch(deviceGroupSetSucceed(false))
         dispatch(deviceGroupLoad())
     }, [dispatch])
 

@@ -4,7 +4,8 @@ import {
   VIDEO_SET_USER_LEVEL,
   VIDEO_SET_ADD_FORM,
   VIDEO_SET_SUCCEED,
-  VIDEO_SET_APPROVED
+  VIDEO_SET_APPROVED,
+  VIDEO_CLEAR_ADD_FORM
 } from "../actions/videoActions"
 
 export function videoSetVideos(data) {
@@ -70,6 +71,7 @@ export function videoAdd(form) {
 
       if (responce.ok) {
         dispatch(videoSetSucceed(true))
+        dispatch(videoClearAddForm())
       }
     }
     else if (form && form.filetype !== "youtube") {
@@ -83,8 +85,11 @@ export function videoAdd(form) {
       XHRRequest.open("POST", "/api/content/create")
       XHRRequest.send(data)
 
-      if (XHRRequest.status === 200) {
-        dispatch(videoSetSucceed(true))
+
+      XHRRequest.onload = function() {
+        if (XHRRequest.status === 200)
+          dispatch(videoSetSucceed(true))
+          dispatch(videoClearAddForm())
       }
     }
 
@@ -135,5 +140,11 @@ export function videoGetApproved(videoId) {
     if (responce.ok) {
       dispatch(videoSetApprovedField(data.is_approved))
     }
+  }
+}
+
+export function videoClearAddForm() {
+  return {
+    type: VIDEO_CLEAR_ADD_FORM
   }
 }

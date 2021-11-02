@@ -5,7 +5,9 @@ import {
   SCHEDULE_SET_DEVICE_GROUPS,
   SCHEDULE_SET_ADD_FORM,
   SCHEDULE_SET_SUCCEED,
-  SCHEDULE_SET_UPDATE_FORM
+  SCHEDULE_SET_UPDATE_FORM,
+  SCHEDULE_CLEAR_ADD_FORM,
+  SCHEDULE_CLEAR_UPDATE_FORM
 } from "../actions/scheduleActions"
 
 export function scheduleSetAll(data){
@@ -75,9 +77,8 @@ export function shedulesGetDeviceGroups() {
     const responce = await fetch("/api/devicegroup", {method, headers})
 
     const data = await responce.json()
-    const dataTransformed = data.map(d => <option key={d.id} value={d.id}>{d.name}</option>)
     if (responce.ok){
-      dispatch(scheduleSetDeviceGroups(dataTransformed))
+      dispatch(scheduleSetDeviceGroups(data))
     }
   }
 }
@@ -89,9 +90,8 @@ export function shedulesGetPlaylists() {
     const responce = await fetch("/api/playlist", {method, headers})
 
     const data = await responce.json()
-    const dataTransformed = data.map(d => <option key={d.id} value={d.id}>{d.name}</option>)
     if (responce.ok){
-      dispatch(scheduleSetPlaylists(dataTransformed))
+      dispatch(scheduleSetPlaylists(data))
     }
   }
 }
@@ -105,6 +105,7 @@ export function schedulesAdd(form) {
 
     if (responce.ok) {
       dispatch(schedulesSetIsSucceed(true))
+      dispatch(scheduleClearAddForm())
     }
   }
 }
@@ -133,6 +134,19 @@ export function schedulesUpdate(form, scheduleId) {
 
     if (responce.ok) {
       dispatch(schedulesSetIsSucceed(true))
+      dispatch(scheduleClearUpdateForm())
     }
+  }
+}
+
+export function scheduleClearAddForm () {
+  return {
+    type: SCHEDULE_CLEAR_ADD_FORM
+  }
+}
+
+export function scheduleClearUpdateForm () {
+  return {
+    type: SCHEDULE_CLEAR_UPDATE_FORM
   }
 }

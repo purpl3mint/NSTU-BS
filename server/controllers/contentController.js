@@ -81,10 +81,13 @@ class ContentController {
     const {id} = req.params
     const data = await Content.findByPk(id)
 
-    unlink(path.resolve(__dirname, '..', 'static', data.link), (err) => {
-      if (err) throw err
-      console.log('Файл был успешно удален');
-    })
+    //Case for crashing server
+    if (data.source === 'static') {
+      unlink(path.resolve(__dirname, '..', 'static', data.link), (err) => {
+        if (err) throw err
+        console.log('Файл был успешно удален');
+      })
+    }
 
     const deletedContent = await Content.destroy({where: {id}})
 

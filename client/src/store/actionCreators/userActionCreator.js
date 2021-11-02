@@ -6,7 +6,9 @@ import {
   USER_SET_CURRENT_ID,
   USER_SET_CURRENT_LEVEL,
   USER_SET_GROUP_FORM,
-  USER_SET_USERS
+  USER_SET_USERS,
+  USER_CLEAR_ADD_FORM,
+  USER_CLEAR_GROUP_FORM
 } from "../actions/userActions"
 
 export function userSetAddForm(name, value){
@@ -25,6 +27,7 @@ export function userAdd(form){
 
     if (responce.ok) {
       dispatch(userSetSucceed(true))
+      dispatch(userClearAddForm())
     }
   }
 }
@@ -49,8 +52,7 @@ export function userLoadGroup() {
     const headers = {'Content-Type': 'application/json'}
     const responce = await fetch("/api/usergroup", {method, headers})
 
-    const dataRaw = await responce.json()
-    const data = dataRaw.map(g => <option key={g.id} value={g.id}>{g.name}</option>)
+    const data = await responce.json()
     if (responce.ok) {
       dispatch(userSetGroups(data))
     }
@@ -94,6 +96,7 @@ export function userSetGroup(form, userId) {
 
     if (responce.ok) {
       dispatch(userSetSucceed(true))
+      dispatch(userClearGroupForm())
     }
   }
 }
@@ -127,5 +130,17 @@ export function userDeleteUser(userId) {
     if (responce.ok) {
       dispatch(userLoadUsers())
     }
+  }
+}
+
+export function userClearAddForm () {
+  return {
+    type: USER_CLEAR_ADD_FORM
+  }
+}
+
+export function userClearGroupForm () {
+  return {
+    type: USER_CLEAR_GROUP_FORM
   }
 }

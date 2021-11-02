@@ -2,11 +2,13 @@ import React, {useCallback, useContext} from "react"
 import { useDispatch, useSelector } from 'react-redux'
 import { AuthContext } from "../../context/AuthContext"
 import { useHttp } from "../../hooks/http.hook"
+import { useMessage } from "../../hooks/message.hook"
 import { authSetForm, authLogin } from "../../store/actionCreators/authActionCreator"
 
 export const AuthPage = () => {
     const auth = useContext(AuthContext)
     const {loading} = useHttp()
+    const message = useMessage()
     const dispatch = useDispatch()
 
     const form = useSelector(state => state.authReducer.form)
@@ -16,8 +18,16 @@ export const AuthPage = () => {
     }
 
     const loginHandler = useCallback(() => {
+        if (!form.username) {
+            message("Ошибка: не указано имя пользователя")
+            return
+        }
+        if (!form.password) {
+            message("Ошибка: не указан пароль")
+            return
+        }
         dispatch(authLogin(form, auth))
-    }, [dispatch, form, auth])
+    }, [dispatch, message, form, auth])
 
 
     return (

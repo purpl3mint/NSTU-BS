@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom"
 import { useHttp } from "../../hooks/http.hook"
 import { PlaylistCard } from "./PlaylistCard"
 import { useDispatch, useSelector } from "react-redux"
-import { playlistLoadAll } from "../../store/actionCreators/playlistActionCreator"
+import { playlistLoadAll, playlistNewSetSucceed } from "../../store/actionCreators/playlistActionCreator"
 
 export const PlaylistsPage = () => {
     const {loading} = useHttp()
@@ -22,6 +22,7 @@ export const PlaylistsPage = () => {
     })
 
     const loadHandler = useCallback( () => {
+        dispatch(playlistNewSetSucceed(false))
         dispatch(playlistLoadAll())
     }, [dispatch])
 

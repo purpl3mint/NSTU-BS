@@ -1,7 +1,8 @@
 import {
   DEVICE_GROUP_SET_SUCCEED, 
   DEVICE_GROUP_SET_FORM, 
-  DEVICE_GROUP_SET_GROUPS
+  DEVICE_GROUP_SET_GROUPS,
+  DEVICE_GROUP_CLEAR_FORM
 } from '../actions/deviceGroupActions'
 
 const initialState = {
@@ -26,6 +27,9 @@ function deviceGroupReducer(state = initialState, action) {
     }
     case DEVICE_GROUP_SET_GROUPS: {
       return {...state, deviceGroups: action.data}
+    }
+    case DEVICE_GROUP_CLEAR_FORM: {
+      return {...state, form: initialState.form}
     }
     default: return state
   }

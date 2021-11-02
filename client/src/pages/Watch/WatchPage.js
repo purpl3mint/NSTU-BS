@@ -5,6 +5,7 @@ import { useParams } from "react-router"
 
 export const WatchPage = (props) => {
   const proxy = 'http://localhost:5000/'
+  const plug = '/plug.mp4'
   const { link } = useParams()
   const {request} = useHttp()
   const [currentVideo, setCurrentVideo] = useState(0)
@@ -18,13 +19,22 @@ export const WatchPage = (props) => {
       setIsLoaded(false)
 
       const data = await request('/api/playlist/contentlink/' + link, 'GET')
-      const links = data.content.map(v => v.content.source === 'static' ? proxy + v.content.link : v.content.link)
 
-      const timeEnd = new Date(data.timeEnd)
+      if (data && data.content) {
+        const links = data.content.map(v => v.content.source === 'static' ? proxy + v.content.link : v.content.link)
 
-      setPlaylist(links)
-      setTimeEnd(timeEnd)
-      setIsLoaded(true)
+        const timeEnd = new Date(data.timeEnd)
+
+        setPlaylist(links)
+        setTimeEnd(timeEnd)
+        setIsLoaded(true)
+      } else {
+        const links = [proxy + plug];
+        const timeEnd = new Date(data.timeEnd)
+        setPlaylist(links)
+        setTimeEnd(timeEnd)
+        setIsLoaded(true)
+      }
     } catch (e) {}
   }, [request, link])
 

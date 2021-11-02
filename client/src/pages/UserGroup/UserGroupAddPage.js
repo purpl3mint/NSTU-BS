@@ -29,7 +29,7 @@ export const UserGroupAddPage = () => {
             message("Ошибка: не задано название группы")
             return
         }
-        if (!form.deviceGroups) {
+        if (!form.devicegroupId) {
             message("Ошибка: не задана группа устройств")
             return
         }

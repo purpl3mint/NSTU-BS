@@ -2,7 +2,8 @@ import {
   USERGROUP_SET_GROUPS,
   USERGROUP_SET_FORM,
   USERGROUP_SET_DEVICE_GROUPS,
-  USERGROUP_SET_SUCCEED
+  USERGROUP_SET_SUCCEED,
+  USERGROUP_CLEAR_FORM
 } from "../actions/usergroupActions"
 
 export function usergroupSetGroups(data) {
@@ -56,6 +57,7 @@ export function usergroupAdd(form) {
       const responceGroup = await fetch("/api/usergroup/devicegroup", {method: methodDevice, body, headers})
       if (responceGroup.ok) {
         dispatch(usergroupSetSucceed(true))
+        dispatch(usergroupClearForm())
       }
     }
   }
@@ -85,5 +87,11 @@ export function usergroupSetSucceed(value) {
   return {
     type: USERGROUP_SET_SUCCEED,
     data: {isSucceed: value}
+  }
+}
+
+export function usergroupClearForm () {
+  return {
+    type: USERGROUP_CLEAR_FORM
   }
 }

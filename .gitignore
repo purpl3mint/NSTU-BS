@@ -79,3 +79,4 @@ typings/
 
 #Custom folders
 server/static
+!server/static/plug.mp4

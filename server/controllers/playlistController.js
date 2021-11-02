@@ -129,24 +129,53 @@ class PlaylistController {
         }
       }
 
+      /*
       return {
         chosenPlaylist: 2,
         timeEnd: null
       }
+      */
+      return {
+        chosenPlaylist: 0,
+        timeEnd: null
+      }
+    }
+
+    function getTimeForNextPlaylist () {
+      let nextPlaylistTimeStart = new Date(3600 * 24 * 1000 - 1);
+
+      for(let i = 0; i < schedules.length; i++) {
+        if (schedulesTimeParsed[i].timeStart < now && schedulesTimeParsed[i].timeStart < nextPlaylistTimeStart)
+          nextPlaylistTimeStart = schedulesTimeParsed[i].timeStart
+      }
+
+      if (nextPlaylistTimeStart > -1) 
+        return nextPlaylistTimeStart
+
+      return new Date(3600 * 24 * 1000 - 1)
     }
 
     const {chosenPlaylist, timeEnd} = chooseCurrentPlaylist()
 
-    const content = await ContentInPlaylist.findAll({
-      where : {
-        playlist_id: chosenPlaylist
-      },
-      include: {
-        model: Content
-      }
-    })
+    if (chosenPlaylist > 0) {
+      const content = await ContentInPlaylist.findAll({
+        where : {
+          playlist_id: chosenPlaylist
+        },
+        include: {
+          model: Content
+        }
+      })
 
-    return res.json( {content, timeEnd} )
+
+      return res.json( {content, timeEnd} )
+    } else {
+      const content = null
+      const timeEnd = getTimeForNextPlaylist()
+
+      return res.json( {content, timeEnd} )
+    }
+
   }
 
   async deleteContent(req, res) {

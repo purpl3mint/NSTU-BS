@@ -16,8 +16,18 @@ export const ScheduleAddPage = () => {
     const dispatch = useDispatch()
 
     const isSucceed = useSelector(state => state.scheduleReducer.isSucceed)
-    const playlists = useSelector(state => state.scheduleReducer.playlists)
-    const devicegroups = useSelector(state => state.scheduleReducer.deviceGroups)
+    const playlists = useSelector(state => {
+        const dataRaw = state.scheduleReducer.playlists
+        const data = dataRaw.map(d => <option key={d.id} value={d.id}>{d.name}</option>)
+
+        return data
+    })
+    const devicegroups = useSelector(state => {
+        const dataRaw = state.scheduleReducer.deviceGroups
+        const data = dataRaw.map(d => <option key={d.id} value={d.id}>{d.name}</option>)
+
+        return data
+    })
     const form = useSelector(state => state.scheduleReducer.addForm)
 
     const loadHandler = useCallback(() => {
