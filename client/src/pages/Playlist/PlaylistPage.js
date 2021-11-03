@@ -55,7 +55,10 @@ export const PlaylistPage = () => {    const dispatch = useDispatch()
 
             { !loading && 
             <div> 
-                <NavLink key="new" to={"/playlist/addcontent/" + id} className="waves-effect waves-light btn">Добавить видео</NavLink>
+                <NavLink key="new" to={"/playlist/addcontent/" + id} className="waves-effect waves-light btn" style={{display: "flex", width: '180px'}}>
+                    <i className="material-icons">add</i>
+                    <span>Добавить видео</span>
+                </NavLink>
                 <div className="collection" style={{border: "0px"}}>
                     { videos }
                 </div>

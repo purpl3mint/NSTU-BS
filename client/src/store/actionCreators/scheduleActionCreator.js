@@ -37,9 +37,6 @@ export function scheduleLoadAll(deviceGroupId) {
 
     let data = await responce.json()
 
-    console.log(data);
-    console.log(deviceGroupId);
-
     if (responce.ok){
       data = data.filter(s => s.devicegroup)
 

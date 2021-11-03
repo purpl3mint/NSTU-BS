@@ -41,12 +41,30 @@ export const Sidebar = () => {
             case 2:
                 newComponent = (
                     <div className="collection col s2" style={{padding: 0, marginRight: "4%"}}>
-                        <NavLink to="/videos" className="collection-item">Видео</NavLink>
-                        <NavLink to="/playlists" className="collection-item">Плейлисты</NavLink>
-                        <NavLink to="/schedules" className="collection-item">Расписания</NavLink>
-                        <NavLink to="/devicegroups" className="collection-item">Группы устройств</NavLink>
-                        <NavLink to="/usergroups" className="collection-item">Группы пользователей</NavLink>
-                        <NavLink to="/users" className="collection-item">Пользователи</NavLink>
+                        <NavLink to="/videos" className="collection-item" style={{display: "flex"}}>
+                            <i className="material-icons" style={{marginRight: "10px"}}>smart_display</i>
+                            Видео
+                        </NavLink>
+                        <NavLink to="/playlists" className="collection-item" style={{display: "flex"}}>
+                            <i className="material-icons" style={{marginRight: "10px"}}>playlist_play</i>
+                            Плейлисты
+                        </NavLink>
+                        <NavLink to="/schedules" className="collection-item" style={{display: "flex"}}>
+                            <i className="material-icons" style={{marginRight: "10px"}}>date_range</i>
+                            Расписания
+                        </NavLink>
+                        <NavLink to="/devicegroups" className="collection-item" style={{display: "flex"}}>
+                            <i className="material-icons" style={{marginRight: "10px"}}>devices</i>
+                            Группы устройств
+                        </NavLink>
+                        <NavLink to="/usergroups" className="collection-item" style={{display: "flex"}}>
+                            <i className="material-icons" style={{marginRight: "10px"}}>groups</i>
+                            Группы пользователей
+                        </NavLink>
+                        <NavLink to="/users" className="collection-item" style={{display: "flex"}}>
+                            <i className="material-icons" style={{marginRight: "10px"}}>person</i>
+                            Пользователи
+                        </NavLink>
                     </div>
                 )
                 break

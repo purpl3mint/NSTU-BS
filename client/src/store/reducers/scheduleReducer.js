@@ -22,22 +22,10 @@ const initialState = {
   addForm: {
     playlist_id: '',
     devices_id: '',
-    timeStart__hour: '00',
-    timeStart__min: '00',
-    timeStart__sec: '00',
-    timeEnd__hour: '00',
-    timeEnd__min: '00',
-    timeEnd__sec: '00',
     time_start: '',
     time_end: ''
   },
   updateForm: {
-    timeStart__hour: '00',
-    timeStart__min: '00',
-    timeStart__sec: '00',
-    timeEnd__hour: '00',
-    timeEnd__min: '00',
-    timeEnd__sec: '00',
     time_start: '',
     time_end: ''
   },
@@ -65,11 +53,7 @@ function scheduleReducer(state = initialState, action) {
 
     case SCHEDULE_SET_ADD_FORM: {
       let newAddForm = {...state.addForm, [action.data.target]: action.data.value}
-      newAddForm = {
-        ...newAddForm,
-        time_start: newAddForm.timeStart__hour + ":" + newAddForm.timeStart__min + ":" + newAddForm.timeStart__sec,
-        time_end: newAddForm.timeEnd__hour + ":" + newAddForm.timeEnd__min + ":" + newAddForm.timeEnd__sec
-      }
+
       return {
         ...state,
         addForm: newAddForm
@@ -99,11 +83,6 @@ function scheduleReducer(state = initialState, action) {
     
     case SCHEDULE_SET_UPDATE_FORM: {
       let newUpdateForm = {...state.updateForm, [action.data.target]: action.data.value}
-      newUpdateForm = {
-        ...newUpdateForm,
-        time_start: newUpdateForm.timeStart__hour + ":" + newUpdateForm.timeStart__min + ":" + newUpdateForm.timeStart__sec,
-        time_end: newUpdateForm.timeEnd__hour + ":" + newUpdateForm.timeEnd__min + ":" + newUpdateForm.timeEnd__sec
-      }
 
       return {
         ...state,

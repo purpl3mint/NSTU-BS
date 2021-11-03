@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux"
 import { playlistLoadAll, playlistNewSetSucceed } from "../../store/actionCreators/playlistActionCreator"
 
 export const PlaylistsPage = () => {
-    //const {loading} = useHttp()
     const dispatch = useDispatch()
 
     const playlists = useSelector(state => {
@@ -36,7 +35,10 @@ export const PlaylistsPage = () => {
 
             { !loading &&
             <div>
-                <NavLink key="new" to="/playlist/add" className="waves-effect waves-light btn">Добавить</NavLink>
+                <NavLink key="new" to="/playlist/add" className="waves-effect waves-light btn" style={{display: "flex", width: '130px'}}>
+                    <i className="material-icons">add</i>
+                    <span>Добавить</span>
+                </NavLink>
                 <div className="collection" style={{border: "0px"}}>
                     { playlists }
                 </div>

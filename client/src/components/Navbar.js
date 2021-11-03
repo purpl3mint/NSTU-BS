@@ -18,7 +18,10 @@ export const Navbar = () => {
                 <NavLink to="/" className="brand-logo">NSTU-BS</NavLink>
                 <ul id="nav-mobile" className="right hide-on-med-and-down">
                 <li><NavLink to="/cabinet">Личный кабинет</NavLink></li>
-                <li><a href="/" onClick={logoutHandler}>Выход</a></li>
+                <li><a href="/" onClick={logoutHandler} style={{display:"flex"}}>
+                    <i className="material-icons" style={{marginRight: "10px"}}>logout</i>
+                    <span>Выход</span>
+                </a></li>
                 </ul>
             </div>
         </nav>

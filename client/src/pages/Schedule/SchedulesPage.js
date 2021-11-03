@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom"
 import { ScheduleCard } from "./ScheduleCard"
 import { Preloader } from '../../components/Preloader'
 import { useDispatch, useSelector } from 'react-redux'
-import { scheduleLoadAll, scheduleSetUserData, scheduleGetUserData } from "../../store/actionCreators/scheduleActionCreator"
+import { scheduleLoadAll, scheduleGetUserData, schedulesSetIsSucceed } from "../../store/actionCreators/scheduleActionCreator"
 
 export const SchedulesPage = () => {
     const dispatch = useDispatch()
@@ -31,7 +31,7 @@ export const SchedulesPage = () => {
         const token = JSON.parse(localStorage.getItem('userData')).token
         dispatch(scheduleGetUserData(token))
         dispatch(scheduleLoadAll(deviceGroupId))
-
+        dispatch(schedulesSetIsSucceed(false))
     }, [dispatch, deviceGroupId])
 
     useEffect(() => {loadHandler()}, [loadHandler])
@@ -45,7 +45,10 @@ export const SchedulesPage = () => {
 
             { !loading && 
             <div>
-                <NavLink key="new" to="/schedule/add" className="waves-effect waves-light btn">Добавить</NavLink>
+                <NavLink key="new" to="/schedule/add" className="waves-effect waves-light btn" style={{display: "flex", width: '130px'}}>
+                    <i className="material-icons">add</i>
+                    <span>Добавить</span>
+                </NavLink>
                 <div className="collection" style={{border: "0px"}}>
                     { schedules }
                 </div>

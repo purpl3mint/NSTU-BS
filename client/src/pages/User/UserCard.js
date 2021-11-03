@@ -59,8 +59,14 @@ export const UserCard = (props) => {
                     Группа пользователей: {usergroupOutput}
                 </NavLink>
             </div>
-            <NavLink className="col s1 btn" to={"/user/edit/" + id} onClick={clickHandler}>Изменить</NavLink>
-            <button name={id} className="btn col s1" onClick={deleteHandler}>Удалить</button>
+
+            <NavLink className="btn" to={"/user/edit/" + id} onClick={clickHandler} style={{marginRight: "10px"}}>
+                <i className="material-icons">edit</i>
+            </NavLink>
+
+            <button name={id} className="btn" onClick={deleteHandler}>
+                <i className="material-icons">delete</i>
+            </button>
         </div>
         
     )

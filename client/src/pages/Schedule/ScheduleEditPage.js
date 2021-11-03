@@ -23,8 +23,7 @@ export const ScheduleEditPage = () => {
     }, [dispatch])
 
     const saveHandler = useCallback(() => {
-        if (!form.timeStart__hour && !form.timeStart__min && !form.timeStart__sec &&
-            !form.timeEnd__hour && !form.timeEnd__min && !form.timeEnd__sec) {
+        if (!form.time_start && !form.time_end) {
             dispatch(schedulesSetIsSucceed(true))
             return
         }
@@ -33,7 +32,7 @@ export const ScheduleEditPage = () => {
     }, [dispatch, form, id])
 
     useEffect(() => { initializeHandler() }, [initializeHandler])
-    
+
     return (
         <div>
             <h1>Изменение расписания</h1>
@@ -41,22 +40,16 @@ export const ScheduleEditPage = () => {
             <div className="row">
                 <div className="col s12">
                     <div className="row">
-                        <div className="input-field col s6">
+                        <div className="input-field col s3">
                             <span>Время начала</span>
                             <div className="row" style={{paddingLeft: "12px"}}>
-                                <input id="timeStart__hour" name="timeStart__hour" type="text" className="validate col s3" placeholder="ЧЧ" onChange={changeHandler}/>
-                                <input id="timeStart__min" name="timeStart__min" type="text" className="validate col s3 offset-s1" placeholder="ММ" onChange={changeHandler}/>
-                                <input id="timeStart__sec" name="timeStart__sec" type="text" className="validate col s3 offset-s1" placeholder="СС" onChange={changeHandler}/>
+                                <input type="time" id="time_start" name="time_start" onChange={changeHandler}></input>
                             </div>
                         </div>
-                    </div>
-                    <div className="row">
-                        <div className="input-field col s6">
+                        <div className="input-field col s3 offset-s1">
                             <span>Время завершения</span>
                             <div className="row" style={{paddingLeft: "12px"}}>
-                                <input id="timeEnd__hour" name="timeEnd__hour" type="text" className="validate col s3" placeholder="ЧЧ" onChange={changeHandler}/>
-                                <input id="timeEnd__min" name="timeEnd__min" type="text" className="validate col s3 offset-s1" placeholder="ММ" onChange={changeHandler}/>
-                                <input id="timeEnd__sec" name="timeEnd__sec" type="text" className="validate col s3 offset-s1" placeholder="СС" onChange={changeHandler}/>
+                                <input type="time" id="time_end" name="time_end" onChange={changeHandler}></input>
                             </div>
                         </div>
                     </div>

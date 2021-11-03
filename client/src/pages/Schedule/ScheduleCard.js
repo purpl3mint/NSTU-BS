@@ -24,8 +24,14 @@ export const ScheduleCard = (props) => {
                     <span className="schedule-card__playlist">Плейлист: {playlistName}</span>
                 </NavLink>
             </div>
-            <NavLink className="col s1 btn" to={"/schedule/edit/" + id} onClick={clickHandler}>Изменить</NavLink>
-            <button name={id} className="btn col s1" onClick={deleteHandler}>Удалить</button>
+            
+            <NavLink className="btn" to={"/schedule/edit/" + id} onClick={clickHandler} style={{marginRight: "10px"}}>
+                <i className="material-icons">edit</i>
+            </NavLink>
+            
+            <button name={id} className="btn" onClick={deleteHandler}>
+                <i className="material-icons">delete</i>
+            </button>
         </div>
     )
 }

@@ -30,7 +30,10 @@ export const UserGroupsPage = () => {
 
             { !loading && 
             <div>
-                <NavLink key="new" to="/usergroup/add" className="waves-effect waves-light btn">Добавить</NavLink>
+                <NavLink key="new" to="/usergroup/add" className="waves-effect waves-light btn" style={{display: "flex", width: '130px'}}>
+                    <i className="material-icons">add</i>
+                    <span>Добавить</span>
+                </NavLink>
                 <div className="collection" style={{border: "0px"}}>
                     { userGroups }
                 </div>

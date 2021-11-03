@@ -36,7 +36,9 @@ export const PlaylistVideoCard = (props) => {
                     <span>{name}</span>
                 </NavLink>
             </div>
-            <button name={id} className="btn col s1 offset-s1" onClick={deleteHandler}>Удалить</button>
+            <button name={id} className="btn" onClick={deleteHandler}>
+                <i className="material-icons">delete</i>
+            </button>
         </div>
     )
 }

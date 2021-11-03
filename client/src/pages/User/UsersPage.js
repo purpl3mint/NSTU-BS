@@ -38,7 +38,10 @@ export const UsersPage = () => {
 
             { !loading && 
             <div>
-                <NavLink key="new" to="/user/add" className="waves-effect waves-light btn">Добавить</NavLink>
+                <NavLink key="new" to="/user/add" className="waves-effect waves-light btn" style={{display: "flex", width: '130px'}}>
+                    <i className="material-icons">add</i>
+                    <span>Добавить</span>
+                </NavLink>
                 <div className="collection" style={{border: "0px"}}>
                     { loading && <div key="devgroup_loader" className="progress"><div className="indeterminate"></div></div> }
                     { users }

@@ -37,7 +37,7 @@ export const VideosPage = () => {
 
             { !loading && 
             <div>
-                <NavLink key="new" to="/video/add" className="waves-effect waves-light btn valign-wrapper" style={{display: "flex", width: '130px'}}>
+                <NavLink key="new" to="/video/add" className="waves-effect waves-light btn" style={{display: "flex", width: '130px'}}>
                     <i className="material-icons">add</i>
                     <span>Добавить</span>
                 </NavLink>
