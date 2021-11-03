@@ -5,6 +5,7 @@ import { AuthContext } from './context/AuthContext';
 import { Navbar } from './components/Navbar';
 import 'materialize-css'
 import "../node_modules/video-react/dist/video-react.css"
+import { HeadTag } from './components/HeadTag';
 
 function App() {
   const {token, login, logout} = useAuth()
@@ -13,6 +14,7 @@ function App() {
   return (
     <AuthContext.Provider value={{token, login, logout, isAutheticated}}>
       <Router>
+        <HeadTag />
         { isAutheticated && <Navbar /> }
 
         <div className="">

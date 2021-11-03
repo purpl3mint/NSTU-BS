@@ -8,8 +8,10 @@ import {
   SCHEDULE_SET_UPDATE_FORM,
   SCHEDULE_CLEAR_ADD_FORM,
   SCHEDULE_CLEAR_UPDATE_FORM,
-  SCHEDULE_SET_PRELOADER
+  SCHEDULE_SET_PRELOADER,
+  SCHEDULE_SET_USER_DATA
 } from "../actions/scheduleActions"
+//const jwt = require('jsonwebtoken')
 
 const initialState = {
   schedules: [],
@@ -39,7 +41,10 @@ const initialState = {
     time_start: '',
     time_end: ''
   },
-  preloader: false
+  preloader: false,
+  userData: {
+    deviceGroupId: 0
+  }
 }
 
 function scheduleReducer(state = initialState, action) {
@@ -116,6 +121,12 @@ function scheduleReducer(state = initialState, action) {
 
     case SCHEDULE_SET_PRELOADER: {
       return {...state, preloader: action.data}
+    }
+
+    case SCHEDULE_SET_USER_DATA: {
+      const newUserData = {...state.userData, [action.data.name]: action.data.value}
+
+      return {...state, userData: newUserData}
     }
 
     default: 

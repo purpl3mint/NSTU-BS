@@ -8,8 +8,10 @@ import {
   SCHEDULE_SET_UPDATE_FORM,
   SCHEDULE_CLEAR_ADD_FORM,
   SCHEDULE_CLEAR_UPDATE_FORM,
-  SCHEDULE_SET_PRELOADER
+  SCHEDULE_SET_PRELOADER,
+  SCHEDULE_SET_USER_DATA
 } from "../actions/scheduleActions"
+const jwt = require('jsonwebtoken')
 
 export function scheduleSetAll(data){
   return{
@@ -25,7 +27,7 @@ export function scheduleSetCurrent(scheduleId){
   }
 }
 
-export function scheduleLoadAll() {
+export function scheduleLoadAll(deviceGroupId) {
   return async(dispatch) => {
     dispatch(scheduleSetPreloader(true))
 
@@ -33,8 +35,17 @@ export function scheduleLoadAll() {
     const headers = {'Content-Type': 'application/json'}
     const responce = await fetch("/api/schedule", {method, headers})
 
-    const data = await responce.json()
+    let data = await responce.json()
+
+    console.log(data);
+    console.log(deviceGroupId);
+
     if (responce.ok){
+      data = data.filter(s => s.devicegroup)
+
+      if (deviceGroupId > 0)
+        data = data.filter(s => s.devicegroupId === deviceGroupId)
+
       dispatch(scheduleSetAll(data))
     }
 
@@ -79,15 +90,24 @@ export function scheduleSetPlaylists(data) {
   }
 }
 
-export function shedulesGetDeviceGroups() {
+export function shedulesGetDeviceGroups(deviceGroupId) {
   return async (dispatch) => {
     dispatch(scheduleSetPreloader(true))
 
     const method = 'GET'
     const headers = {'Content-Type': 'application/json'}
-    const responce = await fetch("/api/devicegroup", {method, headers})
 
-    const data = await responce.json()
+    let responce
+    let data
+    if (deviceGroupId <= 0) {
+      responce = await fetch("/api/devicegroup", {method, headers})
+      data = await responce.json()
+    } else {
+      responce = await fetch("/api/devicegroup/" + deviceGroupId, {method, headers})
+      data = await responce.json()
+      data = [data]
+    }
+
     if (responce.ok){
       dispatch(scheduleSetDeviceGroups(data))
     }
@@ -180,5 +200,32 @@ export function scheduleSetPreloader(isLoading) {
   return {
     type: SCHEDULE_SET_PRELOADER,
     data: isLoading
+  }
+}
+
+export function scheduleSetUserData(name, value) {
+  return {
+    type: SCHEDULE_SET_USER_DATA,
+    data: {name, value}
+  }
+}
+
+export function scheduleGetUserData(token) {
+  return async(dispatch) => {
+    const dataToken = jwt.decode(token)
+
+    if (dataToken.level !== 1) {
+      dispatch(scheduleSetUserData("deviceGroupId", 0))
+    } else {
+      const method = 'GET'
+      const headers = {'Content-Type': 'application/json'}
+      const responceUser = await fetch("/api/user/" + dataToken.id, {method, headers})
+
+      const dataUser = await responceUser.json()
+      if (responceUser.ok) {
+        if (dataUser.devices.length > 0)
+        dispatch(scheduleSetUserData("deviceGroupId", dataUser.devices[0].id))
+      }
+    }
   }
 }

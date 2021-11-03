@@ -3,12 +3,13 @@ import { NavLink } from "react-router-dom"
 import { ScheduleCard } from "./ScheduleCard"
 import { Preloader } from '../../components/Preloader'
 import { useDispatch, useSelector } from 'react-redux'
-import { scheduleLoadAll } from "../../store/actionCreators/scheduleActionCreator"
+import { scheduleLoadAll, scheduleSetUserData, scheduleGetUserData } from "../../store/actionCreators/scheduleActionCreator"
 
 export const SchedulesPage = () => {
     const dispatch = useDispatch()
 
     const loading = useSelector(state => state.scheduleReducer.preloader)
+    const deviceGroupId = useSelector(state => state.scheduleReducer.userData.deviceGroupId)
     const schedules = useSelector(state => {
         const rawShedules = state.scheduleReducer.schedules
 
@@ -27,8 +28,11 @@ export const SchedulesPage = () => {
     })
 
     const loadHandler = useCallback( () => {
-        dispatch(scheduleLoadAll())
-    }, [dispatch])
+        const token = JSON.parse(localStorage.getItem('userData')).token
+        dispatch(scheduleGetUserData(token))
+        dispatch(scheduleLoadAll(deviceGroupId))
+
+    }, [dispatch, deviceGroupId])
 
     useEffect(() => {loadHandler()}, [loadHandler])
 

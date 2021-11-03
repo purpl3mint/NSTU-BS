@@ -37,7 +37,10 @@ export const VideosPage = () => {
 
             { !loading && 
             <div>
-                <NavLink key="new" to="/video/add" className="waves-effect waves-light btn">Добавить</NavLink>
+                <NavLink key="new" to="/video/add" className="waves-effect waves-light btn valign-wrapper" style={{display: "flex", width: '130px'}}>
+                    <i className="material-icons">add</i>
+                    <span>Добавить</span>
+                </NavLink>
                 <div className="collection" style={{border: "0px"}}>
                     { videos }
                 </div>

@@ -17,6 +17,7 @@ export const ScheduleAddPage = () => {
 
     const loading = useSelector(state => state.scheduleReducer.preloader)
     const isSucceed = useSelector(state => state.scheduleReducer.isSucceed)
+    const deviceGroupId = useSelector(state => state.scheduleReducer.userData.deviceGroupId)
     const playlists = useSelector(state => {
         const dataRaw = state.scheduleReducer.playlists
         const data = dataRaw.map(d => <option key={d.id} value={d.id}>{d.name}</option>)
@@ -32,10 +33,10 @@ export const ScheduleAddPage = () => {
     const form = useSelector(state => state.scheduleReducer.addForm)
 
     const loadHandler = useCallback(() => {
-        dispatch(shedulesGetDeviceGroups())
+        dispatch(shedulesGetDeviceGroups(deviceGroupId))
         dispatch(shedulesGetPlaylists())
         dispatch(schedulesSetIsSucceed(false))
-    }, [dispatch])
+    }, [dispatch, deviceGroupId])
 
     const changeHandler = useCallback((e) => {
         dispatch(scheduleSetAddForm(e.target.name, e.target.value))
