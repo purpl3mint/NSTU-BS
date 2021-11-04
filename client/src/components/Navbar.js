@@ -12,18 +12,29 @@ export const Navbar = () => {
         history.push('/')
     }
 
+    
     return (
-        <nav>
+        <nav className="nav-extended">
             <div className="nav-wrapper blue-grey darken-1" style={{paddingLeft: "100px", paddingRight: "100px"}}>
                 <NavLink to="/" className="brand-logo">NSTU-BS</NavLink>
+
+                <a href="/" data-target="mobile-demo" className="sidenav-trigger right">
+                    <i class="material-icons">logout</i>
+                </a>
+                
                 <ul id="nav-mobile" className="right hide-on-med-and-down">
-                <li><NavLink to="/cabinet">Личный кабинет</NavLink></li>
-                <li><a href="/" onClick={logoutHandler} style={{display:"flex"}}>
-                    <i className="material-icons" style={{marginRight: "10px"}}>logout</i>
-                    <span>Выход</span>
-                </a></li>
+                    <li><NavLink to="/cabinet">Личный кабинет</NavLink></li>
+                    <li>
+                        <a href="/" onClick={logoutHandler} style={{display:"flex"}}>
+                            <i className="material-icons" style={{marginRight: "10px"}}>logout</i>
+                            <span>Выход</span>
+                        </a>
+                    </li>
                 </ul>
+
             </div>
         </nav>
     )
+    
+    
 }

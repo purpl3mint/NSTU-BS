@@ -32,8 +32,6 @@ export const ScheduleAddPage = () => {
     })
     const form = useSelector(state => state.scheduleReducer.addForm)
 
-    console.log("form >>> ", form);
-
     const loadHandler = useCallback(() => {
         dispatch(shedulesGetDeviceGroups(deviceGroupId))
         dispatch(shedulesGetPlaylists())

@@ -43,27 +43,27 @@ export const Sidebar = () => {
                     <div className="collection col s2" style={{padding: 0, marginRight: "4%"}}>
                         <NavLink to="/videos" className="collection-item" style={{display: "flex"}}>
                             <i className="material-icons" style={{marginRight: "10px"}}>smart_display</i>
-                            Видео
+                            <span className="hide-on-med-and-down">Видео</span>
                         </NavLink>
                         <NavLink to="/playlists" className="collection-item" style={{display: "flex"}}>
                             <i className="material-icons" style={{marginRight: "10px"}}>playlist_play</i>
-                            Плейлисты
+                            <span className="hide-on-med-and-down">Плейлисты</span>
                         </NavLink>
                         <NavLink to="/schedules" className="collection-item" style={{display: "flex"}}>
                             <i className="material-icons" style={{marginRight: "10px"}}>date_range</i>
-                            Расписания
+                            <span className="hide-on-med-and-down">Расписания</span>
                         </NavLink>
                         <NavLink to="/devicegroups" className="collection-item" style={{display: "flex"}}>
                             <i className="material-icons" style={{marginRight: "10px"}}>devices</i>
-                            Группы устройств
+                            <span className="hide-on-med-and-down">Группы устройств</span>
                         </NavLink>
                         <NavLink to="/usergroups" className="collection-item" style={{display: "flex"}}>
                             <i className="material-icons" style={{marginRight: "10px"}}>groups</i>
-                            Группы пользователей
+                            <span className="hide-on-med-and-down">Группы пользователей</span>
                         </NavLink>
                         <NavLink to="/users" className="collection-item" style={{display: "flex"}}>
                             <i className="material-icons" style={{marginRight: "10px"}}>person</i>
-                            Пользователи
+                            <span className="hide-on-med-and-down">Пользователи</span>
                         </NavLink>
                     </div>
                 )
