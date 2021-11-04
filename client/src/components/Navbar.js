@@ -19,7 +19,7 @@ export const Navbar = () => {
                 <NavLink to="/" className="brand-logo">NSTU-BS</NavLink>
 
                 <a href="/" data-target="mobile-demo" className="sidenav-trigger right">
-                    <i class="material-icons">logout</i>
+                    <i className="material-icons">logout</i>
                 </a>
                 
                 <ul id="nav-mobile" className="right hide-on-med-and-down">

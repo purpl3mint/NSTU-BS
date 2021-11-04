@@ -92,8 +92,8 @@ export const ScheduleAddPage = () => {
                     <div className="row">
                         <div className="col s12">
                             <label>Плейлист</label>
-                            <select name="playlist_id" className="browser-default" onChange={changeHandler}>
-                                <option value="" disabled selected>Выберите плейлист</option>
+                            <select defaultValue="" name="playlist_id" className="browser-default" onChange={changeHandler}>
+                                <option value="" disabled>Выберите плейлист</option>
                                 {playlists}
                             </select>
                         </div>
@@ -101,8 +101,8 @@ export const ScheduleAddPage = () => {
                     <div className="row">
                         <div className="col s12">
                             <label>Группа устройств</label>
-                            <select name="devices_id" className="browser-default" onChange={changeHandler}>
-                                <option value="" disabled selected>Выберите группу устройств</option>
+                            <select defaultValue="" name="devices_id" className="browser-default" onChange={changeHandler}>
+                                <option value="" disabled>Выберите группу устройств</option>
                                 {devicegroups}
                             </select>
                         </div>
