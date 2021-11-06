@@ -47,6 +47,7 @@ export const UsersPage = () => {
 
     useEffect(() => { initializeHandler() }, [initializeHandler])
     
+    /*
     return (
         <div className="row">
             <h1>Пользователи</h1>
@@ -71,6 +72,29 @@ export const UsersPage = () => {
                     isLast={isLast}
                     changeHandler={paginationClickHandler}
                 />
+            </div>
+            }
+
+        </div>
+    )
+    */
+    
+    return (
+        <div className="row">
+            <h1>Пользователи</h1>
+
+            { loading && <Preloader />}
+
+            { !loading && 
+            <div>
+                <NavLink key="new" to="/user/add" className="waves-effect waves-light btn" style={{display: "flex", width: '130px'}}>
+                    <i className="material-icons">add</i>
+                    <span>Добавить</span>
+                </NavLink>
+                <div className="collection" style={{border: "0px"}}>
+                    { loading && <div key="devgroup_loader" className="progress"><div className="indeterminate"></div></div> }
+                    { users }
+                </div>
             </div>
             }
 
