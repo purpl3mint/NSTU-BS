@@ -4,8 +4,13 @@ import { useHttp } from "../../hooks/http.hook"
 import { useParams } from "react-router"
 
 export const WatchPage = (props) => {
-  const proxy = 'http://localhost:5000/'
-  const plug = '/plug.mp4'
+
+  let proxy = window.location.origin + ':80/stat/';
+  if (process.env.NODE_ENV === 'development'){
+      proxy = "http://localhost:5000/stat/"
+  }
+
+  const plug = 'plug.mp4'
   const { link } = useParams()
   const {request} = useHttp()
   const [currentVideo, setCurrentVideo] = useState(0)

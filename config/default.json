@@ -1,0 +1,9 @@
+{
+  "port": 5000,
+  "DB_NAME": "nstu-bs-db",
+  "DB_USER": "postgres",
+  "DB_PASSWORD": "bloopers491eel",
+  "DB_HOST": "localhost",
+  "DB_PORT": 5432,
+  "SECRET_KEY": "leeeeeeeeroyJenkins"
+}

@@ -6,7 +6,12 @@ const jwt = require('jsonwebtoken')
 
 export const VideoCard = (props) => {
     const {name, id, link, source} = props
-    const proxy = "http://localhost:5000/"
+
+    let proxy = window.location.origin + ':80/stat/';
+    if (process.env.NODE_ENV === 'development'){
+        proxy = "http://localhost:5000/stat/"
+    }
+    
     const dispatch = useDispatch()
 
     const level = useSelector(state => state.videoReducer.userLevel)

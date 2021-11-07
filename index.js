@@ -1,5 +1,6 @@
 require('dotenv').config()
 const express = require('express')
+const config = require('config')
 const sequelize = require('./db')
 const models = require('./models/models')
 const cors = require('cors')
@@ -8,18 +9,32 @@ const router = require('./routes/index')
 const errorHandler = require('./middleware/errorHandlingMiddleware')
 const path = require('path')
 
-const PORT = process.env.PORT || 8080
-
 const app = express()
 app.use(cors())
 app.use(express.json())
-app.use(express.static(path.resolve(__dirname, 'static')))
-app.use(express.static(path.join(__dirname, 'client/build')));
+
 app.use(fileUpload({}))
 app.use('/api', router)
 
 //Last middleware
 app.use(errorHandler)
+
+
+if (process.env.NODE_ENV === 'production') {
+  app.use("/", express.static('client/build'));
+  app.get("/stat/:file", (req, res) => {
+    res.sendFile(path.join(__dirname + '/static/' + req.params.file));
+  })
+  app.get('*', (req, res) => {
+      res.sendFile(path.join(__dirname + '/client/build/index.html'));
+  });
+
+}
+
+app.use("/stat", express.static(path.resolve(__dirname, 'static')))
+
+//const PORT = process.env.PORT || config.get('port') || 80
+const PORT = config.get('port') || 80
 
 const start = async () => {
   try {
