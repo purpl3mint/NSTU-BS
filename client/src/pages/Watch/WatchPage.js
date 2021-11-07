@@ -5,7 +5,7 @@ import { useParams } from "react-router"
 
 export const WatchPage = (props) => {
 
-  let proxy = window.location.origin + ':80/stat/';
+  let proxy = window.location.origin + ':8080/stat/';
   if (process.env.NODE_ENV === 'development'){
       proxy = "http://localhost:5000/stat/"
   }

@@ -1,5 +1,5 @@
 {
-  "port": 80,
+  "port": 8080,
   "DB_NAME": "d2mp9eptiodgrq",
   "DB_USER": "hsoslzcwlqmhmx",
   "DB_PASSWORD": "f1253fbe4ba2610743c2f495ff8b91f98c4f170748914ad30a91dfeac40247a9",
