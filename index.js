@@ -34,7 +34,7 @@ if (process.env.NODE_ENV === 'production') {
 app.use("/stat", express.static(path.resolve(__dirname, 'static')))
 
 //const PORT = process.env.PORT || config.get('port') || 80
-const PORT = config.get('port') || 80
+const PORT = process.env.PORT || config.get('port') || 80
 
 const start = async () => {
   try {
