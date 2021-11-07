@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken')
 export const VideoCard = (props) => {
     const {name, id, link, source} = props
 
-    let proxy = window.location.origin + ':8080/stat/';
+    let proxy = window.location.origin + ':80/stat/';
     if (process.env.NODE_ENV === 'development'){
         proxy = "http://localhost:5000/stat/"
     }
