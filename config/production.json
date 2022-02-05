@@ -5,5 +5,10 @@
   "DB_PASSWORD": "f1253fbe4ba2610743c2f495ff8b91f98c4f170748914ad30a91dfeac40247a9",
   "DB_HOST": "ec2-54-161-239-198.compute-1.amazonaws.com",
   "DB_PORT": 5432,
-  "SECRET_KEY": "leeeeeeeeroyJenkins"
+  "SECRET_KEY": "leeeeeeeeroyJenkins",
+  "DB_DIALECT_OPTIONS": {
+    "ssl": {
+      "rejectUnauthorized": false
+    }
+  }
 }

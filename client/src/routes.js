@@ -99,6 +99,9 @@ export const useRoutes = isAutheticated => {
             <Route path="/" exact>
                 <AuthPage />
             </Route>
+            <Route path="/watch/:link" exact>
+                <WatchPage />
+            </Route>
             <Redirect to="/" />
         </Switch>
     )
