@@ -23,86 +23,48 @@ import { UserSetGroupPage } from "./pages/User/UserSetGroupPage"
 import { WatchPage } from "./pages/Watch/WatchPage"
 
 export const useRoutes = isAutheticated => {
-    if (isAutheticated) {
-        return (
-            <div className="row">
-                <Sidebar />
+    let routesList = [
+        {comp:<CabinetPage />,               path:"/",                           exact:true,  auth:true},
+        {comp:<CabinetPage />,               path:"/",                           exact:true,  auth:true},
+        {comp:<VideosPage />,                path:"/videos",                     exact:true,  auth:true},
+        {comp:<VideoAddPage />,              path:"/video/add",                  exact:true,  auth:true},
+        {comp:<VideoPage />,                 path:"/video/:id",                  exact:true,  auth:true},
+        {comp:<PlaylistsPage />,             path:"/playlists",                  exact:true,  auth:true},
+        {comp:<PlaylistPage />,              path:"/playlists/:id",              exact:true,  auth:true},
+        {comp:<PlaylistAddContentPage />,    path:"/playlist/addcontent/:id",    exact:true,  auth:true},
+        {comp:<PlaylistAddPage />,           path:"/playlist/add",               exact:true,  auth:true},
+        {comp:<SchedulesPage />,             path:"/schedules",                  exact:true,  auth:true},
+        {comp:<ScheduleAddPage />,           path:"/schedule/add",               exact:true,  auth:true},
+        {comp:<ScheduleEditPage />,          path:"/schedule/edit/:id",          exact:true,  auth:true},
+        {comp:<DeviceGroupsPage />,          path:"/devicegroups",               exact:true,  auth:true},
+        {comp:<DeviceGroupAddPage />,        path:"/devicegroup/add",            exact:true,  auth:true},
+        {comp:<UserGroupsPage />,            path:"/usergroups",                 exact:true,  auth:true},
+        {comp:<UserGroupAddPage />,          path:"/usergroup/add",              exact:true,  auth:true},
+        {comp:<UsersPage />,                 path:"/users",                      exact:true,  auth:true},
+        {comp:<UserAddPage />,               path:"/user/add",                   exact:true,  auth:true},
+        {comp:<UserSetGroupPage />,          path:"/user/edit/:id",              exact:true,  auth:true},
+        {comp:<WatchPage />,                 path:"/watch/:link",                exact:true,  auth:false},
+        {comp:<AuthPage />,                  path:"/",                           exact:true,  auth:false}
+    ]
 
-                <div className="col s9 m9 l9 xl9">
-                    <Switch>
-                        <Route path="/" exact>
-                            <CabinetPage />
-                        </Route>
-                        <Route path="/videos" exact>
-                            <VideosPage />
-                        </Route>
-                        <Route path="/video/add" exact>
-                            <VideoAddPage />
-                        </Route>
-                        <Route path="/video/:id" exact>
-                            <VideoPage />
-                        </Route>
-                        <Route path="/playlists" exact>
-                            <PlaylistsPage />
-                        </Route>
-                        <Route path="/playlists/:id" exact>
-                            <PlaylistPage />
-                        </Route>
-                        <Route path="/playlist/addcontent/:id" exact>
-                            <PlaylistAddContentPage />
-                        </Route>
-                        <Route path="/playlist/add" exact>
-                            <PlaylistAddPage />
-                        </Route>
-                        <Route path="/schedules" exact>
-                            <SchedulesPage />
-                        </Route>
-                        <Route path="/schedule/add" exact>
-                            <ScheduleAddPage />
-                        </Route>
-                        <Route path="/schedule/edit/:id" exact>
-                            <ScheduleEditPage />
-                        </Route>
-                        <Route path="/devicegroups" exact>
-                            <DeviceGroupsPage />
-                        </Route>
-                        <Route path="/devicegroup/add" exact>
-                            <DeviceGroupAddPage />
-                        </Route>
-                        <Route path="/usergroups" exact>
-                            <UserGroupsPage />
-                        </Route>
-                        <Route path="/usergroup/add" exact>
-                            <UserGroupAddPage />
-                        </Route>
-                        <Route path="/users" exact>
-                            <UsersPage />
-                        </Route>
-                        <Route path="/user/add" exact>
-                            <UserAddPage />
-                        </Route>
-                        <Route path="/user/edit/:id" exact>
-                            <UserSetGroupPage />
-                        </Route>
-                        <Route path="/watch/:link" exact>
-                            <WatchPage />
-                        </Route>
-                        <Redirect to="/" />
-                    </Switch>
-                </div>
-            </div>
-        )
-    }
+    let routesDisplay = routesList.map(r => {
+        if ((isAutheticated && r.auth) || !r.auth)
+            if (r.exact)
+                return <Route path={r.path} exact>{r.comp}</Route>
+            else
+                return <Route path={r.path}>{r.comp}</Route>
+    })
 
     return (
-        <Switch>
-            <Route path="/" exact>
-                <AuthPage />
-            </Route>
-            <Route path="/watch/:link" exact>
-                <WatchPage />
-            </Route>
-            <Redirect to="/" />
-        </Switch>
+        <div className="row">
+            {isAutheticated && <Sidebar /> }
+            
+            <div className="col s9 m9 l9 xl9">
+                <Switch>
+                    { routesDisplay }
+                    <Redirect to="/" />
+                </Switch>
+            </div>
+        </div>
     )
 }
